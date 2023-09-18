@@ -7,6 +7,7 @@ using PlayFab.ClientModels;
 using StarWriter.Utility.Singleton;
 using System.Security;
 using JetBrains.Annotations;
+using PlayFab.SharedModels;
 
 namespace _Scripts._Core.Playfab_Models
 {
@@ -30,13 +31,15 @@ namespace _Scripts._Core.Playfab_Models
         
         // public delegate void LoginSuccessEvent();
         // public static event LoginSuccessEvent OnLoginSuccess;
-        public static EventHandler<LoginResult> OnLoginSuccess;
+        public static EventHandler<PlayFabResultCommon> OnLoginSuccess;
 
-        public delegate void LoginErrorEvent();
-        public static event LoginErrorEvent OnLoginError;
+        // public delegate void LoginErrorEvent();
+        // public static event LoginErrorEvent OnLoginError;
+        public static EventHandler<PlayFabResultCommon> OnLoginError;
 
-        public delegate void ProfileLoaded();
-        public static event ProfileLoaded OnProfileLoaded;
+        // public delegate void ProfileLoaded();
+        // public static event ProfileLoaded OnProfileLoaded;
+        public static EventHandler<PlayFabResultCommon> OnProfileLoaded;
 
         public static List<string> Adjectives;
         public static List<string> Nouns;
@@ -73,16 +76,16 @@ namespace _Scripts._Core.Playfab_Models
             );
         }
 
-        void LoadProfileAfterLogin(object sender,  LoginResult result) 
+        void LoadProfileAfterLogin(object sender,  PlayFabResultCommon result) 
         {
-            LoadPlayerProfile();
+            LoadPlayerProfile(result);
         }
 
         /// <summary>
         /// Load Player Profile
         /// Load player profile using Playfab Id and return player display name
         /// </summary>
-        public void LoadPlayerProfile()
+        public void LoadPlayerProfile(PlayFabResultCommon result)
         {
             PlayFabClientAPI.GetPlayerProfile(
                 new GetPlayerProfileRequest()
@@ -100,7 +103,7 @@ namespace _Scripts._Core.Playfab_Models
                     Debug.Log("AuthenticationManager - Successfully retrieved player profile");
                     Debug.Log($"AuthenticationManager - Player id: {PlayerProfile.DisplayName}");
 
-                    OnProfileLoaded?.Invoke();
+                    OnProfileLoaded?.Invoke(this,result);
                 },
                 (error) =>
                 {
@@ -223,7 +226,7 @@ namespace _Scripts._Core.Playfab_Models
                 PlayerAccount.AuthContext = loginResult.AuthenticationContext;
                 PlayerAccount.IsNewlyCreated = loginResult.NewlyCreated;
 
-                Debug.Log($"AuthenticationManager - Logged in - Newly Created: {loginResult.NewlyCreated}");
+                Debug.Log($"AuthenticationManager - Logged in - Newly Created: {loginResult.NewlyCreated.ToString()}");
                 Debug.Log($"AuthenticationManager - Play Fab Id: {PlayerAccount.PlayFabId}");
                 Debug.Log($"AuthenticationManager - Entity Type: {PlayerAccount.AuthContext.EntityType}");
                 Debug.Log($"AuthenticationManager - Entity Id: {PlayerAccount.AuthContext.EntityId}");
@@ -243,12 +246,12 @@ namespace _Scripts._Core.Playfab_Models
         #region Unlinking
 
         /// <summary>
-        /// Unlink Anonymous Login
+        /// Unlink Device Unique Identifier
         /// Unlink based on the device unique identifier
         /// Can be tested on Unlink Anonymous Login button
         /// Reframe from clicking on it too much, it will abandon the anonymous account, next time login will create a whole new account.
         /// </summary>
-        public void UnlinkAnonymousLogin()
+        public void UnlinkDeviceUniqueIdentifier()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
         UnlinkAndroidLogin();
