@@ -7927,30 +7927,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCanvas: {fileID: 0}
-  AutoPilotEnabled: 0
   Portrait: 0
   ship: {fileID: 0}
+  AutoPilotEnabled: 0
   XSum: 0
   YSum: 0
   XDiff: 0
   YDiff: 0
   Idle: 0
   Paused: 0
-  RightJoystickHome: {x: 0, y: 0}
-  LeftJoystickHome: {x: 0, y: 0}
-  RightClampedPosition: {x: 0, y: 0}
-  LeftClampedPosition: {x: 0, y: 0}
   isGyroEnabled: 0
   invertYEnabled: 0
   invertThrottleEnabled: 0
   OneTouchLeft: 0
+  RightJoystickHome: {x: 0, y: 0}
+  LeftJoystickHome: {x: 0, y: 0}
+  RightClampedPosition: {x: 0, y: 0}
+  LeftClampedPosition: {x: 0, y: 0}
   RightJoystickStart: {x: 0, y: 0}
   LeftJoystickStart: {x: 0, y: 0}
   RightNormalizedJoystickPosition: {x: 0, y: 0}
   LeftNormalizedJoystickPosition: {x: 0, y: 0}
-  SingleTouchValue: {x: 0, y: 0}
   EasedRightJoystickPosition: {x: 0, y: 0}
   EasedLeftJoystickPosition: {x: 0, y: 0}
+  SingleTouchValue: {x: 0, y: 0}
 --- !u!1 &283141850
 GameObject:
   m_ObjectHideFlags: 0
@@ -45819,30 +45819,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCanvas: {fileID: 0}
-  AutoPilotEnabled: 0
   Portrait: 0
   ship: {fileID: 0}
+  AutoPilotEnabled: 0
   XSum: 0
   YSum: 0
   XDiff: 0
   YDiff: 0
   Idle: 0
   Paused: 0
-  RightJoystickHome: {x: 0, y: 0}
-  LeftJoystickHome: {x: 0, y: 0}
-  RightClampedPosition: {x: 0, y: 0}
-  LeftClampedPosition: {x: 0, y: 0}
   isGyroEnabled: 0
   invertYEnabled: 0
   invertThrottleEnabled: 0
   OneTouchLeft: 0
+  RightJoystickHome: {x: 0, y: 0}
+  LeftJoystickHome: {x: 0, y: 0}
+  RightClampedPosition: {x: 0, y: 0}
+  LeftClampedPosition: {x: 0, y: 0}
   RightJoystickStart: {x: 0, y: 0}
   LeftJoystickStart: {x: 0, y: 0}
   RightNormalizedJoystickPosition: {x: 0, y: 0}
   LeftNormalizedJoystickPosition: {x: 0, y: 0}
-  SingleTouchValue: {x: 0, y: 0}
   EasedRightJoystickPosition: {x: 0, y: 0}
   EasedLeftJoystickPosition: {x: 0, y: 0}
+  SingleTouchValue: {x: 0, y: 0}
 --- !u!1 &1526476323
 GameObject:
   m_ObjectHideFlags: 0
@@ -47584,6 +47584,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4853709195325629896, guid: ba70c0f3eb077d44b8a538982d02dadc,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 692
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853709195325629897, guid: ba70c0f3eb077d44b8a538982d02dadc,
+        type: 3}
+      propertyPath: m_Lens.NearClipPlane
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853709195325629897, guid: ba70c0f3eb077d44b8a538982d02dadc,
+        type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 1300
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853709196151767312, guid: ba70c0f3eb077d44b8a538982d02dadc,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -8
+      objectReference: {fileID: 0}
     - target: {fileID: 4853709196820857184, guid: ba70c0f3eb077d44b8a538982d02dadc,
         type: 3}
       propertyPath: m_Name
@@ -59133,30 +59153,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCanvas: {fileID: 0}
-  AutoPilotEnabled: 0
   Portrait: 0
   ship: {fileID: 0}
+  AutoPilotEnabled: 0
   XSum: 0
   YSum: 0
   XDiff: 0
   YDiff: 0
   Idle: 0
   Paused: 0
-  RightJoystickHome: {x: 0, y: 0}
-  LeftJoystickHome: {x: 0, y: 0}
-  RightClampedPosition: {x: 0, y: 0}
-  LeftClampedPosition: {x: 0, y: 0}
   isGyroEnabled: 0
   invertYEnabled: 0
   invertThrottleEnabled: 0
   OneTouchLeft: 0
+  RightJoystickHome: {x: 0, y: 0}
+  LeftJoystickHome: {x: 0, y: 0}
+  RightClampedPosition: {x: 0, y: 0}
+  LeftClampedPosition: {x: 0, y: 0}
   RightJoystickStart: {x: 0, y: 0}
   LeftJoystickStart: {x: 0, y: 0}
   RightNormalizedJoystickPosition: {x: 0, y: 0}
   LeftNormalizedJoystickPosition: {x: 0, y: 0}
-  SingleTouchValue: {x: 0, y: 0}
   EasedRightJoystickPosition: {x: 0, y: 0}
   EasedLeftJoystickPosition: {x: 0, y: 0}
+  SingleTouchValue: {x: 0, y: 0}
 --- !u!1 &1944843498
 GameObject:
   m_ObjectHideFlags: 0
