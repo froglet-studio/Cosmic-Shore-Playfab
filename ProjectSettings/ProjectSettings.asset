@@ -965,11 +965,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 3030fd69-28ab-433f-b4bd-22b9b93c5118
+  cloudProjectId: 25677895-99e0-4a1f-9b24-19891a4adec5
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Tail Glider
-  organizationId: isaiah-merrill
+  projectName: Cosmic-Shore
+  organizationId: yskhan61
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

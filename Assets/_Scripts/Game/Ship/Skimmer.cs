@@ -1,3 +1,4 @@
+using CosmicShore.Game;
 using CosmicShore.Game.IO;
 using CosmicShore.Game.Projectiles;
 using System.Collections;

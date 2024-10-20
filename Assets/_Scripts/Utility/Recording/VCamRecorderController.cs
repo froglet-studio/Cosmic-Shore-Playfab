@@ -2,6 +2,7 @@ using CosmicShore.Game.Arcade;
 using Cinemachine;
 using UnityEngine;
 using System.Collections;
+using CosmicShore.Game;
 
 namespace CosmicShore
 {

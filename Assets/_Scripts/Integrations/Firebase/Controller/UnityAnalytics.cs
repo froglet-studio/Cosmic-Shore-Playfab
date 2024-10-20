@@ -35,7 +35,7 @@ namespace CosmicShore.Integrations.Firebase.Controller
         /// Ask For Consents - Async
         /// Ask User consents for data collection
         /// </summary>
-        private async void AskForConsents()
+        private void AskForConsents()
         {
             if(_isConsented && _isConnected) AnalyticsService.Instance.StartDataCollection();
             else AnalyticsService.Instance.StopDataCollection();

@@ -1,3 +1,4 @@
+using CosmicShore.Game;
 using CosmicShore.Game.AI;
 using CosmicShore.Game.IO;
 using CosmicShore.Game.Projectiles;
