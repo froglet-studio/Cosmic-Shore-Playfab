@@ -413,8 +413,6 @@ MonoBehaviour:
   _networkManager: {fileID: 974832788}
   _sceneNameList: {fileID: 11400000, guid: 59ec318e1f4ac464cbaa35d940a28d48, type: 2}
   _popupManager: {fileID: 1301316257}
-  _tagContainer: {fileID: 0}
-  _enemyDeathCount: {fileID: 0}
 --- !u!1 &8425851
 GameObject:
   m_ObjectHideFlags: 0
@@ -58693,6 +58691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1871936318}
   - component: {fileID: 1871936319}
+  - component: {fileID: 1871936320}
   m_Layer: 0
   m_Name: UpdateRunner
   m_TagString: Untagged
@@ -58725,6 +58724,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6469c2c7ec05c284885950b9e89cdeb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1871936320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871936317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10d05335c08ba84597a1f78c3ef93d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1874567877

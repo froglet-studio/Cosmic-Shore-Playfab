@@ -9,7 +9,6 @@ namespace CosmicShore.Utilities
         public string StartUpScene;
         public string MainMenuScene;
         public string CharSelectScene;
-        public string SinglePlayerScene;
         public string MultiplayerScene;
     }
 }

@@ -889,6 +889,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a711482bf2608e04895d96b767a08747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 0}
+  _loadingSpinner: {fileID: 0}
   _lobbyName: {fileID: 211257093}
   _lobbyCode: {fileID: 299517510}
 --- !u!1 &420213765
@@ -2118,7 +2120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1078953705
 Transform:
   m_ObjectHideFlags: 0

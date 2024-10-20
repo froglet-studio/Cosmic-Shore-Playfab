@@ -18,19 +18,19 @@ namespace CosmicShore.App
     public class ApplicationService : LifetimeScope
     {
         [SerializeField]
-        private UpdateRunner _updateRunner;
+        UpdateRunner _updateRunner;
 
         [SerializeField]
-        private ConnectionManager _connectionManager;
+        ConnectionManager _connectionManager;
 
         [SerializeField]
-        private NetworkManager _networkManager;
+        NetworkManager _networkManager;
 
         [SerializeField]
-        private SceneNameListSO _sceneNameList;
+        SceneNameListSO _sceneNameList;
 
         [SerializeField]
-        private PopupManager _popupManager;
+        PopupManager _popupManager;
 
         [Space(10)]
 
@@ -40,9 +40,9 @@ namespace CosmicShore.App
         [Space(5)]
 
 
-        private LocalLobby _localLobby;
-        private LobbyServiceFacade _lobbyServiceFacade;
-        private IDisposable _subscriptionsDisposable;
+        LocalLobby _localLobby;
+        LobbyServiceFacade _lobbyServiceFacade;
+        IDisposable _subscriptionsDisposable;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -101,9 +101,6 @@ namespace CosmicShore.App
             Application.wantsToQuit += OnApplicationWantsToQuit;
 
             DontDestroyOnLoad(gameObject);
-            DontDestroyOnLoad(_updateRunner.gameObject);
-
-            SceneManager.LoadScene(_sceneNameList.MainMenuScene);
         }
 
 
