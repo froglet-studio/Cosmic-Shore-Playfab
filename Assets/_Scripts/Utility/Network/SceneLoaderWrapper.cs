@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-namespace Unity.Multiplayer.Samples.Utilities
+namespace CosmicShore.Utilities
 {
 
     /// <summary>
@@ -13,9 +13,6 @@ namespace Unity.Multiplayer.Samples.Utilities
     /// </summary>
     public class SceneLoaderWrapper : NetworkBehaviour
     {
-        [SerializeField]
-        LoadingProgressManager m_LoadingProgressManager;
-
         [SerializeField] ClientLoadingScreen m_clientLoadingScreen;
 
         bool IsNetworkSceneManagementEnabled => NetworkManager != null && NetworkManager.SceneManager != null && NetworkManager.NetworkConfig.EnableSceneManagement;
@@ -114,7 +111,7 @@ namespace Unity.Multiplayer.Samples.Utilities
                 if (loadSceneMode == LoadSceneMode.Single)
                 {
                     m_clientLoadingScreen.StartLoadingScreen(sceneName);
-                    m_LoadingProgressManager.LocalLoadOperation = loadOperation;
+                    m_clientLoadingScreen.LocalLoadOperation = loadOperation;
                 }
             }
         }
@@ -139,12 +136,12 @@ namespace Unity.Multiplayer.Samples.Utilities
                         if (sceneEvent.LoadSceneMode == LoadSceneMode.Single)
                         {
                             m_clientLoadingScreen.StartLoadingScreen(sceneEvent.SceneName);
-                            m_LoadingProgressManager.LocalLoadOperation = sceneEvent.AsyncOperation;
+                            m_clientLoadingScreen.LocalLoadOperation = sceneEvent.AsyncOperation;
                         }
                         else
                         {
                             m_clientLoadingScreen.UpdateLoadingScreen(sceneEvent.SceneName);
-                            m_LoadingProgressManager.LocalLoadOperation = sceneEvent.AsyncOperation;
+                            m_clientLoadingScreen.LocalLoadOperation = sceneEvent.AsyncOperation;
                         }
                     }
                     break;
