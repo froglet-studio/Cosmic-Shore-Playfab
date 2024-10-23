@@ -30599,7 +30599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 0}
+    NetworkTransport: {fileID: 974832789}
     PlayerPrefab: {fileID: 905104945568812046, guid: 1bc9960ca0ef4774b9aba01f719d29d6,
       type: 3}
     Prefabs:

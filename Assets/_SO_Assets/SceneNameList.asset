@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartUpScene: Menu_Main
   MainMenuScene: MinigameFreestyleMultiplayer
-  CharSelectScene: MinigameFreestyleMultiplayer_CharSelect
+  CharSelectScene: MinigameFreestyleMultiplayer_Gameplay
   MultiplayerScene: 

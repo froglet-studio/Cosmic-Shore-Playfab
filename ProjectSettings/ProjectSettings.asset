@@ -943,9 +943,9 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
-    Purchasing: 1
+    Purchasing: 0
     UNet: 1
-    Unity Ads: 1
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -965,10 +965,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 25677895-99e0-4a1f-9b24-19891a4adec5
+  cloudProjectId: 1754e538-c05b-4b80-9639-7d3e5c76f127
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Cosmic-Shore
+  projectName: Cosmic_Shore
   organizationId: yskhan61
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

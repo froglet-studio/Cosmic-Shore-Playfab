@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security;
+using System.Threading.Tasks;
 using CosmicShore.Integrations.Architectures.EventBus;
 using CosmicShore.Integrations.PlayFab.PlayerData;
 using CosmicShore.Integrations.PlayFab.PlayerModels;
@@ -11,6 +12,8 @@ using JetBrains.Annotations;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
 
 namespace CosmicShore.Integrations.PlayFab.Authentication
@@ -152,7 +155,7 @@ namespace CosmicShore.Integrations.PlayFab.Authentication
                 );
         }
 
-        void HandleLoginSuccess(LoginResult loginResult = null)
+        async void HandleLoginSuccess(LoginResult loginResult = null)
         {
             if (loginResult == null) return;
             
@@ -167,8 +170,33 @@ namespace CosmicShore.Integrations.PlayFab.Authentication
             Debug.Log($"AuthenticationManager - Entity Type: {PlayFabAccount.AuthContext.EntityType}");
             Debug.Log($"AuthenticationManager - Entity Id: {PlayFabAccount.AuthContext.EntityId}");
 
+            bool success = await AuthenticateWithUnity(loginResult.SessionTicket);
+            if (!success)
+                return;
+
             OnLoginSuccess?.Invoke();
             LoginEventBus.Publish(LoginType.Success);
+        }
+
+        async Task<bool> AuthenticateWithUnity(string playFabSessionTicket)
+        {
+            // Initialize Unity Services
+            await UnityServices.InitializeAsync();
+
+            // Pass PlayFab Session Ticket to Unity's Authentication Service
+            try
+            {
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+                // await AuthenticationService.Instance.SignInWithOpenIdConnectAsync("Oidc-playfab", playFabSessionTicket);
+                Debug.Log("Unity Authentication successful! Player ID: " + AuthenticationService.Instance.PlayerId);
+                return true;
+            }
+            catch (AuthenticationException ex)
+            {
+                Debug.LogError($"Unity Authentication failed: {ex.Message}");
+                return false;
+            }
         }
 
         void HandleLoginError(PlayFabError loginError = null)

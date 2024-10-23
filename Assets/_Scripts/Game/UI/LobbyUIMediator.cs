@@ -6,6 +6,9 @@ using TMPro;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using VContainer;
+using UnityEngine.UI;
+using CosmicShore.Integrations.PlayFab.Authentication;
+using Unity.Services.Authentication;
 
 
 namespace CosmicShore.Game.UI
@@ -23,9 +26,15 @@ namespace CosmicShore.Game.UI
         [Header("Create Lobby")]
 
         [SerializeField]
+        Toggle _createLobbyToggle; 
+
+        [SerializeField]
         TMP_InputField _lobbyName;
 
         [Header("Join Lobby")]
+
+        [SerializeField]
+        Toggle _joinLobbyToggle;
 
         [SerializeField]
         TMP_InputField _lobbyCode;
@@ -54,6 +63,12 @@ namespace CosmicShore.Game.UI
             _connectStatusSubscriber.Subscribe(OnConnectStatusChanged);
         }
 
+        private void Start()
+        {
+            _createLobbyToggle.isOn = true;
+            _joinLobbyToggle.isOn = false;
+        }
+
         private void OnDestroy()
         {
             if (_connectStatusSubscriber != null)
@@ -70,14 +85,11 @@ namespace CosmicShore.Game.UI
                 _lobbyName.text = DEFAULT_LOBBY_NAME;
             }
 
-            if (!PlayFabClientAPI.IsClientLoggedIn())
-            {
-                UnblockUIAfterLoadingIsComplete();
+            if (!TryGetAuthenticationId(out string id))
                 return;
-            }
 
             (bool Success, Lobby Lobby) lobbyCreationAttempt =
-                await _lobbyServiceFacade.TryCreateLobbyAsync(_lobbyName.text, _connectionManager.MaxConnectedPlayers, false);      // is not private
+                await _lobbyServiceFacade.TryCreateLobbyAsync(id, _lobbyName.text, _connectionManager.MaxConnectedPlayers, false);      // is not private
 
             if (lobbyCreationAttempt.Success)
             {
@@ -111,13 +123,10 @@ namespace CosmicShore.Game.UI
                 return;
             }
 
-            if (!PlayFabClientAPI.IsClientLoggedIn())
-            {
-                UnblockUIAfterLoadingIsComplete();
+            if (!TryGetAuthenticationId(out string id))
                 return;
-            }
 
-            (bool Success, Lobby Lobby) lobbyJoinAttempt = await _lobbyServiceFacade.TryJoinLobbyAsync(null, _lobbyCode.text);
+            (bool Success, Lobby Lobby) lobbyJoinAttempt = await _lobbyServiceFacade.TryJoinLobbyAsync(id, null, _lobbyCode.text);
 
             if (lobbyJoinAttempt.Success)
             {
@@ -129,6 +138,18 @@ namespace CosmicShore.Game.UI
             }
         }
 
+        bool TryGetAuthenticationId(out string id)
+        {
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                UnblockUIAfterLoadingIsComplete();
+                id = string.Empty;
+                return false;
+            }
+
+            id = AuthenticationService.Instance.PlayerId;
+            return true;
+        }
         private void BlockUIWhileLoadingIsInProgress()
         {
             _canvasGroup.interactable = false;
