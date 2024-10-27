@@ -5,7 +5,7 @@ namespace CosmicShore.Utilities
     [CreateAssetMenu(fileName = "TagSO", menuName = "ScriptableObjects/TagSO", order = 0)]
     public class TagSO : GuidSO
     {
-        /*[SerializeField]
+        [SerializeField]
         private string m_Name;
 
         protected override void OnValidate()
@@ -17,6 +17,6 @@ namespace CosmicShore.Utilities
 
             // The Guid creation is done after the name is set, so that the name can be used to generate the Guid.
             base.OnValidate();
-        }*/
+        }
     }
 }
