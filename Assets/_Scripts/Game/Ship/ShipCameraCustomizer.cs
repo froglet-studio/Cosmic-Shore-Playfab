@@ -18,9 +18,11 @@ namespace CosmicShore
 
         [SerializeField] bool isOrthographic = false;
 
-        void Start()
+        IEnumerator Start()
         {
             ship = GetComponent<Ship>();
+            yield return new WaitUntil(() => ship.cameraManager != null);
+            
             cameraManager = ship.cameraManager;
             cameraManager.isOrthographic = isOrthographic;
 

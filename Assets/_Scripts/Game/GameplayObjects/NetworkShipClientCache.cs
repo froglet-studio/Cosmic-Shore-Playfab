@@ -9,23 +9,23 @@ namespace CosmicShore.Game.GameplayObjects
 {
     /// <summary>
     /// Temporary cache for all active players in the game.
-    /// Later create NetworkPlayerRuntimeCollectionSO to store all active players in the game.
+    /// Later create NetworkShipRuntimeCollectionSO to store all active players in the game.
     /// </summary>
     [RequireComponent(typeof(NetcodeHooks))]
-    [RequireComponent(typeof(NetworkPlayer))]
-    public class NetworkPlayerClientCache : MonoBehaviour
+    [RequireComponent(typeof(NetworkShip))]
+    public class NetworkShipClientCache : MonoBehaviour
     {
-        private static List<NetworkPlayer> ms_ActivePlayers = new List<NetworkPlayer>();
-        public static List<NetworkPlayer> ActivePlayers => ms_ActivePlayers;
+        private static List<NetworkShip> ms_ActiveShips = new List<NetworkShip>();
+        public static List<NetworkShip> ActiveShips => ms_ActiveShips;
 
         private NetcodeHooks m_NetcodeHooks;
-        private NetworkPlayer m_Owner;  // This is the owner of this client instance
+        public static NetworkShip OwnShip { get; private set; } // This is the owner of this client instance
 
 
         private void Awake()
         {
             m_NetcodeHooks = GetComponent<NetcodeHooks>();
-            m_Owner = GetComponent<NetworkPlayer>();
+            OwnShip = GetComponent<NetworkShip>();
         }
 
         private void OnEnable()
@@ -39,12 +39,12 @@ namespace CosmicShore.Game.GameplayObjects
             m_NetcodeHooks.OnNetworkSpawnHook -= OnNetworkSpawn;
             m_NetcodeHooks.OnNetworkDespawnHook -= OnNetworkDespawn;
 
-            ms_ActivePlayers.Remove(m_Owner);
+            ms_ActiveShips.Remove(OwnShip);
         }
 
         private void OnNetworkSpawn()
         {
-            ms_ActivePlayers.Add(m_Owner);
+            ms_ActiveShips.Add(OwnShip);
             // LogCaching();
         }
 
@@ -52,7 +52,7 @@ namespace CosmicShore.Game.GameplayObjects
         {
             if (m_NetcodeHooks.IsServer)
             {
-                Transform movementTransform = m_Owner.transform;
+                Transform movementTransform = OwnShip.transform;
                 SessionPlayerData? sessionPlayerData = SessionManager<SessionPlayerData>.Instance.GetPlayerData(m_NetcodeHooks.OwnerClientId);
                 if (sessionPlayerData.HasValue)
                 {
@@ -65,13 +65,13 @@ namespace CosmicShore.Game.GameplayObjects
             }
             else
             {
-                ms_ActivePlayers.Remove(m_Owner);
+                ms_ActiveShips.Remove(OwnShip);
             }
         }
 
-        public static NetworkPlayer GetPlayer(ulong ownerClientId)
+        public static NetworkShip GetShip(ulong ownerClientId)
         {
-            foreach (NetworkPlayer playerView in ms_ActivePlayers)
+            foreach (NetworkShip playerView in ms_ActiveShips)
             {
                 if (playerView.OwnerClientId == ownerClientId)
                 {

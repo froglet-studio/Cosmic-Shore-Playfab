@@ -119,6 +119,9 @@ public class ShipTransformer : MonoBehaviour
                                         accumulatedRotation,
                                         lerpAmount * Time.deltaTime);
         }
+
+        // Debug.Log("Accumulated rotation: " + accumulatedRotation);
+        // Debug.Log("Ship rotation: " + transform.rotation);
     }
 
     public void FlatSpinShip(float YAngle)
@@ -143,6 +146,9 @@ public class ShipTransformer : MonoBehaviour
         accumulatedRotation = Quaternion.AngleAxis(
                             inputController.YSum * (speed * RotationThrottleScaler + PitchScaler) * Time.deltaTime,
                             transform.right) * accumulatedRotation;
+
+        // Debug.Log("Pitch Y Sum: " + inputController.YSum);
+        // Debug.Log("Pitch accumulated rotation: " + accumulatedRotation);
     }
 
     protected virtual void Yaw()  // TODO: test replacing these AngleAxis calls with eulerangles
@@ -150,6 +156,9 @@ public class ShipTransformer : MonoBehaviour
         accumulatedRotation = Quaternion.AngleAxis(
                             inputController.XSum * (speed * RotationThrottleScaler + YawScaler)  * Time.deltaTime,
                             transform.up) * accumulatedRotation;
+
+        Debug.Log("Yaw X Sum: " + inputController.XSum);
+        // Debug.Log("Yaw accumulated rotation: " + accumulatedRotation);
     }
 
     protected virtual void Roll()
@@ -157,6 +166,9 @@ public class ShipTransformer : MonoBehaviour
         accumulatedRotation = Quaternion.AngleAxis(
                             inputController.YDiff * (speed * RotationThrottleScaler + RollScaler) * Time.deltaTime,
                             transform.forward) * accumulatedRotation;
+
+        // Debug.Log("Roll Y Diff: " + inputController.YDiff);
+        // Debug.Log("Roll accumulated rotation: " + accumulatedRotation);
     }
 
     protected virtual void MoveShip()

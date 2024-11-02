@@ -94,8 +94,11 @@ public class TrailSpawner : MonoBehaviour
         GameManager.OnGameOver -= RestartAITrailSpawnerAfterDelay;
     }
 
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitUntil(() => 
+        ship != null && ship.Player != null);
+
         waitTime = defaultWaitTime;
         wavelength = initialWavelength;
         if (TrailContainer == null)
@@ -222,13 +225,15 @@ public class TrailSpawner : MonoBehaviour
 
     public void ForceStartSpawningTrail()
     {
-        StopCoroutine(spawnTrailCoroutine);
+        if (spawnTrailCoroutine != null)
+            StopCoroutine(spawnTrailCoroutine);
         spawnTrailCoroutine = StartCoroutine(SpawnTrailCoroutine());
     }
 
     IEnumerator SpawnTrailCoroutine()
     {
         yield return new WaitForSeconds(startDelay);
+        yield return new WaitUntil(() => shipData != null);
 
         while (true)
         {

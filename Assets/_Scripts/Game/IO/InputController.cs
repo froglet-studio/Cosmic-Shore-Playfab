@@ -18,7 +18,7 @@ namespace CosmicShore.Game.IO
         [SerializeField] private GameCanvas gameCanvas;
         [SerializeField] public bool Portrait;
 
-        [HideInInspector] public Ship ship;
+        public Ship ship { get; set; }
         [HideInInspector] public bool AutoPilotEnabled;
         [HideInInspector] public static ScreenOrientation currentOrientation;
 
@@ -73,6 +73,7 @@ namespace CosmicShore.Game.IO
 
         private void Start()
         {
+            gameCanvas = FindObjectOfType<GameCanvas>();
             InitializeJoysticks();
 
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
@@ -144,6 +145,8 @@ namespace CosmicShore.Game.IO
                 YSum = ship.AutoPilot.YSum;
                 XDiff = ship.AutoPilot.XDiff;
                 YDiff = ship.AutoPilot.YDiff;
+
+                Debug.Log("Autopilot XSum set: " + XSum);
             }
             PerformSpeedAndDirectionalEffects();
         }
@@ -152,6 +155,9 @@ namespace CosmicShore.Game.IO
         {
             LeftNormalizedJoystickPosition = Gamepad.current.leftStick.ReadValue();
             RightNormalizedJoystickPosition = Gamepad.current.rightStick.ReadValue();
+
+            Debug.Log(LeftNormalizedJoystickPosition);
+            Debug.Log(RightNormalizedJoystickPosition);
 
             Reparameterize();
             ProcessGamePadButtons();
@@ -342,6 +348,8 @@ namespace CosmicShore.Game.IO
             YSum = 0;
             XDiff = 0;
             YDiff = 0;
+
+            Debug.Log("Reset XSum: " + XSum);
         }
 
         private void HandleIdleState(bool isIdle)
@@ -387,6 +395,8 @@ namespace CosmicShore.Game.IO
             YSum = -Ease(RightNormalizedJoystickPosition.y + LeftNormalizedJoystickPosition.y);
             XDiff = (RightNormalizedJoystickPosition.x - LeftNormalizedJoystickPosition.x + 2) / 4;
             YDiff = Ease(RightNormalizedJoystickPosition.y - LeftNormalizedJoystickPosition.y);
+
+            Debug.Log("Reparameterize XSum set: " + XSum);
 
             if (invertYEnabled)
                 YSum *= -1;

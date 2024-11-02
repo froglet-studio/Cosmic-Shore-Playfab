@@ -40,6 +40,34 @@ namespace CosmicShore.Core
 
         readonly string SelectedShipPlayerPrefKey = "SelectedShip";
 
+        public Ship SelectedShip { get; private set; }
+        public override void Awake()
+        {
+            base.Awake();
+
+            TeamShipTypes.Add(Teams.Jade, GreenTeamShipTypes);
+            TeamShipTypes.Add(Teams.Ruby, RedTeamShipTypes);
+            TeamShipTypes.Add(Teams.Gold, GoldTeamShipTypes);
+
+            if (PlayerPrefs.HasKey(SelectedShipPlayerPrefKey))
+                PlayerShipType = (ShipTypes)PlayerPrefs.GetInt(SelectedShipPlayerPrefKey);
+
+
+            if (PlayerTeam == Teams.None)
+            {
+                Debug.LogError("Player Team is set to None. Defaulting to Green Team");
+                PlayerTeam = Teams.Jade;
+            }
+
+            foreach (var ship in ShipPrefabs.Where(ship => ship != null))
+            {
+                ships.Add(ship.name, ship);
+                shipTypeMap.Add(ship.ShipType, ship);
+            }
+
+            AITeam = PlayerTeam == Teams.Jade ? Teams.Ruby : Teams.Jade;
+        }
+
         public void SetPlayerShip(int shipType)
         {
             Debug.Log($"Hangar.SetPlayerShip: {(ShipTypes)shipType}");
@@ -59,7 +87,7 @@ namespace CosmicShore.Core
             PlayerCaptain = captain;
         }
 
-        public ShipTypes GetPlayerShip()
+        public ShipTypes GetPlayerShipType()
         {
             return PlayerShipType;
         }
@@ -86,35 +114,6 @@ namespace CosmicShore.Core
         {
             AISkillLevel = Mathf.FloorToInt(level/9f*4);
         }
-
-        public Ship SelectedShip { get; private set; }
-        public override void Awake()
-        {
-            base.Awake();
-
-            TeamShipTypes.Add(Teams.Jade, GreenTeamShipTypes);
-            TeamShipTypes.Add(Teams.Ruby, RedTeamShipTypes);
-            TeamShipTypes.Add(Teams.Gold, GoldTeamShipTypes);
-
-            if (PlayerPrefs.HasKey(SelectedShipPlayerPrefKey))
-                PlayerShipType = (ShipTypes) PlayerPrefs.GetInt(SelectedShipPlayerPrefKey);
-
-            
-            if (PlayerTeam == Teams.None)
-            {
-                Debug.LogError("Player Team is set to None. Defaulting to Green Team");
-                PlayerTeam = Teams.Jade;
-            }
-
-            foreach (var ship in ShipPrefabs.Where(ship => ship != null))
-            {
-                ships.Add(ship.name, ship);
-                shipTypeMap.Add(ship.ShipType, ship);
-            }
-
-            AITeam = PlayerTeam == Teams.Jade ? Teams.Ruby : Teams.Jade;
-        }
-
         
 
         public Ship LoadPlayerShip(bool useSquad=false)
@@ -136,7 +135,11 @@ namespace CosmicShore.Core
         public Ship LoadPlayerShip(ShipTypes shipType, Teams team)
         {
             var ship = Instantiate(shipTypeMap[shipType]);
+            return LoadPlayerShip(ship, shipType, team);
+        }
 
+        public Ship LoadPlayerShip(Ship ship, ShipTypes shipType, Teams team)
+        {
             if (PlayerCaptain != null)
                 ship.SetResourceLevels(PlayerCaptain.ResourceLevels);
 
@@ -149,7 +152,7 @@ namespace CosmicShore.Core
             ship.SetAOEExplosionMaterial(materialSet.AOEExplosionMaterial);
             ship.SetAOEConicExplosionMaterial(materialSet.AOEConicExplosionMaterial);
             ship.SetSkimmerMaterial(materialSet.SkimmerMaterial);
-
+            
             SelectedShip = ship;
 
             return ship;
@@ -227,7 +230,6 @@ namespace CosmicShore.Core
             ship.SetAOEExplosionMaterial(materialSet.AOEExplosionMaterial);
             ship.SetAOEConicExplosionMaterial(materialSet.AOEConicExplosionMaterial);
             ship.SetSkimmerMaterial(materialSet.SkimmerMaterial);
-
             var pilot = ship.GetComponent<AIPilot>();
             pilot.SkillLevel = ((float)AISkillLevel-1) / 3; // this assumes that levels remain from 1-4
             pilot.AutoPilotEnabled = true;
