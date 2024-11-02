@@ -1,3 +1,4 @@
+using CosmicShore.Integrations.PlayFab.Authentication;
 using CosmicShore.NetworkManagement;
 using CosmicShore.Utilities;
 using CosmicShore.Utilities.Network;
@@ -5,7 +6,6 @@ using System;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
@@ -42,6 +42,7 @@ namespace CosmicShore.App
 
         LocalLobby _localLobby;
         LobbyServiceFacade _lobbyServiceFacade;
+
         IDisposable _subscriptionsDisposable;
 
         protected override void Configure(IContainerBuilder builder)
@@ -59,6 +60,7 @@ namespace CosmicShore.App
             // they can persist longer than the lifetime of the UI in MainMenu, where we setup the lobby that we create or join.
             builder.Register<LocalLobby>(Lifetime.Singleton);
             builder.Register<LocalLobbyUser>(Lifetime.Singleton);
+            builder.Register<ProfileManager>(Lifetime.Singleton);
 
             // these message channels are essential and persist for the lifetime of the lobby and relay services.
             // Registering as instance to prevent code stripping on IOS
@@ -70,14 +72,14 @@ namespace CosmicShore.App
             // they are networked so that the clients can subscribe to those messages that are published by the server.
             builder.RegisterComponent(new NetworkedMessageChannel<ConnectionEventMessage>()).AsImplementedInterfaces();
 
-            // this one is for chatting amoung the clients in the lobby (team - members)
-            builder.RegisterComponent(new NetworkedMessageChannel<NetworkChatMessage>()).AsImplementedInterfaces();
-
             // this message channel is essential and persists for the lifetime of the lobby and relay services.
             builder.RegisterInstance(new MessageChannel<ReconnectMessage>()).AsImplementedInterfaces();
 
             // buffered message channels hold the latest received message in buffer and pass to any new subscribers
             builder.RegisterInstance(new BufferedMessageChannel<LobbyListFetchedMessage>()).AsImplementedInterfaces();
+
+            //a manager entity that allows us to do anonymous authentication with unity services
+            builder.Register<UnityAuthenticationServiceFacade>(Lifetime.Singleton);
 
             // LobbyServiceFacade is registered as entrypoint because it wants a callback after container is built to do it's initialization
             builder.RegisterEntryPoint<LobbyServiceFacade>(Lifetime.Singleton).AsSelf();

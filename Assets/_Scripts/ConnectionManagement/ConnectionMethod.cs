@@ -1,7 +1,9 @@
-﻿using CosmicShore.Utilities.Network;
+﻿using CosmicShore.Utilities;
+using CosmicShore.Utilities.Network;
 using System.Threading.Tasks;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
@@ -79,7 +81,7 @@ namespace CosmicShore.NetworkManagement
                 return null;
             }
 
-            return "1234";          // We need to return the Id We get after authenticating to PlayFab
+            return AuthenticationService.Instance.PlayerId;
         }
     }
 

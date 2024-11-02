@@ -407,7 +407,8 @@ MonoBehaviour:
   parentReference:
     TypeName: 
   autoRun: 1
-  autoInjectGameObjects: []
+  autoInjectGameObjects:
+  - {fileID: 1036994091}
   _updateRunner: {fileID: 1871936319}
   _connectionManager: {fileID: 93626409}
   _networkManager: {fileID: 974832788}
@@ -7535,7 +7536,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.334961, y: -37.200012}
+  m_AnchoredPosition: {x: 15.334961, y: -37.19995}
   m_SizeDelta: {x: -189.33, y: -130.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &263072050
@@ -17984,7 +17985,6 @@ GameObject:
   - component: {fileID: 585839613}
   - component: {fileID: 585839612}
   - component: {fileID: 585839611}
-  - component: {fileID: 585839610}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -17992,19 +17992,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &585839610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585839609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c6aff54f16b5284988c59467bde894d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _statusText: {fileID: 0}
 --- !u!114 &585839611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25139,7 +25126,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.334961, y: -37.200012}
+  m_AnchoredPosition: {x: 15.334961, y: -37.19995}
   m_SizeDelta: {x: -189.33, y: -130.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &784391809
@@ -30604,7 +30591,7 @@ MonoBehaviour:
       type: 3}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: afbab48a369d59e4095f52f9ff21a54a, type: 2}
+      - {fileID: 11400000, guid: 4c345361027131342b47b68c4ecc8e66, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
@@ -30635,7 +30622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ProtocolType: 1
+  m_ProtocolType: 0
   m_MaxPacketQueueSize: 512
   m_MaxPayloadSize: 6144
   m_HeartbeatTimeoutMS: 500
@@ -32671,6 +32658,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1034289336}
   m_CullTransparentMesh: 1
+--- !u!1 &1036994091 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1891226926731810441, guid: a293d6f34d4843245b1e7d5d11f5fdfc,
+    type: 3}
+  m_PrefabInstance: {fileID: 1891226927487767932}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1053570511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68735,6 +68728,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 2c9b2c006dca06247b5c5a7508e8a7e8,
         type: 2}
+    - target: {fileID: 302356026468653294, guid: fdbd97f79a7aec14f8fadd5589780a74,
+        type: 3}
+      propertyPath: PlayerShipType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 302356026468653295, guid: fdbd97f79a7aec14f8fadd5589780a74,
         type: 3}
       propertyPath: m_RootOrder
@@ -89213,7 +89211,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 41.540527, y: 4.6799927}
+  m_AnchoredPosition: {x: 41.540527, y: 4.6799316}
   m_SizeDelta: {x: 62.4205, y: 191.1136}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &6641753402145800299

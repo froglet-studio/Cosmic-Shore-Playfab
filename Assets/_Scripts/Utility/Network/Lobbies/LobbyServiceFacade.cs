@@ -141,7 +141,7 @@ namespace CosmicShore.Utilities.Network
         /// <param name="maxPlayers"> Maximum number of players allowed in the lobby</param>
         /// <param name="isPrivate">Is the lobby private</param>
         /// <returns></returns>
-        public async Task<(bool Success, Lobby Lobby)> TryCreateLobbyAsync(string playerId, string lobbyName, int maxPlayers, bool isPrivate)
+        public async Task<(bool Success, Lobby Lobby)> TryCreateLobbyAsync(string lobbyName, int maxPlayers, bool isPrivate)
         {
             if (!_rateLimitHost.CanCall)
             {
@@ -151,7 +151,7 @@ namespace CosmicShore.Utilities.Network
 
             try
             {
-                Lobby lobby = await _lobbyApiInterface.CreateLobby(playerId, lobbyName, maxPlayers, isPrivate,
+                Lobby lobby = await _lobbyApiInterface.CreateLobby(_localLobbyUser.ID, lobbyName, maxPlayers, isPrivate,
                     _localLobbyUser.GetDataForUnityServices(), null);
 
                 return (true, lobby);
@@ -186,7 +186,7 @@ namespace CosmicShore.Utilities.Network
         /// <param name="lobbyId">The ID of the lobby to join</param>
         /// <param name="lobbyCode">The code of the lobby to join</param>
         /// <returns>The success status and the joined lobby</returns>
-        public async Task<(bool Success, Lobby Lobby)> TryJoinLobbyAsync(string playerId, string lobbyId, string lobbyCode)
+        public async Task<(bool Success, Lobby Lobby)> TryJoinLobbyAsync(string lobbyId, string lobbyCode)
         {
             if (!_rateLimitJoin.CanCall ||
                 (lobbyId == null && lobbyCode == null))
@@ -199,12 +199,12 @@ namespace CosmicShore.Utilities.Network
             {
                 if (!string.IsNullOrEmpty(lobbyCode))
                 {
-                    Lobby lobby = await _lobbyApiInterface.JoinLobbyByCode(playerId, lobbyCode, _localLobbyUser.GetDataForUnityServices());
+                    Lobby lobby = await _lobbyApiInterface.JoinLobbyByCode(_localLobbyUser.ID, lobbyCode, _localLobbyUser.GetDataForUnityServices());
                     return (true, lobby);
                 }
                 else
                 {
-                    Lobby lobby = await _lobbyApiInterface.JoinLobbyById(playerId, lobbyId, _localLobbyUser.GetDataForUnityServices());
+                    Lobby lobby = await _lobbyApiInterface.JoinLobbyById(_localLobbyUser.ID, lobbyId, _localLobbyUser.GetDataForUnityServices());
                     return (true, lobby);
                 }
             }
@@ -245,7 +245,7 @@ namespace CosmicShore.Utilities.Network
 
             try
             {
-                Lobby lobby = await _lobbyApiInterface.QuickJoinLobby(AuthenticationService.Instance.PlayerId, _localLobbyUser.GetDataForUnityServices());
+                Lobby lobby = await _lobbyApiInterface.QuickJoinLobby(_localLobbyUser.ID, _localLobbyUser.GetDataForUnityServices());
                 return (true, lobby);
             }
             catch (LobbyServiceException e)
@@ -390,7 +390,7 @@ namespace CosmicShore.Utilities.Network
 
             try
             {
-                Lobby lobby = await _lobbyApiInterface.UpdatePlayer(CurrentUnityLobby.Id, AuthenticationService.Instance.PlayerId, _localLobbyUser.GetDataForUnityServices(), allocationId, connectionInfo);
+                Lobby lobby = await _lobbyApiInterface.UpdatePlayer(CurrentUnityLobby.Id, _localLobbyUser.ID, _localLobbyUser.GetDataForUnityServices(), allocationId, connectionInfo);
 
                 if (lobby != null)
                 {
@@ -709,6 +709,7 @@ namespace CosmicShore.Utilities.Network
         {
             string reason = e.InnerException == null ? e.Message : $"{e.Message} ({e.InnerException.Message})"; // Lobby error type, then HTTP error type
             _unityServiceErrorMessagePublisher.Publish(new UnityServiceErrorMessage("Lobby Error", reason, UnityServiceErrorMessage.Service.Lobby, e));
+            Debug.LogError(reason);
         }
     }
 }

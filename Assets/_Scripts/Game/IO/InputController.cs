@@ -74,7 +74,11 @@ namespace CosmicShore.Game.IO
         private void Start()
         {
             InitializeJoysticks();
+
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
             InitializeGyroscope();
+#endif
+
             LoadSettings();
         }
 
@@ -84,7 +88,7 @@ namespace CosmicShore.Game.IO
             ReceiveInput();
         }
 
-        #endregion
+#endregion
 
         #region Initialization Methods
 

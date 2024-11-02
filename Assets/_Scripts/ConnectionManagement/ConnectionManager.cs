@@ -114,14 +114,9 @@ namespace CosmicShore.NetworkManagement
 
         internal void ChangeState(ConnectionState nextState)
         {
-            Debug.Log($"{name}: Changed connection state from {_currentState.GetType().Name} to {nextState.GetType().Name}.");
-
-            if (_currentState != null)
-            {
-                _currentState.Exit();
-            }
-
+            _currentState?.Exit();
             _currentState = nextState;
+            Debug.Log($"{name}: Changed connection state from {_currentState.GetType().Name} to {nextState.GetType().Name}.");
             _currentState.Enter();
         }
 

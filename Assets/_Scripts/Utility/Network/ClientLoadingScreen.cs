@@ -103,7 +103,7 @@ namespace CosmicShore.Utilities
 
         IEnumerator FadeOutCoroutine()
         {
-            yield return new WaitForSeconds(m_DelayBeforeFadeOut);
+            yield return new WaitForSecondsRealtime(m_DelayBeforeFadeOut);
             m_LoadingScreenRunning = false;
 
             float currentTime = 0;
@@ -111,7 +111,7 @@ namespace CosmicShore.Utilities
             {
                 m_CanvasGroup.alpha = Mathf.Lerp(1, 0, currentTime / m_FadeOutDuration);
                 yield return null;
-                currentTime += Time.deltaTime;
+                currentTime += Time.unscaledDeltaTime;
             }
 
             SetCanvasVisibility(false);

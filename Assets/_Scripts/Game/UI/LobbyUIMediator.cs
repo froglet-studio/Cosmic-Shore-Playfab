@@ -1,14 +1,13 @@
 ﻿using CosmicShore.NetworkManagement;
 using CosmicShore.Utilities.Network;
 using CosmicShore.Utilities;
-using PlayFab;
 using TMPro;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using VContainer;
 using UnityEngine.UI;
 using CosmicShore.Integrations.PlayFab.Authentication;
-using Unity.Services.Authentication;
+
 
 
 namespace CosmicShore.Game.UI
@@ -39,28 +38,35 @@ namespace CosmicShore.Game.UI
         [SerializeField]
         TMP_InputField _lobbyCode;
 
-        private LobbyServiceFacade _lobbyServiceFacade;
-        private LocalLobbyUser _localLobbyUser;
-        private LocalLobby _localLobby;
-        private ConnectionManager _connectionManager;
+        UnityAuthenticationServiceFacade _authenticationServiceFacade;
+        LobbyServiceFacade _lobbyServiceFacade;
+        LocalLobbyUser _localLobbyUser;
+        LocalLobby _localLobby;
+        ConnectionManager _connectionManager;
+        NameGenerationData _nameGenerationData;
         ISubscriber<ConnectStatus> _connectStatusSubscriber;
 
         [Inject]
-        private void InjectDependenciesAndInitialize(
+        void InjectDependenciesAndInitialize(
+            UnityAuthenticationServiceFacade authenticationServiceFacade,
             LobbyServiceFacade lobbyServiceFacade,
-            LocalLobbyUser localLobbyUser,
+            LocalLobbyUser localUser,
             LocalLobby localLobby,
-            ISubscriber<ConnectStatus> connectStatusSubscriber,
-            ConnectionManager connectionManager)
+            NameGenerationData nameGenerationData,
+            ISubscriber<ConnectStatus> connectStatusSub,
+            ConnectionManager connectionManager
+        )
         {
+            _authenticationServiceFacade = authenticationServiceFacade;
+            _nameGenerationData = nameGenerationData;
+            _localLobbyUser = localUser;
             _lobbyServiceFacade = lobbyServiceFacade;
-            _localLobbyUser = localLobbyUser;
             _localLobby = localLobby;
-
-            _connectStatusSubscriber = connectStatusSubscriber;
             _connectionManager = connectionManager;
+            _connectStatusSubscriber = connectStatusSub;
+            RegenerateName();
 
-            _connectStatusSubscriber.Subscribe(OnConnectStatusChanged);
+            _connectStatusSubscriber.Subscribe(OnConnectStatus);
         }
 
         private void Start()
@@ -85,11 +91,18 @@ namespace CosmicShore.Game.UI
                 _lobbyName.text = DEFAULT_LOBBY_NAME;
             }
 
-            if (!TryGetAuthenticationId(out string id))
+            BlockUIWhileLoadingIsInProgress();
+
+            bool playerIsAuthorized = await _authenticationServiceFacade.EnsurePlayerIsAuthorized();
+
+            if (!playerIsAuthorized)
+            {
+                UnblockUIAfterLoadingIsComplete();
                 return;
+            }
 
             (bool Success, Lobby Lobby) lobbyCreationAttempt =
-                await _lobbyServiceFacade.TryCreateLobbyAsync(id, _lobbyName.text, _connectionManager.MaxConnectedPlayers, false);      // is not private
+                await _lobbyServiceFacade.TryCreateLobbyAsync(_lobbyName.text, _connectionManager.MaxConnectedPlayers, false);      // is not private
 
             if (lobbyCreationAttempt.Success)
             {
@@ -123,10 +136,7 @@ namespace CosmicShore.Game.UI
                 return;
             }
 
-            if (!TryGetAuthenticationId(out string id))
-                return;
-
-            (bool Success, Lobby Lobby) lobbyJoinAttempt = await _lobbyServiceFacade.TryJoinLobbyAsync(id, null, _lobbyCode.text);
+            (bool Success, Lobby Lobby) lobbyJoinAttempt = await _lobbyServiceFacade.TryJoinLobbyAsync(null, _lobbyCode.text);
 
             if (lobbyJoinAttempt.Success)
             {
@@ -138,18 +148,12 @@ namespace CosmicShore.Game.UI
             }
         }
 
-        bool TryGetAuthenticationId(out string id)
+        public void RegenerateName()
         {
-            if (!AuthenticationService.Instance.IsSignedIn)
-            {
-                UnblockUIAfterLoadingIsComplete();
-                id = string.Empty;
-                return false;
-            }
-
-            id = AuthenticationService.Instance.PlayerId;
-            return true;
+            _localLobbyUser.PlayerName = _nameGenerationData.GenerateName();
+            // _playerNameLabel.text = m_LocalUser.DisplayName;
         }
+
         private void BlockUIWhileLoadingIsInProgress()
         {
             _canvasGroup.interactable = false;
@@ -180,6 +184,14 @@ namespace CosmicShore.Game.UI
             _lobbyServiceFacade.SetRemoteLobby(remoteLobby);
             Debug.Log($"Joined lobby with ID: {_localLobby.LobbyID} and Internal Relay join code {_localLobby.RelayJoinCode}");
             _connectionManager.StartClientLobby(_localLobbyUser.PlayerName);
+        }
+
+        void OnConnectStatus(ConnectStatus status)
+        {
+            if (status is ConnectStatus.GenericDisconnect or ConnectStatus.StartClientFailed)
+            {
+                UnblockUIAfterLoadingIsComplete();
+            }
         }
     }
 }

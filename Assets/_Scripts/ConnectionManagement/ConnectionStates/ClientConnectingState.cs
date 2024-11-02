@@ -69,11 +69,13 @@ namespace CosmicShore.NetworkManagement
             if (string.IsNullOrEmpty(disconnectReason))
             {
                 _connectStatusPublisher.Publish(ConnectStatus.StartClientFailed);
+                Debug.LogError(disconnectReason);
             }
             else
             {
                 ConnectStatus connectStatus = JsonUtility.FromJson<ConnectStatus>(disconnectReason);
                 _connectStatusPublisher.Publish(connectStatus);
+                Debug.LogError(connectStatus);
             }
             _connectionManager.ChangeState(_connectionManager._offlineState);
         }

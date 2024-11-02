@@ -810,8 +810,9 @@ MonoBehaviour:
   parentReference:
     TypeName: CosmicShore.App.ApplicationService
   autoRun: 1
-  autoInjectGameObjects:
-  - {fileID: 409931973}
+  autoInjectGameObjects: []
+  _nameGenerationData: {fileID: 11400000, guid: 24d942c302c0a3040a03308f86e5c1e0,
+    type: 2}
   _lobbyUIMediator: {fileID: 409931975}
   _signInSpinner: {fileID: 1174933052}
 --- !u!1 &371897435

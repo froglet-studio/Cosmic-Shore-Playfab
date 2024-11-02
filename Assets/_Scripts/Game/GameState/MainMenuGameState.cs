@@ -1,12 +1,13 @@
 using CosmicShore.Game.UI;
+using CosmicShore.Integrations.PlayFab.Authentication;
 using CosmicShore.Utilities;
 using CosmicShore.Utilities.Network;
-using PlayFab;
 using System;
-using Unity.Services.Core;
+using Unity.Services.Authentication;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+
 
 namespace CosmicShore.Gameplay.GameState
 {
@@ -21,54 +22,110 @@ namespace CosmicShore.Gameplay.GameState
     public class MainMenuGameState : GameStateBehaviour
     {
         [SerializeField]
-        private LobbyUIMediator _lobbyUIMediator;
+        NameGenerationData _nameGenerationData;
 
         [SerializeField]
-        private GameObject _signInSpinner;
+        LobbyUIMediator _lobbyUIMediator;
+
+        [SerializeField]
+        GameObject _signInSpinner;
 
         [Inject]
-        private SceneNameListSO _sceneNameList;
+        SceneNameListSO _sceneNameList;
 
-        private LocalLobbyUser _localLobbyUser;
-        private LocalLobby _localLobby;
+        [Inject]
+        UnityAuthenticationServiceFacade _authServiceFacade;
+
+        [Inject]
+        LocalLobbyUser _localUser;
+
+        [Inject]
+        LocalLobby _localLobby;
+
+        [Inject]
+        ProfileManager _profileManager;
 
         public override GameState ActiveState => GameState.MainMenu;
-
-        private string _profileName;
-        
-        
-        protected override void Awake()
-        {
-            base.Awake();
-            _signInSpinner.SetActive(false);
-        }
-
-        protected override async void Start()
-        {
-            base.Start();
-
-            string savedName = PlayFabClientAPI.IsClientLoggedIn() ? "Yash" : "No-name";
-
-            _localLobbyUser.PlayerName = savedName;
-
-            // The local lobby user object will be hooked into UI before the LocalLobby is populated during lobby join, so the LocalLobby must know about it already
-            // when that happens.
-            _localLobby.AddUser(_localLobbyUser);
-        }
 
         protected override void Configure(IContainerBuilder builder)
         {
             base.Configure(builder);
+            builder.RegisterComponent(_nameGenerationData);
             builder.RegisterComponent(_lobbyUIMediator);
         }
 
-        [Inject]
-        private void AddDependencies(
-            LocalLobbyUser localLobbyUser,
-            LocalLobby localLobby)
+
+        protected override void Awake()
         {
-            _localLobbyUser = localLobbyUser;
-            _localLobby = localLobby;
+            base.Awake();
+            _signInSpinner.SetActive(false);
+
+            if (string.IsNullOrEmpty(Application.cloudProjectId))
+            {
+                OnSignInFailed();
+                return;
+            }
+
+            TrySignIn();
+        }
+
+        protected override void OnDestroy()
+        {
+            _profileManager.onProfileChanged -= OnProfileChanged;
+            base.OnDestroy();
+        }
+
+        async void TrySignIn()
+        {
+            try
+            {
+                var unityAuthenticationInitOptions =
+                    _authServiceFacade.GenerateAuthenticationOptions(_profileManager.Profile);
+
+                await _authServiceFacade.InitializeAndSignInAsync(unityAuthenticationInitOptions);
+                OnAuthSignIn();
+                _profileManager.onProfileChanged += OnProfileChanged;
+            }
+            catch (Exception)
+            {
+                OnSignInFailed();
+            }
+        }
+
+        void OnAuthSignIn()
+        {
+            _signInSpinner.SetActive(false);
+
+            Debug.Log($"Signed in. Unity Player ID {AuthenticationService.Instance.PlayerId}");
+
+            _localUser.ID = AuthenticationService.Instance.PlayerId;
+
+            // The local LobbyUser object will be hooked into UI before the LocalLobby is populated during lobby join, so the LocalLobby must know about it already when that happens.
+            _localLobby.AddUser(_localUser);
+        }
+
+        void OnSignInFailed()
+        {
+            Debug.LogError("Sign In with Unity Authentication Failed!");
+            if (_signInSpinner)
+            {
+                _signInSpinner.SetActive(false);
+            }
+        }
+
+        async void OnProfileChanged()
+        {
+            _signInSpinner.SetActive(true);
+            await _authServiceFacade.SwitchProfileAndReSignInAsync(_profileManager.Profile);
+
+            _signInSpinner.SetActive(false);
+
+            Debug.Log($"Signed in. Unity Player ID {AuthenticationService.Instance.PlayerId}");
+
+            // Updating LocalUser and LocalLobby
+            _localLobby.RemoveUser(_localUser);
+            _localUser.ID = AuthenticationService.Instance.PlayerId;
+            _localLobby.AddUser(_localUser);
         }
     }
 }
