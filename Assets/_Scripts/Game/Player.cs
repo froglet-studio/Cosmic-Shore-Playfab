@@ -3,6 +3,7 @@ using CosmicShore.Core;
 using CosmicShore.Game.IO;
 using CosmicShore.Game.AI;
 using CosmicShore.Game.UI;
+using System;
 
 namespace CosmicShore.Game
 {
@@ -11,8 +12,8 @@ namespace CosmicShore.Game
     {
         [SerializeField] string playerName;
         [SerializeField] string playerUUID;
-        [SerializeField] Ship ship;
-        [SerializeField] GameObject shipContainer;
+        [SerializeField] protected Ship ship;
+        [SerializeField] protected GameObject shipContainer;
         [SerializeField] public GameCanvas GameCanvas;
         [SerializeField] public ShipTypes defaultShip = ShipTypes.Dolphin;
         [SerializeField] bool UseHangarConfiguration = true;
@@ -25,14 +26,22 @@ namespace CosmicShore.Game
         public string PlayerUUID { get => playerUUID; set => playerUUID = value; }
         public Ship Ship { get => ship; }
 
-        GameManager gameManager;
+        protected GameManager gameManager;
 
-        void Start()
+        protected virtual void Start()
         {
             gameManager = GameManager.Instance;
-
+            GameCanvas = FindObjectOfType<GameCanvas>();
             foreach (Transform child in shipContainer.transform) Destroy(child.gameObject);
 
+            Setup();
+
+            if (!IsAI)
+                gameManager.WaitOnPlayerLoading();
+        }
+
+        public void Setup()
+        {
             if (UseHangarConfiguration)
             {
                 switch (playerName)
@@ -62,6 +71,7 @@ namespace CosmicShore.Game
                     default: // Default will be the players Playfab username
                         Debug.Log($"Player.Start - Instantiate Ship: {PlayerName}");
                         SetupPlayerShip(Hangar.Instance.LoadPlayerShip(defaultShip, Team));
+                        // gameManager.WaitOnPlayerLoading();
                         break;
                 }
             }
@@ -72,12 +82,12 @@ namespace CosmicShore.Game
                 else
                 {
                     SetupPlayerShip(Hangar.Instance.LoadPlayerShip());
-                    gameManager.WaitOnPlayerLoading();
+                    // gameManager.WaitOnPlayerLoading();
                 }
             }
         }
 
-        void SetupPlayerShip(Ship shipInstance)
+        protected virtual void SetupPlayerShip(Ship shipInstance)
         {
             ActivePlayer = this;
 
@@ -90,6 +100,9 @@ namespace CosmicShore.Game
             GameCanvas.MiniGameHUD.ship = ship;
             ship.Team = Team;
             ship.Player = this;
+            ship.Initialize();
+
+            gameManager.WaitOnPlayerLoading();
         }
 
         void SetupAIShip(Ship shipInstance)
@@ -106,6 +119,7 @@ namespace CosmicShore.Game
             ship.Team = Team;
             ship.Player = this;
             ship.InputController = inputController;
+            ship.Initialize();
 
             gameManager.WaitOnAILoading(ship.GetComponent<AIPilot>());
         }

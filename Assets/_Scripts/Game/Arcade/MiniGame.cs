@@ -103,18 +103,11 @@ namespace CosmicShore.Game.Arcade
 
         protected virtual void Start()
         {
-            Players = new List<Player>();
-            for (var i = 0; i < NumberOfPlayers; i++)
-            {
-                Players.Add(Instantiate(playerPrefab));
-                Players[i].defaultShip = playerShipTypeInitialized ? PlayerShipType : DefaultPlayerShipType;
-                Players[i].Team = PlayerTeams[i];
-                Players[i].PlayerName = i == 0 ? PlayerDataController.PlayerProfile.DisplayName : PlayerNames[i];
-                Players[i].PlayerUUID = PlayerNames[i];
-                Players[i].name = "Player" + (i + 1);
-                Players[i].gameObject.SetActive(true);
-            }
+            InitializePlayer();
+        }
 
+        public void InitializeGame()
+        {
             ReadyButton.onClick.AddListener(OnReadyClicked);
             ReadyButton.gameObject.SetActive(false);
 
@@ -124,12 +117,14 @@ namespace CosmicShore.Game.Arcade
 
         protected virtual void OnEnable()
         {
+            GameManager.OnPlayGame += InitializeGame;
             OnMiniGameStart += FirebaseAnalyticsController.LogEventMiniGameStart;
             OnMiniGameEnd += FirebaseAnalyticsController.LogEventMiniGameEnd;
         }
         
         protected virtual void OnDisable()
         {
+            GameManager.OnPlayGame -= InitializeGame;
             OnMiniGameStart -= FirebaseAnalyticsController.LogEventMiniGameStart;
             OnMiniGameEnd -= FirebaseAnalyticsController.LogEventMiniGameEnd;
         }
@@ -193,6 +188,27 @@ namespace CosmicShore.Game.Arcade
                     return;
                 }
             }
+        }
+
+        public Player InitializePlayer()
+        {
+            if (ActivePlayer != null)
+                return ActivePlayer;
+
+            Players = new List<Player>();
+            for (var i = 0; i < NumberOfPlayers; i++)
+            {
+                Players.Add(Instantiate(playerPrefab));
+                Players[i].defaultShip = playerShipTypeInitialized ? PlayerShipType : DefaultPlayerShipType;
+                Players[i].Team = PlayerTeams[i];
+                Players[i].PlayerName = i == 0 ? PlayerDataController.PlayerProfile.DisplayName : PlayerNames[i];
+                Players[i].PlayerUUID = PlayerNames[i];
+                Players[i].name = "Player" + (i + 1);
+                Players[i].gameObject.SetActive(true);
+            }
+
+            ActivePlayer = Players[0];
+            return ActivePlayer;
         }
 
         void StartGame()

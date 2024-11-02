@@ -1,5 +1,6 @@
 using CosmicShore.Core;
 using CosmicShore.Game;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,9 +52,10 @@ namespace CosmicShore
         Transform trailDisplayContainer;
         [SerializeField] Vector3 sihouetteScale = Vector3.one;
 
-        // Start is called before the first frame update
-        void Start()
+        IEnumerator Start()
         {
+            yield return new WaitUntil(() => ship != null && ship.Player != null);
+
             if (!ship.AutoPilot.AutoPilotEnabled && ship.Player.GameCanvas != null)
             {
                 hud = ship.Player.GameCanvas.MiniGameHUD;

@@ -5,6 +5,7 @@ using CosmicShore.Game.Projectiles;
 using CosmicShore.Models;
 using CosmicShore.Models.Enums;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -121,7 +122,7 @@ namespace CosmicShore.Core
             ShipStatus = GetComponent<ShipStatus>();
         }
 
-        void Start()
+        public void Initialize()
         {
             cameraManager = CameraManager.Instance;
             InputController = player.GetComponent<InputController>();

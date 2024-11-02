@@ -19,7 +19,8 @@ public abstract class ShipAction : ElementalShipComponent
     // Give time for components to initialize to make sure the ship object has been assigned
     IEnumerator InitializeShipAttributesCoroutine()
     {
-        yield return new WaitForSecondsRealtime(.1f);
+        // yield return new WaitForSecondsRealtime(.1f);
+        yield return new WaitUntil(() => ship != null);
         InitializeShipAttributes();
     }
 

@@ -216,11 +216,11 @@ namespace CosmicShore.Core
 
         void OnTriggerStay(Collider other)
         {
-            float skimDecayDuration = 1;
-
+            if (ship.Player == null) return;
             if (!other.TryGetComponent<TrailBlock>(out var trailBlock)) return;
-            
             if (trailBlock.Team == team && !affectSelf) return;
+
+            float skimDecayDuration = 1;
             
             // Occasionally, seeing a KeyNotFoundException, so maybe we miss the OnTriggerEnter event (note: always seems to be for AOE blocks)
             if(!skimStartTimes.ContainsKey(trailBlock.ID))   

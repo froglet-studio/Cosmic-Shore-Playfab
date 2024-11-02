@@ -104,6 +104,8 @@ public class StatsManager : Singleton<StatsManager>
 
     public void SkimmerShipCollision(Ship skimmingShip, Ship ship)
     {
+        if (skimmingShip == null || skimmingShip.Player == null) return;
+
         if (!RecordStats)
             return;
 
