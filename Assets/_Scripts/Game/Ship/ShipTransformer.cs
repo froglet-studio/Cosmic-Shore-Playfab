@@ -2,6 +2,7 @@ using UnityEngine;
 using CosmicShore.Core;
 using CosmicShore.Game.IO;
 using System.Collections.Generic;
+using UnityEngine.InputSystem.LowLevel;
 
 public class ShipTransformer : MonoBehaviour
 {
@@ -65,17 +66,18 @@ public class ShipTransformer : MonoBehaviour
         {
             inputController = ship.InputController;
         }
-        if (inputController != null)
-        { 
-            if (inputController.Paused)
-                return;
 
-            RotateShip();
-            shipStatus.blockRotation = transform.rotation;
+        if (inputController == null)
+            return;
 
-            if (shipStatus.Stationary)
-                return;
-        }
+        if (inputController.Paused)
+            return;
+
+        RotateShip();
+        shipStatus.blockRotation = transform.rotation;
+
+        if (shipStatus.Stationary)
+            return;
 
         RotateShip();
         shipStatus.blockRotation = transform.rotation;
@@ -173,6 +175,9 @@ public class ShipTransformer : MonoBehaviour
 
     protected virtual void MoveShip()
     {
+        if (!inputController.HasThrottleInput)
+            return;
+
         float boostAmount = 1f;
         if (shipStatus.Boosting) // TODO: if we run out of fuel while full speed and straight the ship data still thinks we are boosting
         {

@@ -49,6 +49,7 @@ namespace CosmicShore.Game.IO
         private Vector2 RightJoystickValue, LeftJoystickValue;
         public Vector2 SingleTouchValue;
         public Vector3 ThreeDPosition { get; private set; }
+        public bool HasThrottleInput { get; private set; }
 
         float JoystickRadius;
         Gyroscope gyro;
@@ -145,8 +146,6 @@ namespace CosmicShore.Game.IO
                 YSum = ship.AutoPilot.YSum;
                 XDiff = ship.AutoPilot.XDiff;
                 YDiff = ship.AutoPilot.YDiff;
-
-                Debug.Log("Autopilot XSum set: " + XSum);
             }
             PerformSpeedAndDirectionalEffects();
         }
@@ -155,9 +154,7 @@ namespace CosmicShore.Game.IO
         {
             LeftNormalizedJoystickPosition = Gamepad.current.leftStick.ReadValue();
             RightNormalizedJoystickPosition = Gamepad.current.rightStick.ReadValue();
-
-            Debug.Log(LeftNormalizedJoystickPosition);
-            Debug.Log(RightNormalizedJoystickPosition);
+            HasThrottleInput = Gamepad.current.rightTrigger.ReadValue() > 0;
 
             Reparameterize();
             ProcessGamePadButtons();
