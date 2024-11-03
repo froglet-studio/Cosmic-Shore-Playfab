@@ -146,6 +146,8 @@ namespace CosmicShore.Game.IO
                 YSum = ship.AutoPilot.YSum;
                 XDiff = ship.AutoPilot.XDiff;
                 YDiff = ship.AutoPilot.YDiff;
+
+                Debug.Log("Autopilot XSum set: " + XSum);
             }
             PerformSpeedAndDirectionalEffects();
         }
@@ -155,6 +157,9 @@ namespace CosmicShore.Game.IO
             LeftNormalizedJoystickPosition = Gamepad.current.leftStick.ReadValue();
             RightNormalizedJoystickPosition = Gamepad.current.rightStick.ReadValue();
             HasThrottleInput = Gamepad.current.rightTrigger.ReadValue() > 0;
+
+            Debug.Log(LeftNormalizedJoystickPosition);
+            Debug.Log(RightNormalizedJoystickPosition);
 
             Reparameterize();
             ProcessGamePadButtons();
