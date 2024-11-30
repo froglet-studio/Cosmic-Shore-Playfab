@@ -1,9 +1,8 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using CosmicShore.Core;
-using System;
+
 
 namespace CosmicShore.Game.UI
 {
@@ -13,12 +12,12 @@ namespace CosmicShore.Game.UI
         [SerializeField] Vector2 offset;
         [SerializeField] Sprite InactiveImage;
         [SerializeField] Sprite ActiveImage;
-        [SerializeField] Player player;
 
         Image image;
         bool initialized;
         bool imageEnabled = true;
         Vector2 leftTouch, rightTouch;
+        IPlayer player;
 
         private void OnEnable()
         {
@@ -41,33 +40,28 @@ namespace CosmicShore.Game.UI
             image = GetComponent<Image>();
             image.sprite = InactiveImage;
             imageEnabled = GameSetting.Instance.JoystickVisualsEnabled;
-            StartCoroutine(InitializeCoroutine());
         }
 
-        // Wait until the input controller is wired up then only show if there is no gamepad and the left one when flying with single stick controls 
-        IEnumerator InitializeCoroutine()
+        public void Initialize(IPlayer player)
         {
-            yield return new WaitUntil(() => Player.ActivePlayer != null && Player.ActivePlayer.Ship != null && Player.ActivePlayer.Ship.InputController != null);
-
-            if (!Player.ActivePlayer.Ship.ShipStatus.AutoPilotEnabled)
-                gameObject.SetActive(Gamepad.current == null && !Player.ActivePlayer.Ship.ShipStatus.CommandStickControls && (LeftThumb || !Player.ActivePlayer.Ship.ShipStatus.SingleStickControls));
+            if (!player.Ship.ShipStatus.AutoPilotEnabled)
+                gameObject.SetActive(Gamepad.current == null && !player.Ship.ShipStatus.CommandStickControls && (LeftThumb || !player.Ship.ShipStatus.SingleStickControls));
 
             initialized = true;
         }
 
         void Update()
         {
-
-            if (initialized && !Player.ActivePlayer.Ship.ShipStatus.AutoPilotEnabled)
+            if (initialized && !player.Ship.ShipStatus.AutoPilotEnabled)
             {
                 if (Input.touches.Length == 0)
                 {
-                    transform.position = LeftThumb ? Vector2.Lerp(transform.position, Player.ActivePlayer.Ship.InputController.LeftJoystickHome, .2f) : Vector2.Lerp(transform.position, Player.ActivePlayer.Ship.InputController.RightJoystickHome, .2f);
+                    transform.position = LeftThumb ? Vector2.Lerp(transform.position, player.Ship.InputController.LeftJoystickHome, .2f) : Vector2.Lerp(transform.position, player.Ship.InputController.RightJoystickHome, .2f);
                     image.sprite = InactiveImage;
                 }
                 else if (LeftThumb)
                 {
-                    leftTouch = Player.ActivePlayer.Ship.InputController.LeftClampedPosition;
+                    leftTouch = player.Ship.InputController.LeftClampedPosition;
                     transform.position = Vector2.Lerp(transform.position, leftTouch, .2f);
                     imageEnabled = true ? image.sprite = ActiveImage : image.sprite = InactiveImage;
                     
@@ -76,7 +70,7 @@ namespace CosmicShore.Game.UI
                 }
                 else
                 {
-                    rightTouch = Player.ActivePlayer.Ship.InputController.RightClampedPosition;
+                    rightTouch = player.Ship.InputController.RightClampedPosition;
                     transform.position = Vector2.Lerp(transform.position, rightTouch, .2f);
                     imageEnabled = true ? image.sprite = ActiveImage : image.sprite = InactiveImage;
                     //image.transform.localScale = (Player.ActivePlayer.Ship.InputController.RightJoystickStart

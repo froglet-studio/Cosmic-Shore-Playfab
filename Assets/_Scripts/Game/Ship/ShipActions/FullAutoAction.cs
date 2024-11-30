@@ -52,7 +52,7 @@ namespace CosmicShore
                 //child.Rotate(0, 180, 0);
             }
             //projectileContainer = new GameObject($"{ship.Player.PlayerName}_BarrageProjectiles");
-            shipStatus = ship.GetComponent<ShipStatus>();
+            shipStatus = ship.ShipStatus;
         }
 
         public override void StartAction()

@@ -68,7 +68,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/TestScenes/ColorTest.unity
     guid: 608ee7a6fb653984e8456f57d82fb67e
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/MinigameFreestyle.unity
     guid: 6f71535b00043c345b3216d994f22499
   - enabled: 0
@@ -81,7 +81,7 @@ EditorBuildSettings:
     path: Assets/_Scenes/MinigameCellularBrawl2v2.unity
     guid: 78219fe3cb3c96b44a9e146ced331089
   - enabled: 0
-    path: Assets/_Scenes/MinigameDashAndGrab.unity
+    path: Assets/MinigameDashAndGrab.unity
     guid: 9b2bfb506e15d33478bb4f9f1593af50
   - enabled: 0
     path: Assets/_Scenes/TestScenes/Ig/IgSandbox.unity

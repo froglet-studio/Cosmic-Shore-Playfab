@@ -1,15 +1,18 @@
-using CosmicShore.Game.AI;
 using UnityEngine;
+
 
 namespace CosmicShore.Game.Arcade
 {
     public class CellularDuelMiniGame : MiniGame 
     {
-        [SerializeField] Player hostilePilot;
+        IPlayer _hostilePilot;
+
         protected override void Start()
         {
             base.Start();
-            hostilePilot.Ship.GetComponent<AIPilot>().SkillLevel = .4f + IntensityLevel*.15f;
+            _hostilePilot.Ship.AIPilot.SkillLevel = .4f + IntensityLevel*.15f;
         }
+
+        public void SetHostilePilot(IPlayer hostilePilot) => _hostilePilot = hostilePilot;
     }
 }

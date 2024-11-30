@@ -10,7 +10,7 @@ public class ElementalFloat
     [SerializeField] float Min;
     [SerializeField] float Max;
     [SerializeField] Element element;
-    Ship ship;
+    IShip ship;
     string name;
 
     public ElementalFloat(float value)
@@ -23,7 +23,7 @@ public class ElementalFloat
         set { name = value; }
     }
 
-    public Ship Ship
+    public IShip Ship
     {
         set
         {

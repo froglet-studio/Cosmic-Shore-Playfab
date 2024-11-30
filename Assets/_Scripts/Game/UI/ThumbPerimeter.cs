@@ -1,10 +1,9 @@
 using CosmicShore.Core;
 using CosmicShore.Game.IO;
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+
 
 namespace CosmicShore.Game.UI
 {
@@ -16,7 +15,7 @@ namespace CosmicShore.Game.UI
         [SerializeField] float Scaler = 3f; //scale to max radius
 
         [SerializeField] Sprite ActivePerimeterImage;
-        [SerializeField] Player player;
+        [SerializeField] IPlayer player;
         public float alpha = 0f;        
         
         Image image;
@@ -27,6 +26,7 @@ namespace CosmicShore.Game.UI
 
         Vector2 leftStartPosition, rightStartPosition;
         InputController controller;
+        IPlayer _player;
 
         private void OnEnable()
         {
@@ -52,27 +52,25 @@ namespace CosmicShore.Game.UI
             //set Image color alpha
             color.a = 0;
             image.color = color;
-            StartCoroutine(InitializeCoroutine());
         }
 
-        // Wait until the input controller is wired up then only show if there is no gamepad and the left one when flying with single stick controls 
-        IEnumerator InitializeCoroutine()
+        // TODO - Need to call this from somewhere after player initializes.
+        public void Initialize(IPlayer player)
         {
-            yield return new WaitUntil(() => Player.ActivePlayer != null && Player.ActivePlayer.Ship != null && Player.ActivePlayer.Ship.InputController != null);
-            bool isActive = Gamepad.current == null && !Player.ActivePlayer.Ship.ShipStatus.CommandStickControls && (LeftThumb || !Player.ActivePlayer.Ship.ShipStatus.SingleStickControls);
-            if (!Player.ActivePlayer.Ship.ShipStatus.AutoPilotEnabled)
+            bool isActive = Gamepad.current == null && !_player.Ship.ShipStatus.CommandStickControls && (LeftThumb || _player.Ship.ShipStatus.SingleStickControls);
+            if (!_player.Ship.ShipStatus.AutoPilotEnabled)
             {
                 gameObject.SetActive(isActive);
-                controller = Player.ActivePlayer.Ship.InputController;
+                controller = _player.Ship.InputController;
                 initialized = isActive;
-            }               
+            }
         }
 
         void Update()
         {
             if(!imageEnabled) { return; }
 
-            if (initialized && !Player.ActivePlayer.Ship.ShipStatus.AutoPilotEnabled)
+            if (initialized && !_player.Ship.ShipStatus.AutoPilotEnabled)
             {
                 if (Input.touches.Length == 0)
                 {

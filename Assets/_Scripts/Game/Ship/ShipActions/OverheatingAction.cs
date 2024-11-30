@@ -17,7 +17,7 @@ public class OverheatingAction : ShipAction
     protected override void Start()
     {
         base.Start();
-        shipStatus = ship.GetComponent<ShipStatus>();
+        shipStatus = ship.ShipStatus;
     }
 
     protected override void InitializeShipAttributes()

@@ -18,7 +18,7 @@ namespace CosmicShore.Game.IO
         [SerializeField] private GameCanvas gameCanvas;
         [SerializeField] public bool Portrait;
 
-        public Ship ship { get; set; }
+        public IShip Ship { get; set; }
         [HideInInspector] public bool AutoPilotEnabled;
         [HideInInspector] public static ScreenOrientation currentOrientation;
 
@@ -136,16 +136,16 @@ namespace CosmicShore.Game.IO
 
         private void ProcessAutoPilotInput()
         {
-            if (ship.ShipStatus.SingleStickControls)
+            if (Ship.ShipStatus.SingleStickControls)
             {
-                EasedLeftJoystickPosition = new Vector2(ship.AutoPilot.X, ship.AutoPilot.Y);
+                EasedLeftJoystickPosition = new Vector2(Ship.AIPilot.X, Ship.AIPilot.Y);
             }
             else
             {
-                XSum = ship.AutoPilot.XSum;
-                YSum = ship.AutoPilot.YSum;
-                XDiff = ship.AutoPilot.XDiff;
-                YDiff = ship.AutoPilot.YDiff;
+                XSum = Ship.AIPilot.XSum;
+                YSum = Ship.AIPilot.YSum;
+                XDiff = Ship.AIPilot.XDiff;
+                YDiff = Ship.AIPilot.YDiff;
 
                 Debug.Log("Autopilot XSum set: " + XSum);
             }
@@ -174,12 +174,14 @@ namespace CosmicShore.Game.IO
 
             if (Touch.activeTouches.Count > 0)
             {
+                HasThrottleInput = true;
                 Reparameterize();
                 PerformSpeedAndDirectionalEffects();
                 HandleIdleState(false);
             }
             else
             {
+                HasThrottleInput = false;
                 ResetInputValues();
                 HandleIdleState(true);
             }
@@ -189,7 +191,7 @@ namespace CosmicShore.Game.IO
         {
             if (Portrait)
             {
-                ship.SetShipUp(90);
+                Ship.SetShipUp(90);
             }
             else if (Mathf.Abs(Input.acceleration.y) >= PHONE_FLIP_THRESHOLD)
             {
@@ -205,12 +207,12 @@ namespace CosmicShore.Game.IO
                 phoneFlipState = newFlipState;
                 if (phoneFlipState)
                 {
-                    ship.PerformShipControllerActions(InputEvents.FlipAction);
+                    Ship.PerformShipControllerActions(InputEvents.FlipAction);
                     currentOrientation = ScreenOrientation.LandscapeRight;
                 }
                 else
                 {
-                    ship.StopShipControllerActions(InputEvents.FlipAction);
+                    Ship.StopShipControllerActions(InputEvents.FlipAction);
                     currentOrientation = ScreenOrientation.LandscapeLeft;
                 }
                 Debug.Log($"Phone flip state change detected - new flip state: {phoneFlipState}, acceleration.y: {Input.acceleration.y}");
@@ -262,12 +264,12 @@ namespace CosmicShore.Game.IO
             if (leftStickEffectsStarted)
             {
                 leftStickEffectsStarted = false;
-                ship.StopShipControllerActions(InputEvents.LeftStickAction);
+                Ship.StopShipControllerActions(InputEvents.LeftStickAction);
             }
             if (rightStickEffectsStarted)
             {
                 rightStickEffectsStarted = false;
-                ship.StopShipControllerActions(InputEvents.RightStickAction);
+                Ship.StopShipControllerActions(InputEvents.RightStickAction);
             }
         }
 
@@ -276,7 +278,7 @@ namespace CosmicShore.Game.IO
             if (Touch.activeTouches.Count == 1)
             {
                 var position = Touch.activeTouches[0].screenPosition;
-                if (ship && ship.ShipStatus.CommandStickControls)
+                if (Ship != null && Ship.ShipStatus.CommandStickControls)
                 {
                     ProcessCommandStickControls(position);
                 }
@@ -291,11 +293,11 @@ namespace CosmicShore.Game.IO
 
             if (tempThreeDPosition.sqrMagnitude < 10000 && Touch.activeTouches[0].phase == TouchPhase.Began)
             {
-                ship.PerformShipControllerActions(InputEvents.NodeTapAction);
+                Ship.PerformShipControllerActions(InputEvents.NodeTapAction);
             }
-            else if ((tempThreeDPosition - ship.transform.position).sqrMagnitude < 10000 && Touch.activeTouches[0].phase == TouchPhase.Began)
+            else if ((tempThreeDPosition - Ship.Transform.position).sqrMagnitude < 10000 && Touch.activeTouches[0].phase == TouchPhase.Began)
             {
-                ship.PerformShipControllerActions(InputEvents.SelfTapAction);
+                Ship.PerformShipControllerActions(InputEvents.SelfTapAction);
             }
             else
             {
@@ -320,7 +322,7 @@ namespace CosmicShore.Game.IO
             if (!leftStickEffectsStarted)
             {
                 leftStickEffectsStarted = true;
-                ship.PerformShipControllerActions(InputEvents.LeftStickAction);
+                Ship.PerformShipControllerActions(InputEvents.LeftStickAction);
             }
             LeftJoystickValue = position;
             leftTouchIndex = 0;
@@ -334,8 +336,8 @@ namespace CosmicShore.Game.IO
             if (!rightStickEffectsStarted)
             {
                 rightStickEffectsStarted = true;
-                if (ship != null)
-                    ship.PerformShipControllerActions(InputEvents.RightStickAction);
+                if (Ship != null)
+                    Ship.PerformShipControllerActions(InputEvents.RightStickAction);
             }
             RightJoystickValue = position;
             rightTouchIndex = 0;
@@ -361,11 +363,11 @@ namespace CosmicShore.Game.IO
                 Idle = isIdle;
                 if (Idle)
                 {
-                    if (ship) ship.PerformShipControllerActions(InputEvents.IdleAction);
+                    Ship?.PerformShipControllerActions(InputEvents.IdleAction);
                 }
                 else
                 {
-                    ship.StopShipControllerActions(InputEvents.IdleAction);
+                    Ship.StopShipControllerActions(InputEvents.IdleAction);
                 }
             }
         }
@@ -427,12 +429,12 @@ namespace CosmicShore.Game.IO
             if (deviation < threshold && !fullSpeedStraightEffectsStarted)
             {
                 fullSpeedStraightEffectsStarted = true;
-                ship.PerformShipControllerActions(InputEvents.FullSpeedStraightAction);
+                Ship.PerformShipControllerActions(InputEvents.FullSpeedStraightAction);
             }
             else if (fullSpeedStraightEffectsStarted && deviation > threshold)
             {
                 fullSpeedStraightEffectsStarted = false;
-                ship.StopShipControllerActions(InputEvents.FullSpeedStraightAction);
+                Ship.StopShipControllerActions(InputEvents.FullSpeedStraightAction);
             }
         }
 
@@ -441,12 +443,12 @@ namespace CosmicShore.Game.IO
             if (deviation < threshold && !minimumSpeedStraightEffectsStarted)
             {
                 minimumSpeedStraightEffectsStarted = true;
-                ship.PerformShipControllerActions(InputEvents.MinimumSpeedStraightAction);
+                Ship.PerformShipControllerActions(InputEvents.MinimumSpeedStraightAction);
             }
             else if (minimumSpeedStraightEffectsStarted && deviation > threshold)
             {
                 minimumSpeedStraightEffectsStarted = false;
-                ship.StopShipControllerActions(InputEvents.MinimumSpeedStraightAction);
+                Ship.StopShipControllerActions(InputEvents.MinimumSpeedStraightAction);
             }
         }
 
@@ -537,26 +539,26 @@ namespace CosmicShore.Game.IO
             {
                 stateFlag = !stateFlag;
                 if (stateFlag)
-                    ship.PerformShipControllerActions(action);
+                    Ship.PerformShipControllerActions(action);
                 else
-                    ship.StopShipControllerActions(action);
+                    Ship.StopShipControllerActions(action);
             }
         }
 
         private void HandleGamepadButton(ButtonControl button, InputEvents action)
         {
             if (button.wasPressedThisFrame)
-                ship.PerformShipControllerActions(action);
+                Ship.PerformShipControllerActions(action);
             if (button.wasReleasedThisFrame)
-                ship.StopShipControllerActions(action);
+                Ship.StopShipControllerActions(action);
         }
 
         private void HandleGamepadTrigger(ButtonControl trigger, InputEvents action)
         {
             if (trigger.wasPressedThisFrame)
-                ship.PerformShipControllerActions(action);
+                Ship.PerformShipControllerActions(action);
             if (trigger.wasReleasedThisFrame)
-                ship.StopShipControllerActions(action);
+                Ship.StopShipControllerActions(action);
         }
 
         #endregion
@@ -565,32 +567,32 @@ namespace CosmicShore.Game.IO
 
         public void Button1Press()
         {
-            ship.PerformShipControllerActions(InputEvents.Button1Action);
+            Ship.PerformShipControllerActions(InputEvents.Button1Action);
         }
 
         public void Button1Release()
         {
-            ship.StopShipControllerActions(InputEvents.Button1Action);
+            Ship.StopShipControllerActions(InputEvents.Button1Action);
         }
 
         public void Button2Press()
         {
-            ship.PerformShipControllerActions(InputEvents.Button2Action);
+            Ship.PerformShipControllerActions(InputEvents.Button2Action);
         }
 
         public void Button2Release()
         {
-            ship.StopShipControllerActions(InputEvents.Button2Action);
+            Ship.StopShipControllerActions(InputEvents.Button2Action);
         }
 
         public void Button3Press()
         {
-            ship.PerformShipControllerActions(InputEvents.Button3Action);
+            Ship.PerformShipControllerActions(InputEvents.Button3Action);
         }
 
         public void Button3Release()
         {
-            ship.StopShipControllerActions(InputEvents.Button3Action);
+            Ship.StopShipControllerActions(InputEvents.Button3Action);
         }
 
         public void SetPortrait(bool portrait)

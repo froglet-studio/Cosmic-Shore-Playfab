@@ -12,8 +12,8 @@ public class ConsumeBoostAction : ShipAction
 
     protected override void Start()
     {
-        shipData = ship.GetComponent<ShipStatus>();
-        ship.boostMultiplier = 0;
+        shipData = ship.ShipStatus;
+        ship.BoostMultiplier = 0;
     }
     public override void StartAction()
     {
@@ -33,10 +33,10 @@ public class ConsumeBoostAction : ShipAction
     IEnumerator ConsumeBoostCoroutine()
     {
         shipData.Boosting = true;
-        ship.boostMultiplier += boostMultiplier;
+        ship.BoostMultiplier += boostMultiplier;
         yield return new WaitForSeconds(boostDuration);
-        ship.boostMultiplier -= boostMultiplier;
-        if (ship.boostMultiplier <= 0)
+        ship.BoostMultiplier -= boostMultiplier;
+        if (ship.BoostMultiplier <= 0)
         {
             shipData.Boosting = false;
         }

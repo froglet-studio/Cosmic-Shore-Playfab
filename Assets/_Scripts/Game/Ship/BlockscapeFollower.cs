@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace CosmicShore.Core
 {
+    [RequireComponent(typeof(IShip))]
+    [RequireComponent (typeof(ShipStatus))]
     public class BlockscapeFollower : MonoBehaviour
     {
         public TrailBlock AttachedTrailBlock { get; private set; }
@@ -11,14 +13,14 @@ namespace CosmicShore.Core
         [HideInInspector] public float Throttle;
         private Vector3 currentSurfaceNormal = Vector3.up;
 
-        private Ship ship;
+        private IShip ship;
         private Teams team;
         private ShipStatus shipData;
         float SurfaceOffset = 1f;
 
         private void Start()
         {
-            ship = GetComponent<Ship>();
+            ship = GetComponent<IShip>();
             team = ship.Team;
             shipData = GetComponent<ShipStatus>();
         }

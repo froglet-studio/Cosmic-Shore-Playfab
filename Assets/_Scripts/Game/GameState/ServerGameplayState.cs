@@ -24,9 +24,6 @@ namespace CosmicShore.Gameplay.GameState
         ClientGameplayState _clientGameplayState;
 
         [SerializeField]
-        MiniGame _miniGame;
-
-        [SerializeField]
         NetworkObject _shipPrefab;
 
         [SerializeField]
@@ -132,9 +129,11 @@ namespace CosmicShore.Gameplay.GameState
             NetworkObject networkShip = Instantiate(_shipPrefab);
             Assert.IsTrue(networkShip, $"Matching ship network object for client {clientId} not found!");
 
-            var persistentPlayerExists = playerNetworkObject.TryGetComponent(out PersistentPlayer persistentPlayer);
+            var persistentPlayerExists = playerNetworkObject.TryGetComponent(out NetworkPersistentPlayer persistentPlayer);
             Assert.IsTrue(persistentPlayerExists,
                 $"Matching persistent PersistentPlayer for client {clientId} not found!");
+
+            networkShip.SpawnWithOwnership(clientId, true);
 
             // if reconnecting, set the player's position and rotation to its previous state
             if (lateJoin)
@@ -144,31 +143,14 @@ namespace CosmicShore.Gameplay.GameState
                 {
                     networkShip.transform.SetPositionAndRotation(sessionPlayerData.Value.PlayerPosition, sessionPlayerData.Value.PlayerRotation);
                 }
+                // _clientGameplayState.InitializeAndSetupPlayer_ClientRpc(clientId);
             }
             else // else spawn the player at a random spawn point
             {
                 Transform spawnPoint = GetRandomSpawnPoint();
                 networkShip.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+                _clientGameplayState.InitializeAndSetupPlayer_ClientRpc();
             }
-
-            networkShip.SpawnWithOwnership(clientId, true);
-
-            ClientRpcParams clientRpcParams = new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { clientId }
-                }
-            };
-            _clientGameplayState.InitializeAndSetupPlayer_ClientRpc(clientRpcParams);
-
-            // pass name from persistent player to avatar
-            /*if (newPlayer.TryGetComponent(out NetworkNameState networkNameState))                 // NetworkNameState
-            {
-                networkNameState.Name.Value = persistentPlayer.NetworkNameState.Name.Value;
-            }*/
-
-            // m_NetworkPlayerService.ConfigureNetworkPlayer_ClientRpc(clientId);
         }
 
         /// <summary>

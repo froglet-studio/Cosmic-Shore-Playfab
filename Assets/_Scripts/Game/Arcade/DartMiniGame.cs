@@ -25,8 +25,7 @@ namespace CosmicShore.Game.Arcade
         {
             base.SetupTurn();
 
-            ActivePlayer.Ship.TryGetComponent(out Silhouette silhouette);
-            silhouette.Clear();
+            ActivePlayer.Ship.Silhouette.Clear();
 
             TrailSpawner.NukeTheTrails();
             Crystal.transform.position = CrystalStartPosition;

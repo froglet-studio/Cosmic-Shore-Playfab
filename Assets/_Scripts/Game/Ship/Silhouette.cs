@@ -1,30 +1,14 @@
 using CosmicShore.Core;
-using CosmicShore.Game;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 namespace CosmicShore
 {
     public class Silhouette : MonoBehaviour
     {
-        private void OnEnable()
-        {
-            if (driftTrailAction) driftTrailAction.OnChangeDriftAltitude += calculateDriftAngle;
-            if (topJaw) ship.ResourceSystem.Resources[JawResourceIndex].OnResourceChange += calculateBlastAngle;
-            if (trailSpawner) trailSpawner.OnBlockCreated += HandleBlockCreation;
-        }
-        private void OnDisable()
-        {
-            if (driftTrailAction) driftTrailAction.OnChangeDriftAltitude -= calculateDriftAngle;
-            if (topJaw) ship.ResourceSystem.Resources[JawResourceIndex].OnResourceChange -= calculateBlastAngle;
-            if (trailSpawner) trailSpawner.OnBlockCreated -= HandleBlockCreation;
-        }
-
-        float worldToUIScale = 2;
-        float imageScale = .02f;
-
+        [SerializeField] Vector3 sihouetteScale = Vector3.one;
         [SerializeField] List<GameObject> silhouetteParts = new();
 
         #region Optional configuration 
@@ -42,31 +26,47 @@ namespace CosmicShore
         [SerializeField] bool swingBlocks;
         #endregion
 
+        IShip _ship;
         GameObject blockPrefab; // Prefab for the blockImages
-        private GameObject[,] blockPool;
-        private int poolSize;
-
-        [SerializeField] Ship ship;
+        GameObject[,] blockPool;
         Game.UI.MiniGameHUD hud;
         GameObject silhouetteContainer;
         Transform trailDisplayContainer;
-        [SerializeField] Vector3 sihouetteScale = Vector3.one;
 
-        IEnumerator Start()
+        int poolSize;
+        float _worldToUIScale = 2;
+        float _imageScale = .02f;
+
+        private void OnEnable()
         {
-            yield return new WaitUntil(() => ship != null && ship.Player != null);
+            if (driftTrailAction) driftTrailAction.OnChangeDriftAltitude += calculateDriftAngle;
+            if (trailSpawner) trailSpawner.OnBlockCreated += HandleBlockCreation;
+        }
 
-            if (!ship.AutoPilot.AutoPilotEnabled && ship.Player.GameCanvas != null)
+        private void OnDisable()
+        {
+            if (driftTrailAction) driftTrailAction.OnChangeDriftAltitude -= calculateDriftAngle;
+            if (topJaw && _ship != null) _ship.ResourceSystem.Resources[JawResourceIndex].OnResourceChange -= calculateBlastAngle;
+            if (trailSpawner) trailSpawner.OnBlockCreated -= HandleBlockCreation;
+        }
+
+        // TODO - Call this method from Ship
+        public void Initialize(IShip ship)
+        {
+            _ship = ship;
+            if (!_ship.AIPilot.AutoPilotEnabled && _ship.Player.GameCanvas != null)
             {
-                hud = ship.Player.GameCanvas.MiniGameHUD;
-                silhouetteContainer = hud.SetSilhouetteActive(!ship.AutoPilot.AutoPilotEnabled && Player.ActivePlayer == ship.Player);
-                trailDisplayContainer = hud.SetTrailDisplayActive(!ship.AutoPilot.AutoPilotEnabled).transform;
+                hud = _ship.Player.GameCanvas.MiniGameHUD;
+                silhouetteContainer = hud.SetSilhouetteActive(!ship.AIPilot.AutoPilotEnabled && ship.Player.IsActive);
+                trailDisplayContainer = hud.SetTrailDisplayActive(!ship.AIPilot.AutoPilotEnabled).transform;
                 foreach (var part in silhouetteParts)
                 {
                     part.transform.SetParent(silhouetteContainer.transform, false);
                     part.SetActive(true);
                 }
             }
+
+            if (topJaw) _ship.ResourceSystem.Resources[JawResourceIndex].OnResourceChange += calculateBlastAngle;
         }
 
         public void SetBlockPrefab(GameObject block)
@@ -79,9 +79,9 @@ namespace CosmicShore
 
         private void calculateDriftAngle(float dotProduct)
         {
-            ShipStatus status = ship.ShipStatus;
+            ShipStatus status = _ship.ShipStatus;
             flip = Vector3.Dot(transform.up, status.Course) > 0;
-            foreach (var part in silhouetteParts) { part.gameObject.SetActive(!ship.AutoPilot.AutoPilotEnabled && Player.ActivePlayer == ship.Player); } // TODO: why?
+            foreach (var part in silhouetteParts) { part.gameObject.SetActive(!_ship.AIPilot.AutoPilotEnabled && _ship.Player.IsActive); } // TODO: why?
             silhouetteContainer.transform.localRotation = Quaternion.Euler(0, 0, (flip ? -1f : 1f) * Mathf.Acos(dotProduct-.0001f) * Mathf.Rad2Deg);
 
             this.dotProduct = dotProduct;// Acos hates 1
@@ -101,16 +101,16 @@ namespace CosmicShore
 
         private void HandleBlockCreation(float xShift, float wavelength, float scaleX, float scaleY, float scaleZ)
         {
-            if (!ship.AutoPilot.AutoPilotEnabled)
+            if (!_ship.AIPilot.AutoPilotEnabled)
             {
                 if (poolSize < 1)
                 {
-                    if (swingBlocks) poolSize = Mathf.CeilToInt(((RectTransform)trailDisplayContainer).rect.width / (trailSpawner.MinWaveLength * worldToUIScale));
-                    else poolSize = Mathf.CeilToInt(((RectTransform)trailDisplayContainer).rect.width / (trailSpawner.MinWaveLength * worldToUIScale * scaleY));
+                    if (swingBlocks) poolSize = Mathf.CeilToInt(((RectTransform)trailDisplayContainer).rect.width / (trailSpawner.MinWaveLength * _worldToUIScale));
+                    else poolSize = Mathf.CeilToInt(((RectTransform)trailDisplayContainer).rect.width / (trailSpawner.MinWaveLength * _worldToUIScale * scaleY));
                     InitializeBlockPool();
                 }
-                if (swingBlocks) UpdateBlockPool(xShift * (scaleY / 2) * worldToUIScale, wavelength * worldToUIScale, scaleX * scaleY * imageScale, scaleZ * imageScale);
-                else UpdateBlockPool(xShift * worldToUIScale * scaleY, wavelength * worldToUIScale * scaleY, scaleX * scaleY * imageScale, scaleZ * scaleY * imageScale); // VPS per unit speed is proportional to display area because gap doesn't matter and (x*y) * (z*y) / (wavelength*y) is proportional to volume/wavelength.
+                if (swingBlocks) UpdateBlockPool(xShift * (scaleY / 2) * _worldToUIScale, wavelength * _worldToUIScale, scaleX * scaleY * _imageScale, scaleZ * _imageScale);
+                else UpdateBlockPool(xShift * _worldToUIScale * scaleY, wavelength * _worldToUIScale * scaleY, scaleX * scaleY * _imageScale, scaleZ * scaleY * _imageScale); // VPS per unit speed is proportional to display area because gap doesn't matter and (x*y) * (z*y) / (wavelength*y) is proportional to volume/wavelength.
             }
         }
 
@@ -127,7 +127,7 @@ namespace CosmicShore
                     GameObject newBlock = Instantiate(blockPrefab, silhouetteContainer.transform);
                     newBlock.transform.SetParent(tempContainer.transform, false);
                     Debug.Log($"silhouette: {trailSpawner.MinWaveLength}");
-                    newBlock.transform.parent.localPosition = new Vector3(-i * trailSpawner.MinWaveLength * worldToUIScale +
+                    newBlock.transform.parent.localPosition = new Vector3(-i * trailSpawner.MinWaveLength * _worldToUIScale +
                         (((RectTransform)trailDisplayContainer).rect.width/2), 0, 0);
                     newBlock.transform.localPosition = new Vector3(0, j * 2 * trailSpawner.Gap - trailSpawner.Gap, 0);
                     newBlock.transform.localScale = Vector3.zero;
@@ -141,7 +141,7 @@ namespace CosmicShore
 
         private void UpdateBlockPool(float xShift, float wavelength, float scaleX, float scaleZ)
         {
-            if (!ship.AutoPilot.AutoPilotEnabled)
+            if (!_ship.AIPilot.AutoPilotEnabled)
             {
                 for (int j = 0; j < 2; j++)
                 {

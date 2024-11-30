@@ -86,7 +86,7 @@ namespace CosmicShore.Environment.FlowField
             collisions.Clear();
         }
 
-        public void PerformCrystalImpactEffects(CrystalProperties crystalProperties, Ship ship)
+        public void PerformCrystalImpactEffects(CrystalProperties crystalProperties, IShip ship)
         {
             foreach (CrystalImpactEffects effect in crystalImpactEffects)
             {
@@ -116,18 +116,27 @@ namespace CosmicShore.Environment.FlowField
 
         protected virtual void Collide(Collider other)
         {
-            Ship ship;
+            IShip ship;
             Projectile projectile;
 
             if (other.gameObject.IsLayer("Ships"))
             {
-                ship = other.GetComponent<ShipGeometry>().Ship;
+                // ship = other.GetComponent<ShipGeometry>().Ship;
+                if (!other.TryGetComponent(out ShipGeometry shipGeometry))
+                    return;
+
+                ship = shipGeometry.Ship;
+
+                if (shipGeometry.Ship == null)
+                    return;
+
                 if (Team == Teams.None || Team == ship.Team)
                 {
                     if (shipImpactEffects)
                     {
                         ship.PerformCrystalImpactEffects(crystalProperties);
-                        if (ship.TryGetComponent<AIPilot>(out var aiPilot))
+                        AIPilot aiPilot = ship.AIPilot;
+                        if (aiPilot != null)
                         {
                             aiPilot.aggressiveness = aiPilot.defaultAggressiveness;
                             aiPilot.throttle = aiPilot.defaultThrottle;
@@ -148,7 +157,8 @@ namespace CosmicShore.Environment.FlowField
                     if (shipImpactEffects)
                     {
                         projectile.PerformCrystalImpactEffects(crystalProperties);
-                        if (ship.TryGetComponent<AIPilot>(out var aiPilot))
+                        AIPilot aiPilot = ship.AIPilot;
+                        if (aiPilot != null)
                         {
                             aiPilot.aggressiveness = aiPilot.defaultAggressiveness;
                             aiPilot.throttle = aiPilot.defaultThrottle;
@@ -221,7 +231,7 @@ namespace CosmicShore.Environment.FlowField
             transform.localScale = targetScaleVector;
         }
 
-        protected void Explode(Ship ship)
+        protected void Explode(IShip ship)
         {
             for (int i = 0; i < crystalModels.Count; i++)
             {
@@ -241,8 +251,10 @@ namespace CosmicShore.Environment.FlowField
                     var thisAnimator = model.GetComponent<SpaceCrystalAnimator>();
                     spentAnimator.timer = thisAnimator.timer;
                 }
-                var shipStatus = ship.GetComponent<ShipStatus>();
-                spentCrystal.GetComponent<Impact>()?.HandleImpact(shipStatus.Course * shipStatus.Speed, tempMaterial, ship.Player.PlayerName);
+
+                var shipStatus = ship.ShipStatus;
+                if (spentCrystal.TryGetComponent(out Impact impact))
+                    impact.HandleImpact(shipStatus.Course * shipStatus.Speed, tempMaterial, ship.Player.PlayerName);
             }
         }
 

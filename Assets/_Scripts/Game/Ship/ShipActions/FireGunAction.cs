@@ -21,8 +21,8 @@ public class FireGunAction : ShipAction
     protected override void Start()
     {
         base.Start();
-        projectileContainer.transform.parent = ship.Player.transform;
-        shipData = ship.GetComponent<ShipStatus>();
+        projectileContainer.transform.parent = ship.Player.Transform;
+        shipData = ship.ShipStatus;
     }
     public override void StartAction()
     {

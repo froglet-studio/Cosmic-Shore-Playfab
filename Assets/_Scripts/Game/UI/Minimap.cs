@@ -6,11 +6,11 @@ namespace CosmicShore.Game.UI
     public class Minimap : MonoBehaviour
     {
         [SerializeField] Camera Camera;
-        [SerializeField] Player Player;
+        [SerializeField] IPlayer Player;        // TODO - Make sure this is initialized
         [SerializeField] float CameraRadius;
         [SerializeField] Node activeNode;
 
-        Ship ship;
+        IShip ship;
 
         void Start()
         {
@@ -19,8 +19,8 @@ namespace CosmicShore.Game.UI
 
         void Update()
         {
-            Camera.transform.position = (-ship.transform.forward * CameraRadius) + activeNode.transform.position;
-            Camera.transform.LookAt(activeNode.transform.position, ship.transform.up);
+            Camera.transform.position = (-ship.Transform.forward * CameraRadius) + activeNode.transform.position;
+            Camera.transform.LookAt(activeNode.transform.position, ship.Transform.up);
         }
 
         public void SetActiveNode(Node node)

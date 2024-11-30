@@ -12,12 +12,12 @@ namespace CosmicShore
         {
             base.Start();
             ship.ShipStatus.CommandStickControls = true;
-            speed = .1f;
+            shipStatus.Speed = .1f;
         }
 
         protected override void MoveShip()
         {
-            transform.position = Vector3.Lerp(transform.position, inputController.ThreeDPosition, speed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, inputController.ThreeDPosition, shipStatus.Speed * Time.deltaTime);
             shipStatus.Course = inputController.ThreeDPosition - transform.position;
         }
 

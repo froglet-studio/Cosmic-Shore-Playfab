@@ -8,24 +8,30 @@ namespace CosmicShore
     {
         [SerializeField] Material trailViewerMaterial;
 
-        LineRenderer lineRenderer;
-        Ship ship;
-        Transform target;
+        LineRenderer _lineRenderer;
+        IPlayer _player;
+        IShip _ship;
+        Transform _targetTransform;
         
         void Start()
         {
-            ship = GetComponent<Ship>();  
-            lineRenderer = gameObject.AddComponent<LineRenderer>();
-            lineRenderer.material = trailViewerMaterial;
-            lineRenderer.startWidth = lineRenderer.endWidth = 0.1f;
+            _ship = GetComponent<IShip>();  
+            _lineRenderer = gameObject.AddComponent<LineRenderer>();
+            _lineRenderer.material = trailViewerMaterial;
+            _lineRenderer.startWidth = _lineRenderer.endWidth = 0.1f;
+        }
+
+        public void Initialize(IPlayer player)
+        {
+            _player = player;
         }
 
         void Update()
         {
-            target = null;
-            lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.enabled = false;
-            if (Hangar.Instance.SlowedShipTransforms.Count > 0 && Player.ActivePlayer && Player.ActivePlayer.Ship == ship)
+            _targetTransform = null;
+            _lineRenderer.SetPosition(0, transform.position);
+            _lineRenderer.enabled = false;
+            if (Hangar.Instance.SlowedShipTransforms.Count > 0 && _player != null && _player.Ship == _ship)
             {
                 var distance = float.PositiveInfinity;
                 foreach (var shipTransform in Hangar.Instance.SlowedShipTransforms)
@@ -36,13 +42,13 @@ namespace CosmicShore
                     if (tempDistance < distance)
                     {
                         distance = tempDistance;
-                        target = shipTransform;
+                        _targetTransform = shipTransform;
                     }
                 }
-                if (target != null)
+                if (_targetTransform != null)
                 {
-                    lineRenderer.SetPosition(1, target.position);
-                    lineRenderer.enabled = true;
+                    _lineRenderer.SetPosition(1, _targetTransform.position);
+                    _lineRenderer.enabled = true;
                 }
             }
         }

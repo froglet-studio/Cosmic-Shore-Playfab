@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using CosmicShore.Core;
+
 
 namespace CosmicShore
 {
@@ -17,7 +16,7 @@ namespace CosmicShore
         protected override void Start()
         {
             base.Start();
-            spawner = ship.GetComponent<TrailSpawner>();
+            spawner = ship.TrailSpawner;
             resourceCost = resourceSystem.Resources[resourceIndex].MaxAmount / enhancementsPerFullAmmo;
         }
 

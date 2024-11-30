@@ -14,7 +14,7 @@ public class PoolManager : MonoBehaviour
         public int size;
     }
 
-    [SerializeField] Ship ship;
+    [SerializeField] IShip ship;
     [SerializeField] List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
 
@@ -42,7 +42,7 @@ public class PoolManager : MonoBehaviour
     IEnumerator WaitForPlayerCoroutine() // TODO: fix arbitrary wait time
     {
         yield return new WaitForSeconds(2);
-        transform.parent = ship.Player.transform;
+        transform.parent = ship.Player.Transform;
     }
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)

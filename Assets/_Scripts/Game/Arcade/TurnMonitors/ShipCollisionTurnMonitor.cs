@@ -6,7 +6,8 @@ namespace CosmicShore.Game.Arcade
     {
         [SerializeField] int Collisions;
         [SerializeField] MiniGame Game;
-        [SerializeField] Player hostileShip;
+        
+        [SerializeField] IPlayer hostileShip;
 
         public override bool CheckForEndOfTurn()
         {
@@ -29,7 +30,7 @@ namespace CosmicShore.Game.Arcade
         {
 
             if (Display != null)
-                Display.text = ((int)((hostileShip.Ship.transform.position - Game.ActivePlayer.Ship.transform.position).magnitude/10f)).ToString();
+                Display.text = ((int)((hostileShip.Ship.Transform.position - Game.ActivePlayer.Ship.Transform.position).magnitude/10f)).ToString();
         }
     }
 }

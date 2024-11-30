@@ -31,12 +31,12 @@ namespace CosmicShore.Core
         public TrailBlock AttachedTrailBlock { get { return attachedTrail.GetBlock(attachedBlockIndex); } }
 
         ShipStatus shipData;
-        Ship ship;
+        IShip ship;
 
         void Start()
         {
             // TODO: find a better way of setting team that doesn't assume a ship
-            ship = GetComponent<Ship>();
+            ship = GetComponent<IShip>();
             team = ship.Team;
             shipData = GetComponent<ShipStatus>();
         }

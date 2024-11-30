@@ -11,7 +11,7 @@ namespace CosmicShore.Game.Projectiles
     {
         public Vector3 Velocity;
         public Teams Team;
-        public Ship Ship;
+        public IShip Ship;
         public bool ImpactOnEnd;
         public float Inertia = 1;
         
@@ -142,7 +142,7 @@ namespace CosmicShore.Game.Projectiles
                         if (!shipGeometry.Ship.ShipStatus.AutoPilotEnabled) HapticController.PlayHaptic(HapticType.ShipCollision);//.PlayShipCollisionHaptics();
                         break;
                     case ShipImpactEffects.SpinAround:
-                        shipGeometry.Ship.transform.localRotation = Quaternion.LookRotation(Velocity);
+                        shipGeometry.Ship.Transform.localRotation = Quaternion.LookRotation(Velocity);
                         break;
                     case ShipImpactEffects.Knockback:
                         //shipGeometry.Ship.transform.localPosition += Velocity/2f;

@@ -23,7 +23,7 @@ public class ChargedFireGunAction : ShipAction
     {
         base.Start();
         //projectileContainer = new GameObject($"{ship.Player.PlayerName}_Projectiles");
-        shipStatus = ship.GetComponent<ShipStatus>();
+        shipStatus = ship.ShipStatus;
     }
     public override void StartAction()
     {

@@ -45,8 +45,8 @@ namespace CosmicShore.Core
         Teams team;
         public string ownerId;  // TODO: is the ownerId the player name? I hope it is.
         public Teams Team { get => team; set => team = value; }
-        public Player Player;
-        public string PlayerName => Player ? Player.PlayerName : "";
+        public IPlayer Player;
+        public string PlayerName => Player != null ? Player.PlayerName : "";
 
         /// <summary>
         /// Trail Block Layer Name, it is used upon Crystal collisions to distinguish it from the other game objects.
@@ -204,7 +204,7 @@ namespace CosmicShore.Core
             {
                 var ship = other.GetComponent<ShipGeometry>().Ship;
 
-                if (!ship.GetComponent<ShipStatus>().Attached)
+                if (!ship.ShipStatus.Attached)
                 {
                     ship.PerformTrailBlockImpactEffects(TrailBlockProperties);
                 }
@@ -354,7 +354,7 @@ namespace CosmicShore.Core
             meshRenderer.material = targetMaterial;
         }
 
-        public void Steal(Player player, Teams team)
+        public void Steal(IPlayer player, Teams team)
         {
             if (this.team != team)
             {
@@ -363,7 +363,7 @@ namespace CosmicShore.Core
                     DeactivateShields();
                     return;
                 }
-                var playerName = player ? player.PlayerName : "No name";
+                var playerName = player != null ? player.PlayerName : "No name";
                 
                 if (StatsManager.Instance != null)
                     StatsManager.Instance.BlockStolen(team, playerName, TrailBlockProperties);

@@ -4,28 +4,23 @@ using UnityEngine;
 
 public class PortraitUI : MonoBehaviour
 {
-    [SerializeField] Player player;
-    RectTransform rectTransform;
-    bool playerReady;
-
     [SerializeField] Vector2 anchorMin;
     [SerializeField] Vector2 anchorMax;
     [SerializeField] Vector2 position;
     [SerializeField] Vector2 portraitAnchorMin;
     [SerializeField] Vector2 portraitAnchorMax;
     [SerializeField] Vector2 portraitPosition;
-    
-    void Start()
+
+    RectTransform rectTransform;
+    bool playerReady;
+
+    IPlayer _player;
+
+    // TODO - Need to call this method from MiniGame or somewhere
+    // keeping in mind for both single player and multiplayer
+    public void Initialize(IPlayer player)
     {
-        rectTransform = GetComponent<RectTransform>();
-
-        StartCoroutine(InitializeCoroutine());
-    }
-
-    IEnumerator InitializeCoroutine()
-    {
-        yield return new WaitUntil(() => Player.ActivePlayer != null && Player.ActivePlayer.Ship != null && Player.ActivePlayer.Ship != null && Player.ActivePlayer.Ship.InputController != null);
-
+        _player = player;
         playerReady = true;
     }
 
@@ -33,7 +28,7 @@ public class PortraitUI : MonoBehaviour
     {
         if (!playerReady) return;
 
-        if (Player.ActivePlayer.Ship.InputController.Portrait)
+        if (_player.Ship.InputController.Portrait)
         {
             // Set the anchorMin and anchorMax values to center the RectTransform
             rectTransform.anchorMin = portraitAnchorMin;

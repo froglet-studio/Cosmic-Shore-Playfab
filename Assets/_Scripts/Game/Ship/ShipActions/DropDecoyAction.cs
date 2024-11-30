@@ -21,7 +21,9 @@ public class DropDecoyAction : ShipAction
 
     public override void StartAction()
     {
-        if (resourceSystem.Resources[resourceIndex].CurrentAmount > resourceCost)
+        //TODO - need to recreate this method
+
+        /*if (resourceSystem.Resources[resourceIndex].CurrentAmount > resourceCost)
         {
             resourceSystem.ChangeResourceAmount(resourceIndex, -resourceCost);
 
@@ -32,7 +34,7 @@ public class DropDecoyAction : ShipAction
             fake.transform.position = ship.transform.position;
             fake.transform.position += Quaternion.Euler(0, 0, Random.Range(0, 360)) * ship.transform.up * Random.Range(dropRadiusMinRange, dropRadiusMaxRange);
             fake.transform.position += ship.transform.forward * dropForwardDistance;
-        }
+        }*/
     }
 
     public override void StopAction()

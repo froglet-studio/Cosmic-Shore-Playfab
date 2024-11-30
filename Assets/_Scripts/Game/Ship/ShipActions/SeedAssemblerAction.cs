@@ -18,7 +18,7 @@ namespace CosmicShore
         protected override void Start()
         {
             base.Start();
-            spawner = ship.GetComponent<TrailSpawner>();
+            spawner = ship.TrailSpawner;
         }
 
         public override void StartAction()

@@ -46,6 +46,7 @@ namespace CosmicShore.Core
     {
         
         [SerializeField] public List<Resource> Resources;
+        [SerializeField] IShip ship;
 
         public static readonly float OneFuelUnit = 1 / 10f;
         ShipStatus shipData;
@@ -62,7 +63,7 @@ namespace CosmicShore.Core
         {
             yield return new WaitForSeconds(.5f);
 
-            BindElementalFloats(GetComponent<Ship>());
+            BindElementalFloats(ship);
 
             foreach (var resource in Resources)
             {

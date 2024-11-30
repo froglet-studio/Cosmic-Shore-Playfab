@@ -44,7 +44,7 @@ namespace CosmicShore.Core
         {
             MiniGame.PlayerCaptain = captain;
             MiniGame.PlayerShipType = captain.Ship.Class;
-            MiniGame.ShipResources = CaptainManager.Instance.GetCaptainByName(captain.Name).ResourceLevels;
+            MiniGame.ResourceCollection = CaptainManager.Instance.GetCaptainByName(captain.Name).ResourceLevels;
             MiniGame.IntensityLevel = intensity;
             MiniGame.NumberOfPlayers = 1;
             MiniGame.IsDailyChallenge = false;
@@ -62,7 +62,7 @@ namespace CosmicShore.Core
         public void LaunchArcadeGame(GameModes gameMode, ShipTypes ship, ResourceCollection shipResources, int intensity, int numberOfPlayers, bool isDailyChallenge = false)
         {
             MiniGame.PlayerShipType = ship;
-            MiniGame.ShipResources = shipResources;
+            MiniGame.ResourceCollection = shipResources;
             MiniGame.IntensityLevel = intensity;
             MiniGame.NumberOfPlayers = numberOfPlayers;
             MiniGame.IsDailyChallenge = isDailyChallenge;
@@ -81,7 +81,7 @@ namespace CosmicShore.Core
         public void LaunchTrainingGame(GameModes gameMode, ShipTypes ship, ResourceCollection shipResources, int intensity, int numberOfPlayers, bool isDailyChallenge = false)
         {
             MiniGame.PlayerShipType = ship;
-            MiniGame.ShipResources = shipResources;
+            MiniGame.ResourceCollection = shipResources;
             MiniGame.IntensityLevel = intensity;
             MiniGame.NumberOfPlayers = numberOfPlayers;
             MiniGame.IsDailyChallenge = isDailyChallenge;

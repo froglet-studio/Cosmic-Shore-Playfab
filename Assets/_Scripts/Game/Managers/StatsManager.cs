@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using System;
 
+
 public class StatsManager : Singleton<StatsManager>
 {
     [SerializeField] List<GameObject> EndOfRoundStatContainers;
@@ -18,11 +19,11 @@ public class StatsManager : Singleton<StatsManager>
     public Dictionary<Teams, RoundStats> LastRoundTeamStats = new();
     public Dictionary<string, RoundStats> LastRoundPlayerStats = new();
 
-    bool RecordStats = true;
+    bool _recordStats = true;
 
-    public void CrystalCollected(Ship ship, CrystalProperties crystalProperties)
+    public void CrystalCollected(IShip ship, CrystalProperties crystalProperties)
     {
-        if (!RecordStats)
+        if (!_recordStats)
             return;
 
         if (!MaybeCreateDictionaryEntries(ship.Team, ship.Player.PlayerName))
@@ -50,6 +51,7 @@ public class StatsManager : Singleton<StatsManager>
                 roundStats.OmniCrystalsCollected++;
                 PlayerStats[ship.Player.PlayerName] = roundStats;
                 break;
+
             case Element.Charge:
                 roundStats = TeamStats[ship.Team];
                 roundStats.ElementalCrystalsCollected++;
@@ -63,9 +65,8 @@ public class StatsManager : Singleton<StatsManager>
 
                 Debug.Log($"CrystalCollected - recording stat - ship.Player.PlayerName:{ship.Player.PlayerName}, roundStats.ChargeCrystalValue:{roundStats.ChargeCrystalValue}"); 
                 Debug.Log($"CrystalCollected - recording stat - ship.Player.PlayerName:{ship.Player.PlayerName}, playerStats[ship.Player.PlayerName]:{PlayerStats[ship.Player.PlayerName]}"); 
-
-
                 break;
+
             case Element.Mass:
                 roundStats = TeamStats[ship.Team];
                 roundStats.ElementalCrystalsCollected++;
@@ -77,6 +78,7 @@ public class StatsManager : Singleton<StatsManager>
                 roundStats.MassCrystalValue += crystalProperties.crystalValue;
                 PlayerStats[ship.Player.PlayerName] = roundStats;
                 break;
+
             case Element.Space:
                 roundStats = TeamStats[ship.Team];
                 roundStats.ElementalCrystalsCollected++;
@@ -88,6 +90,7 @@ public class StatsManager : Singleton<StatsManager>
                 roundStats.SpaceCrystalValue += crystalProperties.crystalValue;
                 PlayerStats[ship.Player.PlayerName] = roundStats;
                 break;
+
             case Element.Time:
                 roundStats = TeamStats[ship.Team];
                 roundStats.ElementalCrystalsCollected++;
@@ -102,11 +105,11 @@ public class StatsManager : Singleton<StatsManager>
         }
     }
 
-    public void SkimmerShipCollision(Ship skimmingShip, Ship ship)
+    public void SkimmerShipCollision(IShip skimmingShip, IShip ship)
     {
         if (skimmingShip == null || skimmingShip.Player == null) return;
 
-        if (!RecordStats)
+        if (!_recordStats)
             return;
 
         if (!MaybeCreateDictionaryEntries(skimmingShip.Team, skimmingShip.Player.PlayerName))
@@ -123,7 +126,7 @@ public class StatsManager : Singleton<StatsManager>
 
     public void BlockCreated(Teams creatingTeam, string creatingPlayerName, TrailBlockProperties createdTrailBlockProperties)
     {
-        if (!RecordStats)
+        if (!_recordStats)
             return;
 
         if (!MaybeCreateDictionaryEntries(creatingTeam, creatingPlayerName))
@@ -146,7 +149,7 @@ public class StatsManager : Singleton<StatsManager>
 
     public void BlockDestroyed(Teams destroyingTeam, string destroyingPlayerName, TrailBlockProperties destroyedTrailBlockProperties)
     {
-        if (!RecordStats)
+        if (!_recordStats)
             return;
 
         if (!MaybeCreateDictionaryEntries(destroyingTeam, destroyingPlayerName))
@@ -189,7 +192,7 @@ public class StatsManager : Singleton<StatsManager>
 
     public void BlockRestored(Teams restoringTeam, string restoringPlayerName, TrailBlockProperties restoredTrailBlockProperties)
     {
-        if (!RecordStats)
+        if (!_recordStats)
             return;
 
         if (!MaybeCreateDictionaryEntries(restoringTeam, restoringPlayerName))
@@ -214,7 +217,7 @@ public class StatsManager : Singleton<StatsManager>
 
     public void BlockVolumeModified(float volume, TrailBlockProperties modifiedTrailBlockProperties)
     {
-        if (!RecordStats)
+        if (!_recordStats)
             return;
 
         if (!MaybeCreateDictionaryEntries(modifiedTrailBlockProperties.trailBlock.Team, modifiedTrailBlockProperties.trailBlock.PlayerName))
@@ -237,7 +240,7 @@ public class StatsManager : Singleton<StatsManager>
 
     public void BlockStolen(Teams stealingTeam, string stealingPlayerName, TrailBlockProperties stolenTrailBlockProperties)
     {
-        if (!RecordStats)
+        if (!_recordStats)
             return;
 
         if (!MaybeCreateDictionaryEntries(stealingTeam, stealingPlayerName))
@@ -276,7 +279,7 @@ public class StatsManager : Singleton<StatsManager>
 
     public void AbilityActivated(Teams team, string playerName, InputEvents abilityType, float duration)
     {
-        if (!RecordStats)
+        if (!_recordStats)
             return;
 
         if (!MaybeCreateDictionaryEntries(team, playerName))
@@ -388,7 +391,7 @@ public class StatsManager : Singleton<StatsManager>
     {
         LastRoundTeamStats = TeamStats;
         LastRoundPlayerStats = PlayerStats;
-        RecordStats = true;
+        _recordStats = true;
         TeamStats = new Dictionary<Teams, RoundStats>();
         PlayerStats = new Dictionary<string, RoundStats>();
     }
@@ -416,7 +419,7 @@ public class StatsManager : Singleton<StatsManager>
     // TODO: p1 - we probably want a UI class that talks to the stats managar and updates the UI rather than doing it in here directly
     void OutputRoundStats()
     {
-        RecordStats = false;
+        _recordStats = false;
 
         string statsString = "<mspace=4.5px>\n";
         statsString += "<b>Field".PadRight(38) + " | ";

@@ -238,7 +238,7 @@ MonoBehaviour:
   autoInjectGameObjects:
   - {fileID: 1267607586}
   _clientGameplayState: {fileID: 262525757}
-  _miniGame: {fileID: 1078953710}
+  _miniGame: {fileID: 1078953709}
   _shipPrefab: {fileID: 4957369263333239007, guid: fe506eaa052530c4092cedf7d365405a,
     type: 3}
   _playerSpawnPoints:
@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118ace87654de114cbaeac2af24203da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _miniGame: {fileID: 1078953710}
+  _miniGame: {fileID: 1078953709}
 --- !u!1 &420213765
 GameObject:
   m_ObjectHideFlags: 0
@@ -848,7 +848,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1078953705}
-  - component: {fileID: 1078953710}
+  - component: {fileID: 1078953709}
   - component: {fileID: 1078953707}
   - component: {fileID: 1078953708}
   m_Layer: 0
@@ -905,7 +905,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EndOfRoundStatContainers: []
   nodeGame: 0
---- !u!114 &1078953710
+--- !u!114 &1078953709
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -914,7 +914,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1078953702}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2caefb27e1b37a9419bcf832339b9f10, type: 3}
+  m_Script: {fileID: 11500000, guid: e8eb8899fecea5340bf1a69d2fea30ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameMode: 26
@@ -922,8 +922,7 @@ MonoBehaviour:
   TurnMonitors: []
   ScoreTracker: {fileID: 1078953707}
   GameCanvas: {fileID: 547474318}
-  playerPrefab: {fileID: 6540013344256237341, guid: 3e3f88ef4359ffb43baf02f9c2ad8627,
-    type: 3}
+  playerPrefab: {fileID: 0}
   PlayerOrigin: {fileID: 1192541910}
   EndOfTurnDelay: 0
   EnableTrails: 1

@@ -5,11 +5,9 @@ using UnityEngine;
 
 namespace CosmicShore.Game.Animation
 {
-    [RequireComponent(typeof(Ship))]
     public abstract class ShipAnimation : MonoBehaviour
     {
-        protected InputController inputController;
-
+        [SerializeField] protected IShip ship;
         [SerializeField] public SkinnedMeshRenderer SkinnedMeshRenderer;
         [SerializeField] bool SaveNewPositions; // TODO: remove after all models have shape keys support
         [SerializeField] bool UseShapeKeys; // TODO: remove after all models have shape keys support
@@ -17,13 +15,12 @@ namespace CosmicShore.Game.Animation
         [SerializeField] protected float lerpAmount = 2f;
         [SerializeField] protected float smallLerpAmount = .7f;
 
+        protected InputController inputController;
         protected List<Transform> Transforms = new(); // TODO: use this to populate the ship geometries on ship.cs
         protected List<Quaternion> InitialRotations = new(); // TODO: use this to populate the ship geometries on ship.cs
-        Ship ship;
 
         protected virtual void Start()
         {
-            ship = GetComponent<Ship>();
             inputController = ship.InputController;
             ship.ResourceSystem.OnElementLevelChange += UpdateShapeKey;
 
@@ -32,7 +29,7 @@ namespace CosmicShore.Game.Animation
 
         protected virtual void Update()
         {
-            if (inputController == null) inputController = GetComponent<Ship>().InputController;
+            if (inputController == null) inputController = ship.InputController;
             if (inputController != null) // the line above makes this run the moment it has the handle
             {
                 if (inputController.Idle)

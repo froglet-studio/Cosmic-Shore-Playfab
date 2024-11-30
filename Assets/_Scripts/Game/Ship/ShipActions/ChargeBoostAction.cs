@@ -20,7 +20,7 @@ public class ChargeBoostAction : ShipAction
     void GetShipStatus()
     {
         if (!TryGetComponent(out shipStatus))
-            shipStatus = ship.GetComponent<ShipStatus>();
+            shipStatus = ship.ShipStatus;
     }
 
     public override void StartAction()

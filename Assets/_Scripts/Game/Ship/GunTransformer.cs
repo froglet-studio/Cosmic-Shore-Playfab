@@ -12,7 +12,7 @@ namespace CosmicShore
         // Start is called before the first frame update
         [SerializeField] float radius = 20f;
         float constant;
-        [SerializeField] Ship ship;
+        [SerializeField] IShip ship;
         [SerializeField] Transform gunFocus;
 
         void Start()

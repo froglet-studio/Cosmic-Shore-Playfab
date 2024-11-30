@@ -6,7 +6,7 @@ public class DetachAction : ShipAction
 
     protected override void Start()
     {
-        shipData = ship.GetComponent<ShipStatus>();
+        shipData = ship.ShipStatus;
     }
     public override void StartAction()
     {

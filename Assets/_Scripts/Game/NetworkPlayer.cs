@@ -1,41 +1,74 @@
 ﻿using CosmicShore.Core;
-using CosmicShore.Game.AI;
-using CosmicShore.Game.GameplayObjects;
 using CosmicShore.Game.IO;
 using CosmicShore.Game.UI;
 using UnityEngine;
 
+
 namespace CosmicShore.Game
 {
-    public class NetworkPlayer : Player
+    /// <summary>
+    /// This player is spawned to each client from server as 
+    /// the main multiplayer player prefab instance.
+    /// </summary>
+    public class NetworkPlayer : MonoBehaviour, IPlayer
     {
-        protected override void Start()
+        [SerializeField]
+        ShipTypes _defaultShipType;
+
+        public ShipTypes DefaultShipType { get => _defaultShipType; }
+        public Teams Team { get; private set; }
+        public string PlayerName { get; private set; }
+        public string PlayerUUID { get; private set; }
+        public string Name { get; private set; }
+        public InputController InputController { get; private set; }
+        public GameCanvas GameCanvas { get; private set; }
+        public Transform Transform => transform;
+        public bool IsActive { get; private set; } = false;
+
+        IShip _ship;
+        public IShip Ship => _ship;
+
+        public void Initialize(IPlayer.InitializeData data)
         {
-            // We dont want anything to be called at start
+            _defaultShipType = data.DefaultShipType;
+            Team = data.Team;
+            PlayerName = data.PlayerName;
+            PlayerUUID = data.PlayerUUID;
+            Name = data.PlayerName;
         }
 
-        public void Setup(Ship ship) =>
-            SetupPlayerShip(Hangar.Instance.LoadPlayerShip(ship, ship.ShipType, ship.Team));
+        public void ToggleActive(bool active) => IsActive = active;
 
-        public void SetShipParent() =>
-            ship.transform.SetParent(shipContainer.transform, false);
+        /// <summary>
+        /// Setup the player
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <param name="isOwner">Is this player owned by this client</param>
+        public void Setup(IShip ship, bool isOwner) =>
+            SetupPlayerShip(Hangar.Instance.LoadPlayerShip(ship, ship.GetShipType, ship.Team) as IShip, isOwner);
 
-        protected override void SetupPlayerShip(Ship shipInstance)
+        public void SetDefaultShipType(ShipTypes shipType) => _defaultShipType = shipType;
+
+        public void ToggleGameObject(bool toggle) =>
+            gameObject.SetActive(toggle);
+
+        private void SetupPlayerShip(IShip ship, bool isOwner)
         {
-            GameCanvas = FindObjectOfType<GameCanvas>();
-            foreach (Transform child in shipContainer.transform) Destroy(child.gameObject);
+            _ship = ship;
 
-            ActivePlayer = this;
+            if (isOwner)
+            {
+                // Below logics are for the ship's owner client only.
 
-            shipInstance.GetComponent<AIPilot>().enabled = false;
+                GameCanvas = FindObjectOfType<GameCanvas>();
+                GameCanvas.MiniGameHUD.Ship = _ship;
 
-            ship = shipInstance;
-            GetComponent<InputController>().ship = ship;
+                InputController = GetComponent<InputController>();
+                InputController.Ship = _ship;
+            }
 
-            GameCanvas.MiniGameHUD.ship = ship;
-            ship.Team = Team;
-            ship.Player = this;
-            ship.Initialize();
+            _ship.AIPilot.enabled = false;
+            _ship.Initialize(this, _ship.Team);
         }
     }
 }

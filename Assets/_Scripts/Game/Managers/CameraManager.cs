@@ -67,13 +67,13 @@ public class CameraManager : SingletonPersistent<CameraManager>
 
     public void SetupGamePlayCameras()
     {
-        playerFollowTarget = FollowOverride ? Hangar.Instance.SelectedShip.ShipCameraCustomizer.FollowTarget : Hangar.Instance.SelectedShip.transform;
+        playerFollowTarget = FollowOverride ? Hangar.Instance.SelectedShip.GetShipCameraCustomizer.FollowTarget : Hangar.Instance.SelectedShip.Transform;
         SetupGamePlayCameras(playerFollowTarget);
     }
 
-    public void SetupGamePlayCameras(Transform _transform)
+    public void SetupGamePlayCameras(Transform transform)
     {
-        playerFollowTarget = _transform;
+        playerFollowTarget = transform;
         closeCamera.LookAt = deathCamera.LookAt = playerFollowTarget;
         closeCamera.Follow = deathCamera.Follow = playerFollowTarget;
         ThemeManager.Instance.SetBackgroundColor(Camera.main);

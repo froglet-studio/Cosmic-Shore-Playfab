@@ -8,12 +8,12 @@ public class Pip : MonoBehaviour
 {
     [SerializeField] Camera pipCamera;
     [SerializeField] bool mirrored;
+    [SerializeField] IShip ship;
 
     // Start is called before the first frame update
     void Start()
     {
-        Ship ship = GetComponent<Ship>();
-        if (ship.Player.GameCanvas != null) ship.Player.GameCanvas.MiniGameHUD.SetPipActive(!ship.AutoPilot.AutoPilotEnabled, mirrored);
-        if (pipCamera != null) pipCamera.gameObject.SetActive(!ship.AutoPilot.AutoPilotEnabled);
+        if (ship.Player.GameCanvas != null) ship.Player.GameCanvas.MiniGameHUD.SetPipActive(!ship.AIPilot.AutoPilotEnabled, mirrored);
+        if (pipCamera != null) pipCamera.gameObject.SetActive(!ship.AIPilot.AutoPilotEnabled);
     }
 }

@@ -9,7 +9,7 @@ namespace CosmicShore
     public class ClearPrisms : MonoBehaviour
     {
         Transform mainCamera;
-        [SerializeField] Ship Ship;
+        [SerializeField] IShip Ship;
         [SerializeField] AnimationCurve scaleCurve = AnimationCurve.Linear(0, 0, 1, 1);
         [SerializeField] float capsuleRadius = 5f;
 
@@ -26,7 +26,7 @@ namespace CosmicShore
         void Start()
         {
             if (Ship.ShipStatus.AutoPilotEnabled) return;
-            cameraManager = Ship.cameraManager;
+            cameraManager = Ship.CameraManager;
             mainCamera = cameraManager.GetCloseCamera();
             visibilityCapsuleTransform = new GameObject("Visibility Capsule").transform;
             transform.SetParent(visibilityCapsuleTransform);
@@ -41,7 +41,7 @@ namespace CosmicShore
             if (mainCamera == null || Ship.ShipStatus.AutoPilotEnabled) return;
 
             Vector3 cameraPosition = mainCamera.position;
-            Vector3 shipPosition = Ship.transform.position;
+            Vector3 shipPosition = Ship.Transform.position;
 
             // Position the capsule between the camera and the ship
             transform.position = (cameraPosition + shipPosition) / 2f;

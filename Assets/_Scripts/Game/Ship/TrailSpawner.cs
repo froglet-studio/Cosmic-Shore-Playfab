@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Ship))]
+[RequireComponent(typeof(IShip))]
 public class TrailSpawner : MonoBehaviour
 {
     public delegate void BlockCreationHandler(float xShift, float wavelength, float scaleX, float scaleY, float scaleZ);
@@ -37,7 +37,7 @@ public class TrailSpawner : MonoBehaviour
 
     Material blockMaterial;
     Material shieldedBlockMaterial;
-    Ship ship;
+    IShip ship;
     ShipStatus shipData;
 
     [SerializeField] bool warp = false;
@@ -82,7 +82,13 @@ public class TrailSpawner : MonoBehaviour
 
     [Tooltip("This is serialized for debug visibility")]
     [SerializeField] bool spawnerEnabled = true;
-    string ownerId;
+    
+    public string OwnerId { get; set; }
+
+    private void Awake()
+    {
+        OwnerId = string.Empty;
+    }
 
     private void OnEnable()
     {
@@ -96,8 +102,9 @@ public class TrailSpawner : MonoBehaviour
 
     IEnumerator Start()
     {
-        yield return new WaitUntil(() => 
-        ship != null && ship.Player != null);
+        yield return new WaitUntil(() => ship != null && ship.Player != null);
+
+        ship = GetComponent<IShip>();
 
         waitTime = defaultWaitTime;
         wavelength = initialWavelength;
@@ -108,12 +115,12 @@ public class TrailSpawner : MonoBehaviour
         }
 
         shards = GameObject.FindGameObjectWithTag("field");
-        ship = GetComponent<Ship>();
+
         shipData = GetComponent<ShipStatus>();
 
         spawnTrailCoroutine = StartCoroutine(SpawnTrailCoroutine());
 
-        ownerId = ship.Player.PlayerUUID;
+        OwnerId = ship.Player.PlayerUUID;
         XScaler = minBlockScale;
     }
 
@@ -191,14 +198,14 @@ public class TrailSpawner : MonoBehaviour
         Block.TargetScale = new Vector3(trailBlock.transform.localScale.x * XScaler / 2f - Mathf.Abs(halfGap), trailBlock.transform.localScale.y * YScaler, trailBlock.transform.localScale.z * ZScaler);
         TargetScale = Block.TargetScale;
         float xShift = (Block.TargetScale.x / 2f + Mathf.Abs(halfGap)) * (halfGap / Mathf.Abs(halfGap));
-        Block.transform.SetPositionAndRotation(transform.position - shipData.Course * offset + ship.transform.right * xShift, shipData.blockRotation);
+        Block.transform.SetPositionAndRotation(transform.position - shipData.Course * offset + ship.Transform.right * xShift, shipData.blockRotation);
         Block.transform.parent = TrailContainer.transform;
         Block.ownerId = isCharmed ? tempShip.Player.PlayerUUID : ship.Player.PlayerUUID;
         Block.Player = isCharmed ? tempShip.Player : ship.Player;
         Block.Team = isCharmed ? tempShip.Team : ship.Team;
         Block.warp = warp;
         if (waitTillOutsideSkimmer) 
-            Block.waitTime = (skimmer.transform.localScale.z + TrailZScale) / ship.GetComponent<ShipStatus>().Speed;
+            Block.waitTime = (skimmer.transform.localScale.z + TrailZScale) / ship.ShipStatus.Speed;
         if (shielded)
         {
             Block.GetComponent<MeshRenderer>().material = shieldedBlockMaterial;
@@ -211,7 +218,7 @@ public class TrailSpawner : MonoBehaviour
         OnBlockCreated?.Invoke(xShift, wavelength, Block.TargetScale.x, Block.TargetScale.y, Block.TargetScale.z);
         trail.Add(Block);
         Block.Index = trail.TrailList.IndexOf(Block);
-        Block.ID = ownerId + "::" + spawnedTrailCount++;
+        Block.ID = OwnerId + "::" + spawnedTrailCount++;
         
         if (Block.warp)
             wavelength = shards.GetComponent<WarpFieldData>().HybridVector(Block.transform).magnitude * initialWavelength;
@@ -246,14 +253,14 @@ public class TrailSpawner : MonoBehaviour
                     TargetScale = Block.TargetScale;
                     Block.transform.SetPositionAndRotation(transform.position - shipData.Course * offset, shipData.blockRotation);
                     Block.transform.parent = TrailContainer.transform;
-                    Block.waitTime = (skimmer.transform.localScale.z + TrailZScale) / ship.GetComponent<ShipStatus>().Speed;
+                    Block.waitTime = (skimmer.transform.localScale.z + TrailZScale) / ship.ShipStatus.Speed;
                     Block.ownerId = isCharmed ? tempShip.Player.PlayerUUID : ship.Player.PlayerUUID;
                     Block.Player = isCharmed ? tempShip.Player : ship.Player;
                     Block.Team = isCharmed ? tempShip.Team : ship.Team;
                     Block.warp = warp;
                     Block.GetComponent<MeshRenderer>().material = blockMaterial;
                     Block.Index = spawnedTrailCount;
-                    Block.ID = ownerId + "::" + spawnedTrailCount++;
+                    Block.ID = OwnerId + "::" + spawnedTrailCount++;
                     Block.Trail = Trail;
 
                     if (Block.warp)
@@ -272,9 +279,9 @@ public class TrailSpawner : MonoBehaviour
     }
 
     bool isCharmed = false;
-    Ship tempShip;
+    IShip tempShip;
     
-    public void Charm(Ship ship, float duration)
+    public void Charm(IShip ship, float duration)
     {
         tempShip = ship;
         Debug.Log($"charming ship: {ship}");
