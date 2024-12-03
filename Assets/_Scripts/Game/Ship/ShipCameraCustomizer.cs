@@ -7,7 +7,7 @@ namespace CosmicShore
 {
     public class ShipCameraCustomizer : MonoBehaviour
     {
-        [SerializeField] IShip ship;
+        public IShip Ship { get; set; }
 
         [SerializeField] public List<ShipCameraOverrides> ControlOverrides;
         [SerializeField] float closeCamDistance;
@@ -18,11 +18,16 @@ namespace CosmicShore
 
         [SerializeField] bool isOrthographic = false;
 
+        public void Initialize(IShip ship)
+        {
+            Ship = ship;
+        }
+
         IEnumerator Start()
         {
-            yield return new WaitUntil(() => ship.CameraManager != null);
+            yield return new WaitUntil(() => Ship != null && Ship.CameraManager != null);
             
-            cameraManager = ship.CameraManager;
+            cameraManager = Ship.CameraManager;
             cameraManager.isOrthographic = isOrthographic;
 
             ApplyShipControlOverrides(ControlOverrides);
@@ -32,7 +37,7 @@ namespace CosmicShore
         {
 
             // Camera controls are only relevant for human pilots
-            if (ship.AIPilot.AutoPilotEnabled)
+            if (Ship.AIPilot.AutoPilotEnabled)
                 return;
 
             foreach (ShipCameraOverrides effect in controlOverrides)

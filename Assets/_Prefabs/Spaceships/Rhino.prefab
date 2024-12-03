@@ -1348,15 +1348,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   impactProperties: []
-  cameraManager: {fileID: 0}
-  InputController: {fileID: 0}
-  ResourceSystem: {fileID: 0}
   Name: Rhino
   ShipType: 3
-  TrailSpawner: {fileID: 874579555101021522}
-  ShipTransformer: {fileID: 0}
-  AutoPilot: {fileID: 0}
-  ShipStatus: {fileID: 0}
   nearFieldSkimmer: {fileID: 874579554510349383}
   OrientationHandle: {fileID: 7569251362483239328}
   shipGeometries:
@@ -1366,12 +1359,10 @@ MonoBehaviour:
   - {fileID: 284393576699141201}
   - {fileID: 2131910783175408860}
   shipHUD: {fileID: 4204721886924189457}
-  Silhouette: {fileID: 4796952059166273496}
   AOEPrefab: {fileID: 2728798890556433942, guid: d568a14301490e54280955b50673f884,
     type: 3}
   farFieldSkimmer: {fileID: 0}
-  ShipCameraCustomizer: {fileID: 0}
-  FollowTarget: {fileID: 0}
+  ShipCameraCustomizer: {fileID: 3953285837003103147}
   resourceIndex: 0
   ammoResourceIndex: 0
   boostResourceIndex: 0
@@ -1381,7 +1372,6 @@ MonoBehaviour:
   trailBlockImpactEffects: 0f000000
   blockChargeChange: 0
   boostMultiplier: 6
-  boostFuelAmount: -0.015
   bottomEdgeButtons: 0
   Inertia: 70
   inputEventShipActions:
@@ -1392,10 +1382,6 @@ MonoBehaviour:
     - {fileID: 1315493734959331551}
     - {fileID: 5565916779484709519}
   resourceEventClassActions: []
-  AOEExplosionMaterial: {fileID: 0}
-  AOEConicExplosionMaterial: {fileID: 0}
-  SkimmerMaterial: {fileID: 0}
-  Captain: {fileID: 0}
   ElementStats: []
 --- !u!114 &6441696348568773771
 MonoBehaviour:
@@ -1609,6 +1595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25dd04a558b7f8947ad81c90dc14c5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sihouetteScale: {x: 1, y: 1, z: 1}
   silhouetteParts:
   - {fileID: 6936285373394276089}
   - {fileID: 2343904303954125754}
@@ -1619,8 +1606,6 @@ MonoBehaviour:
   bottomJaw: {fileID: 0}
   JawResourceIndex: 0
   swingBlocks: 1
-  ship: {fileID: 874579555101021527}
-  sihouetteScale: {x: 1, y: 1, z: 1}
 --- !u!114 &3953285837003103147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12415,6 +12400,11 @@ PrefabInstance:
     - target: {fileID: 2148634898793878778, guid: 8b6f43f781b1f9149be91e3e9e59326f,
         type: 3}
       propertyPath: Ship
+      value: 
+      objectReference: {fileID: 874579555101021527}
+    - target: {fileID: 2148634898793878778, guid: 8b6f43f781b1f9149be91e3e9e59326f,
+        type: 3}
+      propertyPath: IShipReference.underlyingValue
       value: 
       objectReference: {fileID: 874579555101021527}
     - target: {fileID: 6349275177958244260, guid: 8b6f43f781b1f9149be91e3e9e59326f,

@@ -2324,15 +2324,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   impactProperties: []
-  cameraManager: {fileID: 0}
-  InputController: {fileID: 0}
-  ResourceSystem: {fileID: 0}
   Name: Dolphin
   ShipType: 2
-  TrailSpawner: {fileID: 874579555101021522}
-  ShipTransformer: {fileID: 0}
-  AutoPilot: {fileID: 0}
-  ShipStatus: {fileID: 0}
   nearFieldSkimmer: {fileID: 874579554510349383}
   OrientationHandle: {fileID: 1087614488730427270}
   shipGeometries:
@@ -2348,12 +2341,10 @@ MonoBehaviour:
   - {fileID: 4111049083201334103}
   - {fileID: 4175282931251547525}
   shipHUD: {fileID: 8183527628512287213}
-  Silhouette: {fileID: 6959572785868932314}
   AOEPrefab: {fileID: 9218889541719856748, guid: 2ae56847c6f549948a71f41eaf59f749,
     type: 3}
   farFieldSkimmer: {fileID: 0}
-  ShipCameraCustomizer: {fileID: 0}
-  FollowTarget: {fileID: 0}
+  ShipCameraCustomizer: {fileID: 5302681132313811143}
   resourceIndex: 0
   ammoResourceIndex: 0
   boostResourceIndex: 1
@@ -2382,10 +2373,6 @@ MonoBehaviour:
     ShipActions:
     - {fileID: 2525174765376973701}
   resourceEventClassActions: []
-  AOEExplosionMaterial: {fileID: 0}
-  AOEConicExplosionMaterial: {fileID: 0}
-  SkimmerMaterial: {fileID: 0}
-  Captain: {fileID: 0}
   ElementStats: []
 --- !u!114 &6441696348568773771
 MonoBehaviour:
@@ -2597,6 +2584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25dd04a558b7f8947ad81c90dc14c5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sihouetteScale: {x: 1, y: 1, z: 1}
   silhouetteParts:
   - {fileID: 6342508168091891684}
   - {fileID: 4573856470754406349}
@@ -2607,8 +2595,6 @@ MonoBehaviour:
   bottomJaw: {fileID: 2109664493357155099}
   JawResourceIndex: 0
   swingBlocks: 0
-  ship: {fileID: 874579555101021527}
-  sihouetteScale: {x: 1, y: 1, z: 1}
 --- !u!114 &5302681132313811143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3031,7 +3017,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5446a35daa6134e9ac74f6afbaa82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ship: {fileID: 874579555101021527}
+  IShipReference:
+    underlyingValue: {fileID: 874579555101021527}
   scaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -3359,6 +3346,11 @@ PrefabInstance:
       propertyPath: blockImpactEffects.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7751815150560592197, guid: 6540c78597c2dcc468123b270169fc44,
+        type: 3}
+      propertyPath: IShipReference.underlyingValue
+      value: 
+      objectReference: {fileID: 874579555101021527}
     - target: {fileID: 7751815150560592197, guid: 6540c78597c2dcc468123b270169fc44,
         type: 3}
       propertyPath: blockStayEffects.Array.data[0]

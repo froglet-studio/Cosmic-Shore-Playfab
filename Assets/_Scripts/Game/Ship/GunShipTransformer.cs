@@ -29,7 +29,7 @@ public class GunShipTransformer : ShipTransformer
         if (shipStatus.Attached && !attached)
         {
             trailFollower.Attach(shipStatus.AttachedTrailBlock);
-            if (!ship.InputController.AutoPilotEnabled && cameraManager != null)
+            if (!Ship.InputController.AutoPilotEnabled && cameraManager != null)
             {
                 cameraManager.SetNormalizedCloseCameraDistance(1);
                 Debug.Log("camera distance now set to 1");
@@ -38,7 +38,7 @@ public class GunShipTransformer : ShipTransformer
         else if (!shipStatus.Attached && attached)
         {
             trailFollower.Detach();
-            if (!ship.InputController.AutoPilotEnabled && cameraManager != null)
+            if (!Ship.InputController.AutoPilotEnabled && cameraManager != null)
             {
                 cameraManager.SetNormalizedCloseCameraDistance(0);
                 Debug.Log("camera distance now set to 0");
@@ -88,10 +88,10 @@ public class GunShipTransformer : ShipTransformer
         if (shipStatus.AttachedTrailBlock.destroyed)
             shipStatus.AttachedTrailBlock.Restore();
 
-        if (shipStatus.AttachedTrailBlock.Team == ship.Team)
+        if (shipStatus.AttachedTrailBlock.Team == Ship.Team)
         {
             shipStatus.AttachedTrailBlock.Grow(growthAmount.Value);
         }
-        else shipStatus.AttachedTrailBlock.Steal(ship.Player, ship.Team);
+        else shipStatus.AttachedTrailBlock.Steal(Ship.Player, Ship.Team);
     }
 }

@@ -137,13 +137,18 @@ namespace CosmicShore.Game.AI
             CrystalTransform = closestItem == null ? activeNode.transform : closestItem.transform;
         }
 
+        public void Initialize(IShip ship)
+        {
+            Ship = ship;
+            shipStatus = Ship.ShipStatus;
+        }
+
         void Start()
         {
             maxDistanceSquared = maxDistance * maxDistance;
             aggressiveness = defaultAggressiveness;
             throttle = defaultThrottle;
-            shipStatus = Ship.ShipStatus;
-
+            
             CornerBehaviors = new Dictionary<Corner, AvoidanceBehavior>() {
                 { Corner.TopRight, new AvoidanceBehavior (raycastWidth, raycastHeight, Clockwise, Vector3.zero ) },
                 { Corner.BottomRight, new AvoidanceBehavior (raycastWidth, -raycastHeight, CounterClockwise, Vector3.zero ) },

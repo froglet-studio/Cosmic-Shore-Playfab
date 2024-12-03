@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Device;
 
 namespace CosmicShore
 {
@@ -11,7 +8,7 @@ namespace CosmicShore
         protected override void Start()
         {
             base.Start();
-            ship.ShipStatus.CommandStickControls = true;
+            Ship.ShipStatus.CommandStickControls = true;
             shipStatus.Speed = .1f;
         }
 

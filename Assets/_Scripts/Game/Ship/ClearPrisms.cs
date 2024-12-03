@@ -1,15 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CosmicShore.Core;
-
 
 namespace CosmicShore
 {
     public class ClearPrisms : MonoBehaviour
     {
         Transform mainCamera;
-        [SerializeField] IShip Ship;
+        [SerializeField] InterfaceReference<IShip> IShipReference;
+        IShip Ship => IShipReference.Value;
+
         [SerializeField] AnimationCurve scaleCurve = AnimationCurve.Linear(0, 0, 1, 1);
         [SerializeField] float capsuleRadius = 5f;
 

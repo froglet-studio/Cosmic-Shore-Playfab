@@ -7,7 +7,6 @@ namespace CosmicShore.Game.Animation
 {
     public abstract class ShipAnimation : MonoBehaviour
     {
-        [SerializeField] protected IShip ship;
         [SerializeField] public SkinnedMeshRenderer SkinnedMeshRenderer;
         [SerializeField] bool SaveNewPositions; // TODO: remove after all models have shape keys support
         [SerializeField] bool UseShapeKeys; // TODO: remove after all models have shape keys support
@@ -15,27 +14,33 @@ namespace CosmicShore.Game.Animation
         [SerializeField] protected float lerpAmount = 2f;
         [SerializeField] protected float smallLerpAmount = .7f;
 
+        protected IShip Ship;
         protected InputController inputController;
         protected List<Transform> Transforms = new(); // TODO: use this to populate the ship geometries on ship.cs
         protected List<Quaternion> InitialRotations = new(); // TODO: use this to populate the ship geometries on ship.cs
 
+        public virtual void Initialize(IShip ship)
+        {
+            Ship = ship;
+            inputController = Ship.InputController;
+            Ship.ResourceSystem.OnElementLevelChange += UpdateShapeKey;
+
+            AssignTransforms();
+        }
+
         protected virtual void Start()
         {
-            inputController = ship.InputController;
-            ship.ResourceSystem.OnElementLevelChange += UpdateShapeKey;
-
             AssignTransforms();
         }
 
         protected virtual void Update()
         {
-            if (inputController == null) inputController = ship.InputController;
-            if (inputController != null) // the line above makes this run the moment it has the handle
+            if (inputController != null) 
             {
                 if (inputController.Idle)
                     Idle();
                 else
-                    if (ship.ShipStatus.SingleStickControls) PerformShipPuppetry(inputController.EasedLeftJoystickPosition.y, inputController.EasedLeftJoystickPosition.x, 0, 0);
+                    if (Ship.ShipStatus.SingleStickControls) PerformShipPuppetry(inputController.EasedLeftJoystickPosition.y, inputController.EasedLeftJoystickPosition.x, 0, 0);
                     else PerformShipPuppetry(inputController.YSum, inputController.XSum, inputController.YDiff, inputController.XDiff);
             }
         }

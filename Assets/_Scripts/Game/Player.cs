@@ -8,7 +8,8 @@ namespace CosmicShore.Game
 {
     public class Player : MonoBehaviour, IPlayer
     {
-        [SerializeField] public ShipTypes defaultShip = ShipTypes.Dolphin;
+        [SerializeField] public ShipTypes defaultShip = ShipTypes.Dolphin;  // TODO: combine this and DefaultShipType
+        [SerializeField] GameObject shipContainer;
         [SerializeField] bool UseHangarConfiguration = true;
         [SerializeField] bool IsAI = false;
         [SerializeField] string _playerName;
@@ -33,13 +34,14 @@ namespace CosmicShore.Game
 
         protected GameManager gameManager;
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             gameManager = GameManager.Instance;
         }
 
         public void Initialize(IPlayer.InitializeData data)
         {
+            gameManager = GameManager.Instance;
             DefaultShipType = data.DefaultShipType;
             Team = data.Team;
             _playerName = data.PlayerName;
@@ -79,7 +81,8 @@ namespace CosmicShore.Game
                     case "PlayerFour":
                     default: // Default will be the players Playfab username
                         Debug.Log($"Player.Start - Instantiate Ship: {PlayerName}");
-                        SetupPlayerShip(Hangar.Instance.LoadPlayerShip(defaultShip, Team));
+
+                        SetupPlayerShip(Hangar.Instance.LoadPlayerShip(DefaultShipType, Team));
                         break;
                 }
             }
@@ -102,7 +105,7 @@ namespace CosmicShore.Game
         protected virtual void SetupPlayerShip(IShip ship)
         {
             Ship = ship;
-            Ship.Transform.SetParent(transform, false);
+            Ship.Transform.SetParent(shipContainer.transform, false);
             Ship.AIPilot.enabled = false;
 
             GetComponent<InputController>().Ship = ship;
@@ -117,13 +120,14 @@ namespace CosmicShore.Game
         {
             Debug.Log($"Player - SetupAIShip - playerName: {PlayerName}");
 
-            ship.AIPilot.enabled = true;
+            Ship = ship;
+            Ship.AIPilot.enabled = true;
 
             var inputController = GetComponent<InputController>();
-            inputController.Ship = ship;
-            ship.Initialize(this, Team);
+            inputController.Ship = Ship;
+            Ship.Initialize(this, Team);
 
-            gameManager.WaitOnAILoading(ship.AIPilot);
+            gameManager.WaitOnAILoading(Ship.AIPilot);
         }
 
         public void ToggleActive(bool active) => IsActive = active;

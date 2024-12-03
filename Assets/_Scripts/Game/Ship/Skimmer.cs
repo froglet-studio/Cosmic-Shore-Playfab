@@ -18,8 +18,8 @@ namespace CosmicShore.Core
         [SerializeField] float MultiSkimMultiplier = 0f;
         [SerializeField] bool visible;
         [SerializeField] ElementalFloat Scale = new ElementalFloat(1);
-        
         public IShip Ship { get; set; }
+
         public IPlayer Player { get; set; }
         public Teams Team { get; set; }
 
@@ -54,16 +54,23 @@ namespace CosmicShore.Core
 
         float initialGap;
 
-        void Start()
+        public void Initialize(IShip ship)
         {
-            cameraManager = CameraManager.Instance;
+            Ship = ship;
             if (Ship != null)
             {
+                Player = Ship.Player;
+                Team = Ship.Team;
                 BindElementalFloats(Ship);
                 resourceSystem = Ship.ResourceSystem;
                 if (visible)
                     GetComponent<MeshRenderer>().material = new Material(Ship.SkimmerMaterial);
             }
+        }
+
+        void Start()
+        {
+            cameraManager = CameraManager.Instance;
 
             sweetSpot = transform.localScale.x / 4;
             FWHM = transform.localScale.x / 4; //Full Width at Half Max

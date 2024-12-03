@@ -588,14 +588,13 @@ MonoBehaviour:
   - {fileID: 1078953703}
   ScoreTracker: {fileID: 1078953707}
   GameCanvas: {fileID: 1556114763}
-  playerPrefab: {fileID: 1649340654}
+  playerPrefab: {fileID: 1649340655}
   PlayerOrigin: {fileID: 1192541910}
   EndOfTurnDelay: 0
   EnableTrails: 1
   DefaultPlayerShipType: 2
   DefaultPlayerCaptain: {fileID: 11400000, guid: 6d520cd7eb8878b4aa2551e0591bc08d,
     type: 2}
-  ActivePlayer: {fileID: 0}
   Crystal: {fileID: 1568959833}
   CrystalStartPosition: {x: 0, y: 0, z: -120}
   SegmentSpawner: {fileID: 1471404064}
@@ -1376,12 +1375,18 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1649340653}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1649340655}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ca79d17578366e4f9cd2b19173ecab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1649340655 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2151207714166088056, guid: 8a9d12e43096881468feb22e39e9fbeb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1649340653}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1655328213
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1497,6 +1502,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FancyCam
+      objectReference: {fileID: 0}
+    - target: {fileID: 4861673831439747586, guid: de8dcb2bc0dbfe8428698a1e94080bfe,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4861673831439747586, guid: de8dcb2bc0dbfe8428698a1e94080bfe,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4861673831439747586, guid: de8dcb2bc0dbfe8428698a1e94080bfe,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4861673831439747586, guid: de8dcb2bc0dbfe8428698a1e94080bfe,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4861673831439747613, guid: de8dcb2bc0dbfe8428698a1e94080bfe,
         type: 3}

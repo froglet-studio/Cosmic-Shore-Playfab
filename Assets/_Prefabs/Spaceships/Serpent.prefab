@@ -1994,7 +1994,6 @@ GameObject:
   - component: {fileID: 874579555101021522}
   - component: {fileID: 1435252848482629424}
   - component: {fileID: 3440187540988767646}
-  - component: {fileID: 6776027772320837218}
   - component: {fileID: 6293426128044408357}
   - component: {fileID: 5086360743770514783}
   - component: {fileID: 2731003324702047408}
@@ -2050,15 +2049,8 @@ MonoBehaviour:
     speedPenalty: 0
     hapticType: 0
     trailBlock: {fileID: 0}
-  cameraManager: {fileID: 0}
-  InputController: {fileID: 0}
-  ResourceSystem: {fileID: 0}
   Name: Serpent
   ShipType: 7
-  TrailSpawner: {fileID: 874579555101021522}
-  ShipTransformer: {fileID: 0}
-  AutoPilot: {fileID: 0}
-  ShipStatus: {fileID: 0}
   nearFieldSkimmer: {fileID: 874579554510349383}
   OrientationHandle: {fileID: 1878660672777590133}
   shipGeometries:
@@ -2070,12 +2062,10 @@ MonoBehaviour:
   - {fileID: 1376376450048088127}
   - {fileID: 6988205045896376628}
   shipHUD: {fileID: 9084521984956080798}
-  Silhouette: {fileID: 2731003324702047408}
   AOEPrefab: {fileID: 2728798890556433942, guid: f5ecfb9923155a84c860975d559b2714,
     type: 3}
   farFieldSkimmer: {fileID: 3138628630497430536}
   ShipCameraCustomizer: {fileID: 0}
-  FollowTarget: {fileID: 0}
   resourceIndex: 0
   ammoResourceIndex: 0
   boostResourceIndex: 0
@@ -2095,10 +2085,6 @@ MonoBehaviour:
     ShipActions:
     - {fileID: 3362399389898013871}
   resourceEventClassActions: []
-  AOEExplosionMaterial: {fileID: 0}
-  AOEConicExplosionMaterial: {fileID: 0}
-  SkimmerMaterial: {fileID: 0}
-  Captain: {fileID: 0}
   ElementStats: []
 --- !u!114 &6441696348568773771
 MonoBehaviour:
@@ -2287,25 +2273,6 @@ MonoBehaviour:
   ability: {fileID: 0}
   CrystalTransform: {fileID: 0}
   flowFieldData: {fileID: 0}
---- !u!114 &6776027772320837218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6417075533431866457}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2116872444dccfd43a29513c3af008b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SkinnedMeshRenderer: {fileID: 0}
-  SaveNewPositions: 1
-  UseShapeKeys: 0
-  brakeThreshold: 0.65
-  lerpAmount: 2
-  smallLerpAmount: 0.7
-  animator: {fileID: 1619232438159974630}
 --- !u!114 &6293426128044408357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2360,6 +2327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25dd04a558b7f8947ad81c90dc14c5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sihouetteScale: {x: 1, y: 1, z: 1}
   silhouetteParts:
   - {fileID: 322268676704545573}
   - {fileID: 8777980414596646480}
@@ -2372,8 +2340,6 @@ MonoBehaviour:
   bottomJaw: {fileID: 0}
   JawResourceIndex: 0
   swingBlocks: 0
-  ship: {fileID: 874579555101021527}
-  sihouetteScale: {x: 1, y: 1, z: 1}
 --- !u!114 &705402283976800655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4030,6 +3996,11 @@ PrefabInstance:
     - target: {fileID: 2148634898793878778, guid: 8b6f43f781b1f9149be91e3e9e59326f,
         type: 3}
       propertyPath: Ship
+      value: 
+      objectReference: {fileID: 874579555101021527}
+    - target: {fileID: 2148634898793878778, guid: 8b6f43f781b1f9149be91e3e9e59326f,
+        type: 3}
+      propertyPath: IShipReference.underlyingValue
       value: 
       objectReference: {fileID: 874579555101021527}
     - target: {fileID: 6349275177958244260, guid: 8b6f43f781b1f9149be91e3e9e59326f,

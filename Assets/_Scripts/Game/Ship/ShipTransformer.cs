@@ -2,14 +2,13 @@ using UnityEngine;
 using CosmicShore.Core;
 using CosmicShore.Game.IO;
 using System.Collections.Generic;
-using UnityEngine.InputSystem.LowLevel;
 
 public class ShipTransformer : MonoBehaviour
 {
     Quaternion inverseInitialRotation = new(0, 0, 0, 0);
 
     #region Ship
-    protected IShip ship;
+    public IShip Ship { get; set; }
     protected ShipStatus shipStatus;
     protected ResourceSystem resourceSystem;
     #endregion
@@ -37,17 +36,19 @@ public class ShipTransformer : MonoBehaviour
     public float SpeedMultiplier => throttleMultiplier;
     protected Vector3 velocityShift = Vector3.zero;
 
+    public void Initialize(IShip Ship)
+    {
+        this.Ship = Ship;
+        shipStatus = Ship.ShipStatus;
+        resourceSystem = Ship.ResourceSystem;
+        inputController = Ship.InputController;
+    }
 
     protected virtual void Start()
     {
-        ship = GetComponent<IShip>();
-        shipStatus = ship.ShipStatus;
-        resourceSystem = ship.ResourceSystem;
-
         MinimumSpeed = DefaultMinimumSpeed;
         ThrottleScaler = DefaultThrottleScaler.Value;
         accumulatedRotation = transform.rotation;
-        inputController = ship.InputController;
     }
 
     public void Reset()
@@ -63,7 +64,7 @@ public class ShipTransformer : MonoBehaviour
     {
         if (inputController == null)
         {
-            inputController = ship.InputController;
+            inputController = Ship.InputController;
         }
 
         if (inputController == null)
@@ -139,7 +140,7 @@ public class ShipTransformer : MonoBehaviour
 
     public void GentleSpinShip(Vector3 newDirection, Vector3 newUp, float amount)
     {
-        accumulatedRotation = Quaternion.Lerp(accumulatedRotation, Quaternion.LookRotation(newDirection,ship.Transform.up), amount);
+        accumulatedRotation = Quaternion.Lerp(accumulatedRotation, Quaternion.LookRotation(newDirection,Ship.Transform.up), amount);
     }
 
     protected virtual void Pitch() // These need to not use *= because quaternions are not commutative
@@ -184,7 +185,7 @@ public class ShipTransformer : MonoBehaviour
         float boostAmount = 1f;
         if (shipStatus.Boosting) // TODO: if we run out of fuel while full speed and straight the ship data still thinks we are boosting
         {
-            boostAmount = ship.BoostMultiplier;
+            boostAmount = Ship.BoostMultiplier;
         }
         if (shipStatus.ChargedBoostDischarging) boostAmount *= shipStatus.ChargedBoostCharge;
         if (inputController != null)

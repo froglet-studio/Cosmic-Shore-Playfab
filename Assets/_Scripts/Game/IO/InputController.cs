@@ -10,13 +10,13 @@ using CosmicShore.App.Systems;
 using UnityEngine.InputSystem.Controls;
 using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
-
 namespace CosmicShore.Game.IO
 {
     public class InputController : MonoBehaviour
     {
-        [SerializeField] private GameCanvas gameCanvas;
+        [SerializeField] GameCanvas gameCanvas;
         [SerializeField] public bool Portrait;
+        [SerializeField] bool requireTriggerForThrottle;
 
         public IShip Ship { get; set; }
         [HideInInspector] public bool AutoPilotEnabled;
@@ -156,7 +156,11 @@ namespace CosmicShore.Game.IO
         {
             LeftNormalizedJoystickPosition = Gamepad.current.leftStick.ReadValue();
             RightNormalizedJoystickPosition = Gamepad.current.rightStick.ReadValue();
-            HasThrottleInput = Gamepad.current.rightTrigger.ReadValue() > 0;
+
+            if (requireTriggerForThrottle)
+                HasThrottleInput = Gamepad.current.rightTrigger.ReadValue() > 0;
+            else
+                HasThrottleInput = true;
 
             Debug.Log(LeftNormalizedJoystickPosition);
             Debug.Log(RightNormalizedJoystickPosition);

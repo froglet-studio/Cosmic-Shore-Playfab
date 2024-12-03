@@ -14,7 +14,12 @@ namespace CosmicShore.Game.Projectiles
     {
         public float firePeriod = .2f;
         public Teams Team;
-        public IShip Ship;
+        public InterfaceReference<IShip> IShipReference;
+        public IShip Ship
+        {
+            get => IShipReference.Value;
+            set => IShipReference.Value = value;
+        } 
         bool onCooldown = false;
         float sideLength = 2;
         float barrelLength = 4;

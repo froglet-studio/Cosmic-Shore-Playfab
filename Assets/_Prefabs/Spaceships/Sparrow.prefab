@@ -261,14 +261,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602172765213610200}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6800163183717624682}
   - {fileID: 7319692269000084777}
-  m_Father: {fileID: 1758863986445633205}
+  m_Father: {fileID: 2056944189029331406}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9219397688819371261
 MonoBehaviour:
@@ -284,7 +284,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePeriod: 0.001
   Team: 0
-  Ship: {fileID: 874579555101021527}
+  IShipReference:
+    underlyingValue: {fileID: 874579555101021527}
 --- !u!1 &718813643571874445
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,8 +602,6 @@ Transform:
   m_Children:
   - {fileID: 510276444983129515}
   - {fileID: 1457947805507234555}
-  - {fileID: 4152976686380839989}
-  - {fileID: 8014772844257104279}
   m_Father: {fileID: 3397189760217659071}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5658933110804061391
@@ -1267,7 +1266,7 @@ GameObject:
   - component: {fileID: 8014772844257104279}
   - component: {fileID: 612601062165713561}
   m_Layer: 8
-  m_Name: MissileLauncher
+  m_Name: Sky Burst Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1281,12 +1280,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3085934584348983764}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.5000008, y: -0.49999946, z: -0.50000066, w: 0.4999992}
+  m_LocalPosition: {x: -0.218074, y: -0.028418615, z: -0.008299568}
+  m_LocalScale: {x: 0.04916739, y: 0.04916739, z: 0.049167406}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1758863986445633205}
+  m_Father: {fileID: 3639927891889859887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &612601062165713561
 MonoBehaviour:
@@ -1302,7 +1301,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePeriod: 0.2
   Team: 0
-  Ship: {fileID: 874579555101021527}
+  IShipReference:
+    underlyingValue: {fileID: 874579555101021527}
 --- !u!1 &3154927268608993227
 GameObject:
   m_ObjectHideFlags: 0
@@ -2221,25 +2221,16 @@ MonoBehaviour:
     speedPenalty: 0
     hapticType: 0
     trailBlock: {fileID: 0}
-  cameraManager: {fileID: 0}
-  InputController: {fileID: 0}
-  ResourceSystem: {fileID: 0}
   Name: Sparrow
   ShipType: 11
-  TrailSpawner: {fileID: 874579555101021522}
-  ShipTransformer: {fileID: 0}
-  AutoPilot: {fileID: 0}
-  ShipStatus: {fileID: 0}
   nearFieldSkimmer: {fileID: 874579554510349383}
   OrientationHandle: {fileID: 1878660672777590133}
   shipGeometries:
   - {fileID: 3257439243574632068}
   shipHUD: {fileID: 8706425432549089397}
-  Silhouette: {fileID: 2731003324702047408}
   AOEPrefab: {fileID: 0}
   farFieldSkimmer: {fileID: 3138628630497430536}
   ShipCameraCustomizer: {fileID: 705402283976800655}
-  FollowTarget: {fileID: 3967031065131343057}
   resourceIndex: 0
   ammoResourceIndex: 0
   boostResourceIndex: 1
@@ -2262,10 +2253,6 @@ MonoBehaviour:
     ShipActions:
     - {fileID: 8671196826403818986}
   resourceEventClassActions: []
-  AOEExplosionMaterial: {fileID: 0}
-  AOEConicExplosionMaterial: {fileID: 0}
-  SkimmerMaterial: {fileID: 0}
-  Captain: {fileID: 0}
   ElementStats: []
 --- !u!114 &6441696348568773771
 MonoBehaviour:
@@ -2472,7 +2459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2116872444dccfd43a29513c3af008b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkinnedMeshRenderer: {fileID: 0}
+  SkinnedMeshRenderer: {fileID: 4494445581967653786}
   SaveNewPositions: 1
   UseShapeKeys: 1
   brakeThreshold: 0.65
@@ -2505,6 +2492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25dd04a558b7f8947ad81c90dc14c5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sihouetteScale: {x: 1, y: 1, z: 1}
   silhouetteParts:
   - {fileID: 322268676704545573}
   - {fileID: 8777980414596646480}
@@ -2517,8 +2505,6 @@ MonoBehaviour:
   bottomJaw: {fileID: 0}
   JawResourceIndex: 0
   swingBlocks: 0
-  ship: {fileID: 874579555101021527}
-  sihouetteScale: {x: 1, y: 1, z: 1}
 --- !u!114 &705402283976800655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2853,7 +2839,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86da7e09f78ffc846ae810b412ab9951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ship: {fileID: 874579555101021527}
   pools:
   - prefab: {fileID: 7877928849292311340, guid: 1bdcea9e9329dd141af7ab874a4d31a2,
       type: 3}
@@ -3277,7 +3262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86da7e09f78ffc846ae810b412ab9951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ship: {fileID: 874579555101021527}
   pools:
   - prefab: {fileID: 7877928849292311340, guid: d98b78f64251b2c42a322f4f46f197ac,
       type: 3}
@@ -4287,7 +4271,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 151e3f0352963624abf4da579618e66d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4152976686380839989}
+    - targetCorrespondingSourceObject: {fileID: -6232245709983614198, guid: 151e3f0352963624abf4da579618e66d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8014772844257104279}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3906236135712884897, guid: 151e3f0352963624abf4da579618e66d,
         type: 3}
@@ -4358,6 +4350,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.5, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &3639927891889859887 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6232245709983614198, guid: 151e3f0352963624abf4da579618e66d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1945839443224614437}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4494445581967653786 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2692722512241470911, guid: 151e3f0352963624abf4da579618e66d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1945839443224614437}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &5362545824626142132 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 151e3f0352963624abf4da579618e66d,

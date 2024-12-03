@@ -100,11 +100,15 @@ public class TrailSpawner : MonoBehaviour
         GameManager.OnGameOver -= RestartAITrailSpawnerAfterDelay;
     }
 
+    public void Initialize(IShip ship)
+    {
+        this.ship = ship;
+    }
+
+
     IEnumerator Start()
     {
         yield return new WaitUntil(() => ship != null && ship.Player != null);
-
-        ship = GetComponent<IShip>();
 
         waitTime = defaultWaitTime;
         wavelength = initialWavelength;

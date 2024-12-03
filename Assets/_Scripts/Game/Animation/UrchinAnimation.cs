@@ -1,5 +1,4 @@
 using UnityEngine;
-using CosmicShore.Core;
 using System.Collections.Generic;
 
 namespace CosmicShore.Game.Animation
@@ -37,7 +36,7 @@ namespace CosmicShore.Game.Animation
         {
             base.Update();
 
-            if (ship.ShipStatus.Attached)
+            if (Ship.ShipStatus.Attached)
             {
                 ResetParts(scaledParts, 6);
             }
@@ -66,7 +65,7 @@ namespace CosmicShore.Game.Animation
         protected override void PerformShipPuppetry(float pitch, float yaw, float roll, float throttle)
         {
 
-            if (ship.ShipStatus.Attached)
+            if (Ship.ShipStatus.Attached)
             {
                 RotatePart(Body,
                    Time.deltaTime * 100f,

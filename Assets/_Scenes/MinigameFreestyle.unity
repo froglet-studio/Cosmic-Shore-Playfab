@@ -740,7 +740,6 @@ MonoBehaviour:
   EnableTrails: 1
   DefaultPlayerShipType: 2
   DefaultPlayerCaptain: {fileID: 0}
-  ActivePlayer: {fileID: 0}
   Crystal: {fileID: 1568959833}
   CrystalStartPosition: {x: 0, y: 0, z: -120}
   SegmentSpawner: {fileID: 1020381236}
@@ -1219,18 +1218,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a9d12e43096881468feb22e39e9fbeb, type: 3}
---- !u!114 &1649340654 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2151207714166088012, guid: 8a9d12e43096881468feb22e39e9fbeb,
+--- !u!1 &1649340654 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2151207714166088056, guid: 8a9d12e43096881468feb22e39e9fbeb,
     type: 3}
   m_PrefabInstance: {fileID: 1649340653}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ca79d17578366e4f9cd2b19173ecab8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1655328213
 PrefabInstance:
   m_ObjectHideFlags: 0

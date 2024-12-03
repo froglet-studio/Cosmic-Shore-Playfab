@@ -1,5 +1,6 @@
 using CosmicShore.Game;
 using CosmicShore.Game.AI;
+using CosmicShore.Game.Animation;
 using CosmicShore.Game.IO;
 using CosmicShore.Game.Projectiles;
 using CosmicShore.Models;
@@ -121,7 +122,6 @@ namespace CosmicShore.Core
             get
             {
                 _aiPilot = _aiPilot != null ? _aiPilot : gameObject.GetComponent<AIPilot>();
-                _aiPilot.Ship = this;
                 return _aiPilot;
             }
         }
@@ -133,6 +133,16 @@ namespace CosmicShore.Core
             {
                 _shipTransformer = _shipTransformer !=  null ? _shipTransformer : GetComponent<ShipTransformer>();
                 return _shipTransformer;
+            }
+        }
+
+        ShipAnimation _shipAnimation;
+        public ShipAnimation ShipAnimation 
+        {
+            get
+            {
+                _shipAnimation = _shipAnimation != null ? _shipAnimation : GetComponent<ShipAnimation>();
+                return _shipAnimation;
             }
         }
 
@@ -246,6 +256,15 @@ namespace CosmicShore.Core
 
             foreach (var classAction in ClassResourceActions.Keys.SelectMany(key => ClassResourceActions[key]))
                 classAction.Ship = this;
+
+            Silhouette?.Initialize(this);
+            ShipAnimation?.Initialize(this);
+            ShipTransformer?.Initialize(this);
+            AIPilot?.Initialize(this);
+            nearFieldSkimmer?.Initialize(this);
+            farFieldSkimmer?.Initialize(this);
+            ShipCameraCustomizer?.Initialize(this);
+            TrailSpawner?.Initialize(this);
 
             if (AIPilot.AutoPilotEnabled) return;
             if (!shipHUD) return;

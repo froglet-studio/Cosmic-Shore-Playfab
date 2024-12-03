@@ -25,7 +25,12 @@ namespace CosmicShore.Utilities
 
         private void Awake()
         {
-            if (_instance != null) throw new System.Exception("Invalid state, instance already exists");
+            if (_instance != null)
+            {
+                Debug.LogWarning("PopupManager Invalid State, instance already exists");
+                return;
+            }
+
             _instance = this;            // since DontdestroyOnLoad only works on root objects, we need to make sure the canvas is a root object
         }
 
@@ -86,5 +91,4 @@ namespace CosmicShore.Utilities
             return panel;
         }
     }
-
 }

@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0037926815, g: 0.0032631278, b: 0.0034446984, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -105,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -118,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -129,6 +128,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5497835173863578963, guid: 65bf1ed35b752374ca46ae214710e41c,
@@ -277,6 +277,9 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65bf1ed35b752374ca46ae214710e41c, type: 3}
 --- !u!114 &69216807 stripped
 MonoBehaviour:
@@ -295,6 +298,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 75685400755654236, guid: 8a9d12e43096881468feb22e39e9fbeb,
@@ -6264,14 +6268,23 @@ PrefabInstance:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 3531154851332593097, guid: 8a9d12e43096881468feb22e39e9fbeb, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a9d12e43096881468feb22e39e9fbeb, type: 3}
+--- !u!1 &433663841 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2151207714166088056, guid: 8a9d12e43096881468feb22e39e9fbeb,
+    type: 3}
+  m_PrefabInstance: {fileID: 433663840}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &433663843 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2151207714166088012, guid: 8a9d12e43096881468feb22e39e9fbeb,
     type: 3}
   m_PrefabInstance: {fileID: 433663840}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 433663841}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ca79d17578366e4f9cd2b19173ecab8, type: 3}
@@ -6282,6 +6295,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3076874808401193700, guid: 32cc35a6605af014c926743312133238,
@@ -6397,12 +6411,32 @@ PrefabInstance:
       objectReference: {fileID: 3844806713261670429, guid: 697345885e4838445a5d9db5ab931ed5,
         type: 3}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9106189021102876753, guid: 32cc35a6605af014c926743312133238,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1360556389}
   m_SourcePrefab: {fileID: 100100000, guid: 32cc35a6605af014c926743312133238, type: 3}
+--- !u!114 &451321389 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9106189021102876755, guid: 32cc35a6605af014c926743312133238,
+    type: 3}
+  m_PrefabInstance: {fileID: 451321388}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360556388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ca79d17578366e4f9cd2b19173ecab8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1156664488
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1449494197}
     m_Modifications:
     - target: {fileID: 7817456538282590180, guid: cb702179ff5b42f41a3521ccd59e6934,
@@ -6466,6 +6500,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb702179ff5b42f41a3521ccd59e6934, type: 3}
 --- !u!1 &1360556388 stripped
 GameObject:
@@ -6486,42 +6523,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCanvas: {fileID: 0}
-  AutoPilotEnabled: 0
   Portrait: 0
-  ship: {fileID: 0}
+  requireTriggerForThrottle: 0
+  AutoPilotEnabled: 0
   XSum: 0
   YSum: 0
   XDiff: 0
   YDiff: 0
   Idle: 0
   Paused: 0
-  RightJoystickHome: {x: 0, y: 0}
-  LeftJoystickHome: {x: 0, y: 0}
-  RightClampedPosition: {x: 0, y: 0}
-  LeftClampedPosition: {x: 0, y: 0}
   isGyroEnabled: 0
   invertYEnabled: 0
   invertThrottleEnabled: 0
   OneTouchLeft: 0
+  RightJoystickHome: {x: 0, y: 0}
+  LeftJoystickHome: {x: 0, y: 0}
+  RightClampedPosition: {x: 0, y: 0}
+  LeftClampedPosition: {x: 0, y: 0}
   RightJoystickStart: {x: 0, y: 0}
   LeftJoystickStart: {x: 0, y: 0}
   RightNormalizedJoystickPosition: {x: 0, y: 0}
   LeftNormalizedJoystickPosition: {x: 0, y: 0}
-  SingleTouchValue: {x: 0, y: 0}
   EasedRightJoystickPosition: {x: 0, y: 0}
   EasedLeftJoystickPosition: {x: 0, y: 0}
---- !u!114 &1360556390 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9106189021102876755, guid: 32cc35a6605af014c926743312133238,
-    type: 3}
-  m_PrefabInstance: {fileID: 451321388}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360556388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ca79d17578366e4f9cd2b19173ecab8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  SingleTouchValue: {x: 0, y: 0}
 --- !u!1 &1449494196
 GameObject:
   m_ObjectHideFlags: 0
@@ -6546,6 +6571,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1449494196}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -6555,7 +6581,6 @@ Transform:
   - {fileID: 1898590044}
   - {fileID: 1984950344}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1449494198
 MonoBehaviour:
@@ -6576,6 +6601,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3076874808401193700, guid: 32cc35a6605af014c926743312133238,
@@ -6696,6 +6722,13 @@ PrefabInstance:
       objectReference: {fileID: 3844806713261670429, guid: 697345885e4838445a5d9db5ab931ed5,
         type: 3}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9106189021102876753, guid: 32cc35a6605af014c926743312133238,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1466531422}
   m_SourcePrefab: {fileID: 100100000, guid: 32cc35a6605af014c926743312133238, type: 3}
 --- !u!1 &1466531421 stripped
 GameObject:
@@ -6716,30 +6749,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCanvas: {fileID: 0}
-  AutoPilotEnabled: 0
   Portrait: 0
-  ship: {fileID: 0}
+  requireTriggerForThrottle: 0
+  AutoPilotEnabled: 0
   XSum: 0
   YSum: 0
   XDiff: 0
   YDiff: 0
   Idle: 0
   Paused: 0
-  RightJoystickHome: {x: 0, y: 0}
-  LeftJoystickHome: {x: 0, y: 0}
-  RightClampedPosition: {x: 0, y: 0}
-  LeftClampedPosition: {x: 0, y: 0}
   isGyroEnabled: 0
   invertYEnabled: 0
   invertThrottleEnabled: 0
   OneTouchLeft: 0
+  RightJoystickHome: {x: 0, y: 0}
+  LeftJoystickHome: {x: 0, y: 0}
+  RightClampedPosition: {x: 0, y: 0}
+  LeftClampedPosition: {x: 0, y: 0}
   RightJoystickStart: {x: 0, y: 0}
   LeftJoystickStart: {x: 0, y: 0}
   RightNormalizedJoystickPosition: {x: 0, y: 0}
   LeftNormalizedJoystickPosition: {x: 0, y: 0}
-  SingleTouchValue: {x: 0, y: 0}
   EasedRightJoystickPosition: {x: 0, y: 0}
   EasedLeftJoystickPosition: {x: 0, y: 0}
+  SingleTouchValue: {x: 0, y: 0}
 --- !u!1 &1527998405
 GameObject:
   m_ObjectHideFlags: 0
@@ -6799,13 +6832,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1527998405}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1527998411
 MonoBehaviour:
@@ -6825,14 +6858,14 @@ MonoBehaviour:
   - {fileID: 1527998412}
   ScoreTracker: {fileID: 1527998408}
   GameCanvas: {fileID: 69216807}
-  playerPrefab: {fileID: 433663843}
+  playerPrefab: {fileID: 433663841}
   PlayerOrigin: {fileID: 1984950343}
   EndOfTurnDelay: 0
   EnableTrails: 1
   DefaultPlayerShipType: 6
   DefaultPlayerCaptain: {fileID: 0}
-  ActivePlayer: {fileID: 0}
-  hostilePilot: {fileID: 1360556390}
+  hostilePilotReference:
+    underlyingValue: {fileID: 451321389}
 --- !u!114 &1527998412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6848,7 +6881,8 @@ MonoBehaviour:
   Display: {fileID: 0}
   Collisions: 1
   Game: {fileID: 1527998411}
-  hostileShip: {fileID: 1360556390}
+  hostilePilotReference:
+    underlyingValue: {fileID: 451321389}
 --- !u!1 &1829578212
 GameObject:
   m_ObjectHideFlags: 0
@@ -6889,13 +6923,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829578212}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1829578216
 MonoBehaviour:
@@ -6985,19 +7019,20 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984950343}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -350}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1449494197}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2047869374
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5247650485044281825, guid: 061f308768b5b564bbb0f130d1a8f02e,
@@ -7091,6 +7126,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 061f308768b5b564bbb0f130d1a8f02e, type: 3}
 --- !u!20 &2047869375 stripped
 Camera:
@@ -7103,6 +7141,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3076874808401193700, guid: 32cc35a6605af014c926743312133238,
@@ -7228,6 +7267,13 @@ PrefabInstance:
       objectReference: {fileID: 3844806713261670429, guid: 697345885e4838445a5d9db5ab931ed5,
         type: 3}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9106189021102876753, guid: 32cc35a6605af014c926743312133238,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2145254200}
   m_SourcePrefab: {fileID: 100100000, guid: 32cc35a6605af014c926743312133238, type: 3}
 --- !u!1 &2145254199 stripped
 GameObject:
@@ -7248,35 +7294,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCanvas: {fileID: 0}
-  AutoPilotEnabled: 0
   Portrait: 0
-  ship: {fileID: 0}
+  requireTriggerForThrottle: 0
+  AutoPilotEnabled: 0
   XSum: 0
   YSum: 0
   XDiff: 0
   YDiff: 0
   Idle: 0
   Paused: 0
-  RightJoystickHome: {x: 0, y: 0}
-  LeftJoystickHome: {x: 0, y: 0}
-  RightClampedPosition: {x: 0, y: 0}
-  LeftClampedPosition: {x: 0, y: 0}
   isGyroEnabled: 0
   invertYEnabled: 0
   invertThrottleEnabled: 0
   OneTouchLeft: 0
+  RightJoystickHome: {x: 0, y: 0}
+  LeftJoystickHome: {x: 0, y: 0}
+  RightClampedPosition: {x: 0, y: 0}
+  LeftClampedPosition: {x: 0, y: 0}
   RightJoystickStart: {x: 0, y: 0}
   LeftJoystickStart: {x: 0, y: 0}
   RightNormalizedJoystickPosition: {x: 0, y: 0}
   LeftNormalizedJoystickPosition: {x: 0, y: 0}
-  SingleTouchValue: {x: 0, y: 0}
   EasedRightJoystickPosition: {x: 0, y: 0}
   EasedLeftJoystickPosition: {x: 0, y: 0}
+  SingleTouchValue: {x: 0, y: 0}
 --- !u!1001 &2267044653980613924
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2267044654069565993, guid: 7d3c24f07511c2b449da87870cb86cce,
@@ -7340,12 +7387,16 @@ PrefabInstance:
       value: MainMenuDependencyLoader
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d3c24f07511c2b449da87870cb86cce, type: 3}
 --- !u!1001 &8350600879856906978
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1449494197}
     m_Modifications:
     - target: {fileID: 8350600879602490808, guid: 7fec532a729a8b648a8de2399d1b918a,
@@ -7409,4 +7460,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7fec532a729a8b648a8de2399d1b918a, type: 3}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 2267044653980613924}
+  - {fileID: 2047869374}
+  - {fileID: 1449494197}
+  - {fileID: 1527998410}
+  - {fileID: 69216806}
+  - {fileID: 451321388}
+  - {fileID: 1466531420}
+  - {fileID: 2145254198}
+  - {fileID: 433663840}
+  - {fileID: 1829578215}
