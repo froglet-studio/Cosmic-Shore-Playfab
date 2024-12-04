@@ -27,7 +27,7 @@ Every HyperSea-worthy vessel is capable of enhancing its colored mass output. Pa
 
 ![Disrupt](./README-images/image-1.png)
 
-Every vessel is also equipped with the ability to destroy, steal, shrink or otherwise disrupt other colors of mass. Filling populated biomes with additional mass can make them more hostile. Sometimes reducing hostile mass is your only option.
+Every vessel is also equipped with the ability to disrupt other colors of mass through destruction, stealing, or shrinking. Filling populated biomes with additional mass can make them more hostile. Sometimes reducing hostile mass is your only option.
 
 ### Maneuver
 
