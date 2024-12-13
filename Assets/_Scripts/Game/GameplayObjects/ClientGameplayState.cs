@@ -11,9 +11,6 @@ namespace CosmicShore.Game.GameplayObjects
 {
     public class ClientGameplayState : NetworkBehaviour
     {
-        [SerializeField]
-        MiniGame _miniGame;
-
         [ClientRpc]
         public void InitializeAndSetupPlayer_ClientRpc(ClientRpcParams clientRpcParams = default)
         {
@@ -31,20 +28,18 @@ namespace CosmicShore.Game.GameplayObjects
 
                 playerNetworkObject.TryGetComponent(out NetworkPlayer networkPlayer);
                 Assert.IsTrue(networkPlayer, $"Network Player not found for client {clientId}!");
-                if (clientId == OwnerClientId)
+                /*if (clientId == OwnerClientId)
                 {
                     _miniGame.InitializePlayer(networkPlayer);
-                }
+                }*/
 
                 NetworkShip networkShip = NetworkShipClientCache.GetShip(clientId);
                 Assert.IsTrue(networkShip, $"Network ship not found for client {clientId}!");
 
-                // NetworkShip networkShip = NetworkShipClientCache.OwnShip;
-                // _player.Setup(networkShip.Ship);
-                networkPlayer.Setup(networkShip.Ship, clientId == OwnerClientId);
-                // networkShip.SetPlayerUUIDToTrailSpawner_ClientRpc(_player.PlayerUUID);
+                networkPlayer.Setup(networkShip, clientId == OwnerClientId);
             }
 
+            GameManager.UnPauseGame();
             GameManager.Instance.WaitOnPlayerLoading();
         }
     }

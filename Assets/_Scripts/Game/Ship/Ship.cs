@@ -8,11 +8,11 @@ using CosmicShore.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Services.Analytics;
 using UnityEngine;
 
 namespace CosmicShore.Core
 {
-
     [Serializable]
     public struct InputEventShipActionMapping
     {
@@ -31,6 +31,7 @@ namespace CosmicShore.Core
     [RequireComponent(typeof(TrailSpawner))]
     [RequireComponent(typeof(ShipStatus))]
     [RequireComponent(typeof(Silhouette))]
+    [RequireComponent(typeof(ShipCameraCustomizer))]
     public class Ship : MonoBehaviour, IShip
     {
         public event Action OnShipInitialized;
@@ -56,9 +57,6 @@ namespace CosmicShore.Core
         [Header("Optional Ship Components")]
         [SerializeField] GameObject AOEPrefab;
         [SerializeField] Skimmer farFieldSkimmer;
-        [SerializeField] ShipCameraCustomizer ShipCameraCustomizer;
-        public ShipCameraCustomizer GetShipCameraCustomizer => ShipCameraCustomizer;
-
 
         [SerializeField] int resourceIndex = 0;
         [SerializeField] int ammoResourceIndex = 0; // TODO: move to an ability system with separate classes
@@ -82,10 +80,10 @@ namespace CosmicShore.Core
         public float GetInertia => Inertia;
 
         [SerializeField] List<InputEventShipActionMapping> inputEventShipActions;
-        Dictionary<InputEvents, List<ShipAction>> ShipControlActions = new();
+        Dictionary<InputEvents, List<ShipAction>> _shipControlActions = new();
 
         [SerializeField] List<ResourceEventShipActionMapping> resourceEventClassActions;
-        Dictionary<ResourceEvents, List<ShipAction>> ClassResourceActions = new();
+        Dictionary<ResourceEvents, List<ShipAction>> _classResourceActions = new();
 
         [Serializable]
         public struct ElementStat
@@ -216,6 +214,16 @@ namespace CosmicShore.Core
             }
         }
 
+        ShipCameraCustomizer _shipCameraCustomizer;
+        public ShipCameraCustomizer ShipCameraCustomizer
+        {
+            get
+            {
+                _shipCameraCustomizer = _shipCameraCustomizer != null ? _shipCameraCustomizer : GetComponent<ShipCameraCustomizer>();
+                return _shipCameraCustomizer;
+            }
+        }
+
         public CameraManager CameraManager => CameraManager.Instance;
         public Transform Transform => transform;
         public Material AOEExplosionMaterial { get; private set; }
@@ -223,10 +231,12 @@ namespace CosmicShore.Core
         public Material SkimmerMaterial { get; private set; }
         public SO_Captain Captain { get; private set; }
 
+
         Dictionary<InputEvents, float> _inputAbilityStartTimes = new();
         Dictionary<ResourceEvents, float> _resourceAbilityStartTimes = new();
         Material _shipMaterial;
         float _speedModifierDuration = 2f;
+
 
         public void Initialize(IPlayer player, Teams team = Teams.None)
         {
@@ -236,35 +246,18 @@ namespace CosmicShore.Core
             if (!FollowTarget) FollowTarget = transform;
             if (bottomEdgeButtons) Player.GameCanvas.MiniGameHUD.PositionButtonPanel(true);
 
-            foreach (var shipGeometry in shipGeometries)
-                shipGeometry.AddComponent<ShipGeometry>().Ship = this;
+            InitializeShipGeometries();
+            InitializeShipControlActions();
+            InitializeClassResourceActions();
 
-            foreach (var inputEventShipAction in inputEventShipActions)
-                if (!ShipControlActions.ContainsKey(inputEventShipAction.InputEvent))
-                    ShipControlActions.Add(inputEventShipAction.InputEvent, inputEventShipAction.ShipActions);
-                else
-                    ShipControlActions[inputEventShipAction.InputEvent].AddRange(inputEventShipAction.ShipActions);
-
-            foreach (var shipAction in ShipControlActions.Keys.SelectMany(key => ShipControlActions[key]))
-                shipAction.Ship = this;
-            
-            foreach (var resourceEventClassAction in resourceEventClassActions)
-                if (!ClassResourceActions.ContainsKey(resourceEventClassAction.ResourceEvent))
-                    ClassResourceActions.Add(resourceEventClassAction.ResourceEvent, resourceEventClassAction.ClassActions);
-                else
-                    ClassResourceActions[resourceEventClassAction.ResourceEvent].AddRange(resourceEventClassAction.ClassActions);
-
-            foreach (var classAction in ClassResourceActions.Keys.SelectMany(key => ClassResourceActions[key]))
-                classAction.Ship = this;
-
-            Silhouette?.Initialize(this);
-            ShipAnimation?.Initialize(this);
-            ShipTransformer?.Initialize(this);
-            AIPilot?.Initialize(this);
-            nearFieldSkimmer?.Initialize(this);
-            farFieldSkimmer?.Initialize(this);
-            ShipCameraCustomizer?.Initialize(this);
-            TrailSpawner?.Initialize(this);
+            Silhouette.Initialize(this);
+            ShipAnimation.Initialize(this);
+            ShipTransformer.Initialize(this);
+            AIPilot.Initialize(this);
+            nearFieldSkimmer.Initialize(this);
+            farFieldSkimmer.Initialize(this);
+            ShipCameraCustomizer.Initialize(this);
+            TrailSpawner.Initialize(this);
 
             if (AIPilot.AutoPilotEnabled) return;
             if (!shipHUD) return;
@@ -277,6 +270,10 @@ namespace CosmicShore.Core
 
             OnShipInitialized?.Invoke();
         }
+
+        void InitializeShipGeometries() => ShipHelper.InitializeShipGeometries(this, shipGeometries);
+        void InitializeShipControlActions() => ShipHelper.InitializeShipControlActions(this, inputEventShipActions, _shipControlActions);
+        void InitializeClassResourceActions() => ShipHelper.InitializeClassResourceActions(this, resourceEventClassActions, _classResourceActions);
 
         public void BindElementalFloat(string statName, Element element)
         {
@@ -397,13 +394,10 @@ namespace CosmicShore.Core
             }
         }
 
-        public void PerformShipControllerActions(InputEvents controlType)
+        public void PerformShipControllerActions(InputEvents @event)
         {
-            _inputAbilityStartTimes[controlType] = Time.time;
-
-            if (!ShipControlActions.TryGetValue(controlType, out var shipControlActions)) return;
-            foreach (var action in shipControlActions)
-                action.StartAction();
+            ShipHelper.PerformShipControllerActions(@event, out float time, _shipControlActions);
+            _inputAbilityStartTimes[@event] = time;
         }
 
         public void StopShipControllerActions(InputEvents controlType)
@@ -411,11 +405,7 @@ namespace CosmicShore.Core
             if (StatsManager.Instance != null)
                 StatsManager.Instance.AbilityActivated(Team, _player.PlayerName, controlType, Time.time-_inputAbilityStartTimes[controlType]);
 
-            if (ShipControlActions.TryGetValue(controlType, out var shipControlActions))
-            {
-                foreach (var action in shipControlActions)
-                    action.StopAction();
-            }
+            ShipHelper.StopShipControllerActions(controlType, _shipControlActions);
         }
 
 
@@ -427,15 +417,15 @@ namespace CosmicShore.Core
             switch (buttonNumber)
             {
                 case 1:
-                    if(ShipControlActions.ContainsKey(InputEvents.Button1Action))
+                    if(_shipControlActions.ContainsKey(InputEvents.Button1Action))
                         PerformShipControllerActions(InputEvents.Button1Action);
                     break;
                 case 2:
-                    if(ShipControlActions.ContainsKey(InputEvents.Button2Action))
+                    if(_shipControlActions.ContainsKey(InputEvents.Button2Action))
                         PerformShipControllerActions(InputEvents.Button2Action);
                     break;
                 case 3:
-                    if(ShipControlActions.ContainsKey(InputEvents.Button3Action))
+                    if(_shipControlActions.ContainsKey(InputEvents.Button3Action))
                         PerformShipControllerActions(InputEvents.Button3Action);
                     break;
                 default:
@@ -452,15 +442,15 @@ namespace CosmicShore.Core
             switch (buttonNumber)
             {
                 case 1:
-                    if(ShipControlActions.ContainsKey(InputEvents.Button1Action))
+                    if(_shipControlActions.ContainsKey(InputEvents.Button1Action))
                         StopShipControllerActions(InputEvents.Button1Action);
                     break;
                 case 2:
-                    if(ShipControlActions.ContainsKey(InputEvents.Button2Action))
+                    if(_shipControlActions.ContainsKey(InputEvents.Button2Action))
                         StopShipControllerActions(InputEvents.Button2Action);
                     break;
                 case 3:
-                    if(ShipControlActions.ContainsKey(InputEvents.Button3Action))
+                    if(_shipControlActions.ContainsKey(InputEvents.Button3Action))
                         StopShipControllerActions(InputEvents.Button3Action);
                     break;
                 default:
@@ -473,7 +463,7 @@ namespace CosmicShore.Core
         {
             _resourceAbilityStartTimes[resourceEvent] = Time.time;
 
-            if (!ClassResourceActions.TryGetValue(resourceEvent, out var classResourceActions)) return;
+            if (!_classResourceActions.TryGetValue(resourceEvent, out var classResourceActions)) return;
 
             foreach (var action in classResourceActions)
                 action.StartAction();
@@ -484,7 +474,7 @@ namespace CosmicShore.Core
             //if (StatsManager.Instance != null)
             //    StatsManager.Instance.AbilityActivated(Team, player.PlayerName, resourceEvent, Time.time-inputAbilityStartTimes[controlType]);
 
-            if (!ClassResourceActions.TryGetValue(resourceEvent, out var classResourceActions)) return;
+            if (!_classResourceActions.TryGetValue(resourceEvent, out var classResourceActions)) return;
             foreach (var action in classResourceActions)
                 action.StopAction();
         }
@@ -503,19 +493,17 @@ namespace CosmicShore.Core
         public void AssignCaptain(Captain captain)
         {
             Captain = captain.SO_Captain;
-            SetResourceLevels(captain.ResourceLevels);
         }
 
         public void AssignCaptain(SO_Captain captain)
         {
             Captain = captain;
-            SetResourceLevels(captain.InitialResourceLevels);
         }
 
         public void SetShipMaterial(Material material)
         {
             _shipMaterial = material;
-            ApplyShipMaterial();
+            ShipHelper.ApplyShipMaterial(_shipMaterial, shipGeometries);
         }
 
         public void SetBlockMaterial(Material material)
@@ -563,10 +551,7 @@ namespace CosmicShore.Core
             OrientationHandle.transform.localRotation = Quaternion.Euler(0, 0, angle);
         }
 
-        public void Teleport(Transform targetTransform)
-        {
-            transform.SetPositionAndRotation(targetTransform.position, targetTransform.rotation);
-        }
+        public void Teleport(Transform targetTransform) => ShipHelper.Teleport(transform, targetTransform);
 
         // TODO: need to be able to disable ship abilities as well for minigames
         public void DisableSkimmer()
@@ -578,28 +563,6 @@ namespace CosmicShore.Core
         public void SetBoostMultiplier(float multiplier) => boostMultiplier = multiplier;
 
         public void ToggleGameObject(bool toggle) => gameObject.SetActive(toggle);
-
-        void ApplyShipMaterial()
-        {
-            if (_shipMaterial == null)
-                return;
-
-            foreach (var shipGeometry in shipGeometries)
-            {
-                if (shipGeometry.GetComponent<SkinnedMeshRenderer>() != null) 
-                {
-                    var materials = shipGeometry.GetComponent<SkinnedMeshRenderer>().materials;
-                    materials[2] = _shipMaterial;
-                    shipGeometry.GetComponent<SkinnedMeshRenderer>().materials = materials;
-                }
-                else if (shipGeometry.GetComponent<MeshRenderer>() != null)
-                {
-                    var materials = shipGeometry.GetComponent<MeshRenderer>().materials;
-                    materials[1] = _shipMaterial;
-                    shipGeometry.GetComponent<MeshRenderer>().materials = materials;
-                } 
-            }
-        }
 
         //
         // Attach and Detach

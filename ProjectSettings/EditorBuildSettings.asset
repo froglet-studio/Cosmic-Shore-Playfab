@@ -68,7 +68,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/TestScenes/ColorTest.unity
     guid: 608ee7a6fb653984e8456f57d82fb67e
-  - enabled: 0
+  - enabled: 1
     path: Assets/_Scenes/MinigameFreestyle.unity
     guid: 6f71535b00043c345b3216d994f22499
   - enabled: 0

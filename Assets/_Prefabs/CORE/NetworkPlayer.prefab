@@ -135,15 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65d339185f0f2614daba989df3cd14f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: Player
-  playerUUID: admin
-  ship: {fileID: 0}
-  shipContainer: {fileID: 1360789018413082665}
-  GameCanvas: {fileID: 0}
-  defaultShip: 12
-  UseHangarConfiguration: 1
-  IsAI: 0
-  Team: 1
+  _defaultShipType: 0
 --- !u!114 &2151207714166088003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameCanvas: {fileID: 0}
   Portrait: 0
+  requireTriggerForThrottle: 1
   AutoPilotEnabled: 0
   XSum: 0
   YSum: 0

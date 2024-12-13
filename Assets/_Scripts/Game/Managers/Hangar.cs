@@ -140,10 +140,13 @@ namespace CosmicShore.Core
         public IShip LoadPlayerShip(ShipTypes shipType, Teams team)
         {
             Instantiate(shipTypeMap[shipType].Transform).TryGetComponent(out IShip ship);
-            return LoadPlayerShip(ship, shipType, team);
+            return LoadPlayerShip(ship, team, true);  // for single player, isOwner is default to true
         }
 
-        public IShip LoadPlayerShip(IShip ship, ShipTypes shipType, Teams team)
+        /// <summary>
+        /// This method is used when ship is loaded for multiplayer gameplay
+        /// </summary>
+        public IShip LoadPlayerShip(IShip ship, Teams team, bool isOwner)
         {
             if (PlayerCaptain != null)
                 ship.SetResourceLevels(PlayerCaptain.ResourceLevels);
@@ -158,7 +161,8 @@ namespace CosmicShore.Core
             ship.SetAOEConicExplosionMaterial(materialSet.AOEConicExplosionMaterial);
             ship.SetSkimmerMaterial(materialSet.SkimmerMaterial);
             
-            SelectedShip = ship;
+            if (isOwner)
+                SelectedShip = ship;
             return ship;
         }
 
@@ -228,6 +232,7 @@ namespace CosmicShore.Core
             Instantiate(shipTypeMap[shipType].Transform).TryGetComponent(out IShip ship);
             if (captain != null)
                 ship.AssignCaptain(captain);
+            ship.SetResourceLevels(captain.InitialResourceLevels);
             ship.SetShipMaterial(materialSet.ShipMaterial);
             ship.SetBlockMaterial(materialSet.BlockMaterial);
             ship.SetBlockSilhouettePrefab(materialSet.BlockSilhouettePrefab);

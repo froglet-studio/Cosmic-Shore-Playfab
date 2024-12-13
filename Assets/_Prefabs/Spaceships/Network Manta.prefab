@@ -1714,22 +1714,18 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5928382658856804067}
-  - component: {fileID: 874579555101021527}
   - component: {fileID: 6441696348568773771}
   - component: {fileID: 7686683633640807837}
   - component: {fileID: 874579555101021522}
   - component: {fileID: 1435252848482629424}
-  - component: {fileID: 3440187540988767646}
-  - component: {fileID: 6776027772320837218}
   - component: {fileID: 6293426128044408357}
-  - component: {fileID: 5086360743770514783}
-  - component: {fileID: 2731003324702047408}
   - component: {fileID: 3882236086036410899}
   - component: {fileID: 4957369263333239007}
   - component: {fileID: 5869255415211418711}
   - component: {fileID: 6778176693569747856}
   - component: {fileID: 1366612608224064696}
   - component: {fileID: 7769843577632859008}
+  - component: {fileID: 6425593304142120472}
   m_Layer: 0
   m_Name: Network Manta
   m_TagString: Player_Ship
@@ -1755,79 +1751,6 @@ Transform:
   - {fileID: 4894037493201937865}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &874579555101021527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6417075533431866457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a273abd40c7104c4392188723ab929d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  impactProperties:
-  - fuelBonus: 0
-    fuelPenalty: 0
-    scoreBonus: 0
-    scorePenalty: 0
-    tailLengthBonus: 0
-    tailLengthPenalty: 0
-    speedBonus: 0
-    speedPenalty: 0
-    hapticType: 0
-    trailBlock: {fileID: 0}
-  cameraManager: {fileID: 0}
-  InputController: {fileID: 0}
-  ResourceSystem: {fileID: 0}
-  Name: Network Manta
-  ShipType: 12
-  TrailSpawner: {fileID: 874579555101021522}
-  ShipTransformer: {fileID: 0}
-  AutoPilot: {fileID: 0}
-  ShipStatus: {fileID: 0}
-  nearFieldSkimmer: {fileID: 874579554510349383}
-  OrientationHandle: {fileID: 1878660672777590133}
-  shipGeometries:
-  - {fileID: 7006514261138449697}
-  - {fileID: 1815102489639903026}
-  - {fileID: 8912034820902656382}
-  - {fileID: 6675130274311316141}
-  - {fileID: 7696976320636676308}
-  - {fileID: 1376376450048088127}
-  - {fileID: 6988205045896376628}
-  shipHUD: {fileID: 0}
-  Silhouette: {fileID: 2731003324702047408}
-  AOEPrefab: {fileID: 2728798890556433942, guid: f5ecfb9923155a84c860975d559b2714,
-    type: 3}
-  farFieldSkimmer: {fileID: 3138628630497430536}
-  ShipCameraCustomizer: {fileID: 0}
-  FollowTarget: {fileID: 0}
-  resourceIndex: 0
-  ammoResourceIndex: 0
-  boostResourceIndex: 0
-  crystalImpactEffects: 06000000030000000b000000
-  minExplosionScale: 50
-  maxExplosionScale: 500
-  trailBlockImpactEffects: 020000000f00000011000000
-  blockChargeChange: 0
-  boostMultiplier: 2
-  bottomEdgeButtons: 0
-  Inertia: 70
-  inputEventShipActions:
-  - InputEvent: 8
-    ShipActions:
-    - {fileID: 867704553499413969}
-  - InputEvent: 4
-    ShipActions:
-    - {fileID: 5096403877754360922}
-  resourceEventClassActions: []
-  AOEExplosionMaterial: {fileID: 0}
-  AOEConicExplosionMaterial: {fileID: 0}
-  SkimmerMaterial: {fileID: 0}
-  Captain: {fileID: 0}
-  ElementStats: []
 --- !u!114 &6441696348568773771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1947,68 +1870,6 @@ MonoBehaviour:
   <MassLevel>k__BackingField: 0
   <SpaceLevel>k__BackingField: 0
   <TimeLevel>k__BackingField: 0
---- !u!114 &3440187540988767646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6417075533431866457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a58bf4fb65afa704194fe9e28e67d58d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SkillLevel: 0.3
-  defaultThrottleHigh: 0.9
-  defaultThrottleLow: 0.2
-  defaultAggressivenessHigh: 0.09
-  defaultAggressivenessLow: 0.04
-  throttleIncreaseHigh: 0.001
-  throttleIncreaseLow: 0.0005
-  avoidanceHigh: 35
-  avoidanceLow: 15
-  aggressivenessIncreaseHigh: 0.07
-  aggressivenessIncreaseLow: 0.02
-  throttle: 0
-  aggressiveness: 0.1
-  XSum: 0
-  YSum: 0
-  XDiff: 0
-  YDiff: 0
-  X: 0
-  Y: 0
-  raycastHeight: 2
-  raycastWidth: 2
-  AutoPilotEnabled: 0
-  LookingAtCrystal: 0
-  ram: 0
-  drift: 0
-  SingleStickControls: 0
-  useAbility: 1
-  abilityCooldown: 5
-  ability: {fileID: 867704553499413969}
-  CrystalTransform: {fileID: 0}
-  flowFieldData: {fileID: 0}
---- !u!114 &6776027772320837218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6417075533431866457}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2116872444dccfd43a29513c3af008b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SkinnedMeshRenderer: {fileID: 7720489361082621337}
-  SaveNewPositions: 1
-  UseShapeKeys: 1
-  brakeThreshold: 0.65
-  lerpAmount: 2
-  smallLerpAmount: 0.7
-  animator: {fileID: 1619232438159974630}
 --- !u!114 &6293426128044408357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2037,46 +1898,6 @@ MonoBehaviour:
   smallAnimationScaler: 27
   mediumAnimationScaler: 30
   bigAnimationScaler: 60
---- !u!114 &5086360743770514783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6417075533431866457}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2317700572bfe8f47a5240c73200eaac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pipCamera: {fileID: 1507913478050007905}
-  mirrored: 0
---- !u!114 &2731003324702047408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6417075533431866457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25dd04a558b7f8947ad81c90dc14c5df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  silhouetteParts:
-  - {fileID: 322268676704545573}
-  - {fileID: 8777980414596646480}
-  - {fileID: 4010301292554909138}
-  - {fileID: 4125835721608554647}
-  - {fileID: 5978549935140177486}
-  trailSpawner: {fileID: 874579555101021522}
-  driftTrailAction: {fileID: 0}
-  topJaw: {fileID: 0}
-  bottomJaw: {fileID: 0}
-  JawResourceIndex: 0
-  swingBlocks: 0
-  ship: {fileID: 874579555101021527}
-  sihouetteScale: {x: 1, y: 1, z: 1}
 --- !u!114 &3882236086036410899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2171,7 +1992,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac1ef2c7f2d7c4043991307c7f413545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ship: {fileID: 874579555101021527}
+  _name: Network Manta
+  _shipType: 12
+  _nearFieldSkimmer: {fileID: 874579554510349383}
+  _orientationHandle: {fileID: 1878660672777590133}
+  _shipGeometries:
+  - {fileID: 7006514261138449697}
+  - {fileID: 1815102489639903026}
+  - {fileID: 8912034820902656382}
+  - {fileID: 6675130274311316141}
+  - {fileID: 7696976320636676308}
+  - {fileID: 1376376450048088127}
+  - {fileID: 6988205045896376628}
+  _farFieldSkimmer: {fileID: 3138628630497430536}
+  _bottomEdgeButtons: 0
+  _inputEventShipActions:
+  - InputEvent: 8
+    ShipActions:
+    - {fileID: 867704553499413969}
+  - InputEvent: 4
+    ShipActions:
+    - {fileID: 5096403877754360922}
+  _resourceEventClassActions: []
 --- !u!114 &7769843577632859008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2184,6 +2026,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3905d1e2545a74c84336ca35c2e23a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6425593304142120472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6417075533431866457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58bf4fb65afa704194fe9e28e67d58d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkillLevel: 0.3
+  defaultThrottleHigh: 0.9
+  defaultThrottleLow: 0.2
+  defaultAggressivenessHigh: 0.09
+  defaultAggressivenessLow: 0.04
+  throttleIncreaseHigh: 0.001
+  throttleIncreaseLow: 0.0005
+  avoidanceHigh: 35
+  avoidanceLow: 15
+  aggressivenessIncreaseHigh: 0.07
+  aggressivenessIncreaseLow: 0.02
+  throttle: 0
+  aggressiveness: 0.1
+  XSum: 0
+  YSum: 0
+  XDiff: 0
+  YDiff: 0
+  X: 0
+  Y: 0
+  raycastHeight: 2
+  raycastWidth: 2
+  AutoPilotEnabled: 0
+  LookingAtCrystal: 0
+  ram: 0
+  drift: 0
+  SingleStickControls: 0
+  useAbility: 1
+  abilityCooldown: 5
+  ability: {fileID: 867704553499413969}
+  CrystalTransform: {fileID: 0}
+  flowFieldData: {fileID: 0}
 --- !u!1 &6675130274311316141
 GameObject:
   m_ObjectHideFlags: 0
@@ -3157,11 +3042,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7751815150560592197, guid: 6540c78597c2dcc468123b270169fc44,
         type: 3}
-      propertyPath: ship
-      value: 
-      objectReference: {fileID: 874579555101021527}
-    - target: {fileID: 7751815150560592197, guid: 6540c78597c2dcc468123b270169fc44,
-        type: 3}
       propertyPath: fuelAmount
       value: 0
       objectReference: {fileID: 0}
@@ -3301,11 +3181,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7751815150560592197, guid: 6540c78597c2dcc468123b270169fc44,
-        type: 3}
-      propertyPath: ship
-      value: 
-      objectReference: {fileID: 874579555101021527}
     - target: {fileID: 7751815150560592197, guid: 6540c78597c2dcc468123b270169fc44,
         type: 3}
       propertyPath: selfSkim
@@ -3477,12 +3352,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 637acd3ede086ed45b23959a02b1c534, type: 3}
---- !u!20 &1507913478050007905 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 7095398317472191918, guid: 637acd3ede086ed45b23959a02b1c534,
-    type: 3}
-  m_PrefabInstance: {fileID: 8546359282292252367}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8650884460702527226 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1050704211038875701, guid: 637acd3ede086ed45b23959a02b1c534,

@@ -149,8 +149,9 @@ namespace CosmicShore.Gameplay.GameState
             {
                 Transform spawnPoint = GetRandomSpawnPoint();
                 networkShip.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-                _clientGameplayState.InitializeAndSetupPlayer_ClientRpc();
             }
+
+            _clientGameplayState.InitializeAndSetupPlayer_ClientRpc();
         }
 
         /// <summary>

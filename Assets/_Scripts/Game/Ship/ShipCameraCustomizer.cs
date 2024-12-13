@@ -7,7 +7,7 @@ namespace CosmicShore
 {
     public class ShipCameraCustomizer : MonoBehaviour
     {
-        public IShip Ship { get; set; }
+        public IShip Ship { get; private set; }
 
         [SerializeField] public List<ShipCameraOverrides> ControlOverrides;
         [SerializeField] float closeCamDistance;
@@ -21,12 +21,7 @@ namespace CosmicShore
         public void Initialize(IShip ship)
         {
             Ship = ship;
-        }
 
-        IEnumerator Start()
-        {
-            yield return new WaitUntil(() => Ship != null && Ship.CameraManager != null);
-            
             cameraManager = Ship.CameraManager;
             cameraManager.isOrthographic = isOrthographic;
 

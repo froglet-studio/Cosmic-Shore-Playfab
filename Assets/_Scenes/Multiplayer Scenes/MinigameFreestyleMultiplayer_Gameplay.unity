@@ -238,7 +238,6 @@ MonoBehaviour:
   autoInjectGameObjects:
   - {fileID: 1267607586}
   _clientGameplayState: {fileID: 262525757}
-  _miniGame: {fileID: 1078953709}
   _shipPrefab: {fileID: 4957369263333239007, guid: fe506eaa052530c4092cedf7d365405a,
     type: 3}
   _playerSpawnPoints:
@@ -310,7 +309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118ace87654de114cbaeac2af24203da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _miniGame: {fileID: 1078953709}
 --- !u!1 &420213765
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,6 +618,16 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.9411765
       objectReference: {fileID: 0}
+    - target: {fileID: 5497835174634480093, guid: 65bf1ed35b752374ca46ae214710e41c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5497835174820813627, guid: 65bf1ed35b752374ca46ae214710e41c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -635,18 +643,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 547474316}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &547474318 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7187200369466620888, guid: 65bf1ed35b752374ca46ae214710e41c,
-    type: 3}
-  m_PrefabInstance: {fileID: 547474316}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc9985f1de22b3c4f963a6a97bf6fd05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &730729323
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,106 +835,6 @@ MonoBehaviour:
   TowerHeight: 100
   TowerRadius: 20
   RotationsPerUnit: 0.1
---- !u!1 &1078953702
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1078953705}
-  - component: {fileID: 1078953709}
-  - component: {fileID: 1078953707}
-  - component: {fileID: 1078953708}
-  m_Layer: 0
-  m_Name: Game
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1078953705
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078953702}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1078953707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078953702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8eb12f3db145b49948825ed7a796cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ActivePlayerScoreDisplay: {fileID: 0}
-  ScoringMode: 2
-  GolfRules: 0
-  GameCanvas: {fileID: 0}
-  TimePlayedScoreMultiplier: 1
-  ScoreNormalizationQuotient: 145.65
---- !u!114 &1078953708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078953702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e50774bfa84874243a429c7097d42f36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EndOfRoundStatContainers: []
-  nodeGame: 0
---- !u!114 &1078953709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078953702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8eb8899fecea5340bf1a69d2fea30ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameMode: 26
-  NumberOfRounds: 1
-  TurnMonitors: []
-  ScoreTracker: {fileID: 1078953707}
-  GameCanvas: {fileID: 547474318}
-  playerPrefab: {fileID: 0}
-  PlayerOrigin: {fileID: 1192541910}
-  EndOfTurnDelay: 0
-  EnableTrails: 1
-  DefaultPlayerShipType: 12
-  DefaultPlayerCaptain: {fileID: 0}
-  ActivePlayer: {fileID: 0}
-  Crystal: {fileID: 1568959833}
-  CrystalStartPosition: {x: 0, y: 0, z: -120}
-  SegmentSpawner: {fileID: 1020381236}
-  numberOfSegments: 10
-  straightLineLength: 400
-  ResetTrails: 1
-  ScaleCrystalPositionWithIntensity: 0
-  ScaleLengthWithIntensity: 1
-  ScaleNumberOfSegmentsWithIntensity: 1
-  helix: {fileID: 0}
 --- !u!1 &1180450041
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,7 +914,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1267607587
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1784,7 +1680,6 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1078953705}
   - {fileID: 129195827}
   - {fileID: 1655328213}
   - {fileID: 547474316}

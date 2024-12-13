@@ -44,17 +44,11 @@ namespace CosmicShore.Game
         /// </summary>
         /// <param name="ship"></param>
         /// <param name="isOwner">Is this player owned by this client</param>
-        public void Setup(IShip ship, bool isOwner) =>
-            SetupPlayerShip(Hangar.Instance.LoadPlayerShip(ship, ship.GetShipType, ship.Team) as IShip, isOwner);
-
-        public void SetDefaultShipType(ShipTypes shipType) => _defaultShipType = shipType;
-
-        public void ToggleGameObject(bool toggle) =>
-            gameObject.SetActive(toggle);
-
-        private void SetupPlayerShip(IShip ship, bool isOwner)
+        public void Setup(IShip ship, bool isOwner)
         {
             _ship = ship;
+            _ship = Hangar.Instance.LoadPlayerShip(_ship, _ship.Team, isOwner);
+            _ship.AIPilot.AutoPilotEnabled = false;
 
             if (isOwner)
             {
@@ -62,13 +56,23 @@ namespace CosmicShore.Game
 
                 GameCanvas = FindObjectOfType<GameCanvas>();
                 GameCanvas.MiniGameHUD.Ship = _ship;
-
-                InputController = GetComponent<InputController>();
-                InputController.Ship = _ship;
+            }
+            bool inputControllerFound = TryGetComponent(out InputController inputController);
+            if (inputControllerFound)
+            {
+                InputController = inputController;
+                InputController.enabled = isOwner;
+                if (isOwner)
+                    InputController.Ship = _ship;
             }
 
-            _ship.AIPilot.enabled = false;
             _ship.Initialize(this, _ship.Team);
         }
+            
+
+        public void SetDefaultShipType(ShipTypes shipType) => _defaultShipType = shipType;
+
+        public void ToggleGameObject(bool toggle) =>
+            gameObject.SetActive(toggle);
     }
 }

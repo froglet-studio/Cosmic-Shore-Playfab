@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace CosmicShore.Game.Arcade
 {
-    public class MiniGame : MonoBehaviour
+    public class MiniGame : MonoBehaviour, IMiniGame
     {
         [SerializeField] protected GameModes gameMode;
         [SerializeField] protected int NumberOfRounds = int.MaxValue;
@@ -221,23 +221,6 @@ namespace CosmicShore.Game.Arcade
 
             Players[0].ToggleActive(true);
             ActivePlayer = Players[0];
-            return ActivePlayer;
-        }
-
-        public IPlayer InitializePlayer(IPlayer player)
-        {
-            ActivePlayer = player;
-            IPlayer.InitializeData data = new()
-            {
-                DefaultShipType = playerShipTypeInitialized ? PlayerShipType : DefaultPlayerShipType,
-                Team = PlayerTeams[0],
-                PlayerName = PlayerDataController.PlayerProfile.DisplayName,
-                PlayerUUID = PlayerNames[0],
-                Name = "Player1"
-            };
-            ActivePlayer.Initialize(data);
-            ActivePlayer.ToggleActive(true);
-            ActivePlayer.ToggleGameObject(true);
             return ActivePlayer;
         }
 

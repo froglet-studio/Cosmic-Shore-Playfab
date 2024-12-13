@@ -31,7 +31,7 @@ namespace CosmicShore.Core
         public float GetInertia {  get; }
         public float BoostMultiplier { get; set; }      // TODO - Set should not be public
         public SO_Captain Captain { get; }
-        public ShipCameraCustomizer GetShipCameraCustomizer { get; }
+        public ShipCameraCustomizer ShipCameraCustomizer { get; }
         public CameraManager CameraManager { get; }
         public List<GameObject> ShipGeometries { get; }
 
