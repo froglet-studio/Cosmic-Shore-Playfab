@@ -62,6 +62,9 @@ public class ShipTransformer : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (Ship == null)
+            return;
+
         if (inputController == null)
         {
             inputController = Ship.InputController;

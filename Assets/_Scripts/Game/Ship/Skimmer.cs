@@ -65,6 +65,8 @@ namespace CosmicShore.Core
                 resourceSystem = Ship.ResourceSystem;
                 if (visible)
                     GetComponent<MeshRenderer>().material = new Material(Ship.SkimmerMaterial);
+
+                initialGap = Ship.TrailSpawner.Gap;
             }
         }
 
@@ -76,7 +78,7 @@ namespace CosmicShore.Core
             FWHM = transform.localScale.x / 4; //Full Width at Half Max
             sigma = FWHM / 2.355f;
             radius = transform.localScale.x / 2;
-            initialGap = Ship.TrailSpawner.Gap;
+            
             if (appliedScale != Scale.Value)
             {
                 appliedScale = Scale.Value;
@@ -223,6 +225,7 @@ namespace CosmicShore.Core
 
         void OnTriggerStay(Collider other)
         {
+            if (Ship == null) return;
             if (Ship.Player == null) return;
             if (!other.TryGetComponent<TrailBlock>(out var trailBlock)) return;
             if (trailBlock.Team == Team && !affectSelf) return;

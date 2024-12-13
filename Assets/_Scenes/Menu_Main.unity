@@ -49003,12 +49003,12 @@ PrefabInstance:
     - target: {fileID: 4853709195325629896, guid: ba70c0f3eb077d44b8a538982d02dadc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 694.731
+      value: 696.5
       objectReference: {fileID: 0}
     - target: {fileID: 4853709195325629897, guid: ba70c0f3eb077d44b8a538982d02dadc,
         type: 3}
       propertyPath: m_Lens.NearClipPlane
-      value: 0.526207
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4853709195325629897, guid: ba70c0f3eb077d44b8a538982d02dadc,
         type: 3}
@@ -49018,7 +49018,7 @@ PrefabInstance:
     - target: {fileID: 4853709196151767312, guid: ba70c0f3eb077d44b8a538982d02dadc,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -5.26897
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 4853709196820857184, guid: ba70c0f3eb077d44b8a538982d02dadc,
         type: 3}

@@ -1,5 +1,4 @@
-﻿using CosmicShore.Game.Arcade;
-using CosmicShore.Game.GameplayObjects;
+﻿using CosmicShore.Game.GameplayObjects;
 using CosmicShore.NetworkManagement;
 using CosmicShore.Utilities;
 using CosmicShore.Utilities.Network;
@@ -122,16 +121,9 @@ namespace CosmicShore.Gameplay.GameState
         void SpawnNetworkPlayerForEachClients(ulong clientId, bool lateJoin)
         {
             NetworkObject playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
-            /*_player = m_MiniGame.InitializePlayer() as NetworkPlayer;
-            _player.Setup();
-            GameManager.Instance.WaitOnPlayerLoading();*/
 
             NetworkObject networkShip = Instantiate(_shipPrefab);
             Assert.IsTrue(networkShip, $"Matching ship network object for client {clientId} not found!");
-
-            var persistentPlayerExists = playerNetworkObject.TryGetComponent(out NetworkPersistentPlayer persistentPlayer);
-            Assert.IsTrue(persistentPlayerExists,
-                $"Matching persistent PersistentPlayer for client {clientId} not found!");
 
             networkShip.SpawnWithOwnership(clientId, true);
 

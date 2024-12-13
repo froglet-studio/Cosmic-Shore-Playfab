@@ -1,6 +1,9 @@
 ﻿using CosmicShore.Core;
+using CosmicShore.Game.GameplayObjects;
 using CosmicShore.Game.IO;
 using CosmicShore.Game.UI;
+using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 
@@ -10,8 +13,10 @@ namespace CosmicShore.Game
     /// This player is spawned to each client from server as 
     /// the main multiplayer player prefab instance.
     /// </summary>
-    public class NetworkPlayer : MonoBehaviour, IPlayer
+    public class NetworkPlayer : NetworkBehaviour, IPlayer
     {
+        public static List<NetworkPlayer> NppList { get; private set; } = new();
+
         [SerializeField]
         ShipTypes _defaultShipType;
 
@@ -27,6 +32,23 @@ namespace CosmicShore.Game
 
         IShip _ship;
         public IShip Ship => _ship;
+
+        private void Awake()
+        {
+            NppList.Clear();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            NppList.Add(this);
+
+            gameObject.name = "PersistentPlayer_" + OwnerClientId;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            NppList.Remove(this);
+        }
 
         public void Initialize(IPlayer.InitializeData data)
         {
@@ -44,13 +66,13 @@ namespace CosmicShore.Game
         /// </summary>
         /// <param name="ship"></param>
         /// <param name="isOwner">Is this player owned by this client</param>
-        public void Setup(IShip ship, bool isOwner)
+        public void Setup(IShip ship)
         {
             _ship = ship;
-            _ship = Hangar.Instance.LoadPlayerShip(_ship, _ship.Team, isOwner);
+            _ship = Hangar.Instance.LoadPlayerShip(_ship, _ship.Team, IsOwner);
             _ship.AIPilot.AutoPilotEnabled = false;
 
-            if (isOwner)
+            if (IsOwner)
             {
                 // Below logics are for the ship's owner client only.
 
@@ -61,8 +83,8 @@ namespace CosmicShore.Game
             if (inputControllerFound)
             {
                 InputController = inputController;
-                InputController.enabled = isOwner;
-                if (isOwner)
+                InputController.enabled = IsOwner;
+                if (IsOwner)
                     InputController.Ship = _ship;
             }
 
