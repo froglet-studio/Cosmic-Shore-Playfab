@@ -108,7 +108,7 @@ namespace CosmicShore.Game
             Ship.Transform.SetParent(shipContainer.transform, false);
             Ship.AIPilot.enabled = false;
 
-            GetComponent<InputController>().Ship = ship;
+            InputController.Ship = ship;
             GameCanvas.MiniGameHUD.Ship = ship;
 
             Ship.Initialize(this, Team);
@@ -123,8 +123,7 @@ namespace CosmicShore.Game
             Ship = ship;
             Ship.AIPilot.enabled = true;
 
-            var inputController = GetComponent<InputController>();
-            inputController.Ship = Ship;
+            InputController.Ship = ship;
             Ship.Initialize(this, Team);
 
             gameManager.WaitOnAILoading(Ship.AIPilot);

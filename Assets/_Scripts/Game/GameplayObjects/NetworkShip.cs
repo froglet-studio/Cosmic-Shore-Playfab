@@ -104,9 +104,6 @@ namespace CosmicShore.Game.GameplayObjects
         {
             get
             {
-                if (!IsOwner)
-                    return null;    // no InputController for non-owner instances
-
                 if (_inputController == null)
                 {
                     if (Player == null)
@@ -189,6 +186,11 @@ namespace CosmicShore.Game.GameplayObjects
         {
             if (!IsOwner)
                 n_Speed.OnValueChanged += OnSpeedValueChanged;
+
+            ShipTransformer.enabled = IsOwner;
+
+            TrailSpawner.ForceStartSpawningTrail();
+            TrailSpawner.RestartTrailSpawnerAfterDelay(2f);
         }
 
         private void Update()
@@ -210,11 +212,12 @@ namespace CosmicShore.Game.GameplayObjects
             _player = player;
             _team = team;
 
+            AIPilot.AutoPilotEnabled = false;
             InitializeShipGeometries();
             TrailSpawner.Initialize(this);
             _nearFieldSkimmer.Initialize(this);
             _farFieldSkimmer.Initialize(this);
-
+            
 
             if (IsOwner)
             {
@@ -228,9 +231,6 @@ namespace CosmicShore.Game.GameplayObjects
                 ShipCameraCustomizer.Initialize(this);
                 ShipTransformer.Initialize(this);
             }
-
-            TrailSpawner.ForceStartSpawningTrail();
-            TrailSpawner.RestartTrailSpawnerAfterDelay(2f);
 
             OnShipInitialized?.Invoke();
         }

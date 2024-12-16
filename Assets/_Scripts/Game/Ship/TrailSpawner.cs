@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(IShip))]
+[RequireComponent(typeof(ShipStatus))]
 public class TrailSpawner : MonoBehaviour
 {
     public delegate void BlockCreationHandler(float xShift, float wavelength, float scaleX, float scaleY, float scaleZ);
@@ -38,7 +39,7 @@ public class TrailSpawner : MonoBehaviour
     Material blockMaterial;
     Material shieldedBlockMaterial;
     IShip ship;
-    ShipStatus shipData;
+    ShipStatus shipStatus;
 
     [SerializeField] bool warp = false;
     GameObject shards;
@@ -103,12 +104,6 @@ public class TrailSpawner : MonoBehaviour
     public void Initialize(IShip ship)
     {
         this.ship = ship;
-    }
-
-
-    IEnumerator Start()
-    {
-        yield return new WaitUntil(() => ship != null && ship.Player != null);
 
         waitTime = defaultWaitTime;
         wavelength = initialWavelength;
@@ -120,9 +115,9 @@ public class TrailSpawner : MonoBehaviour
 
         shards = GameObject.FindGameObjectWithTag("field");
 
-        shipData = GetComponent<ShipStatus>();
+        shipStatus = GetComponent<ShipStatus>();
 
-        spawnTrailCoroutine = StartCoroutine(SpawnTrailCoroutine());
+        // spawnTrailCoroutine = StartCoroutine(SpawnTrailCoroutine());
 
         OwnerId = ship.Player.PlayerUUID;
         XScaler = minBlockScale;
@@ -202,7 +197,7 @@ public class TrailSpawner : MonoBehaviour
         Block.TargetScale = new Vector3(trailBlock.transform.localScale.x * XScaler / 2f - Mathf.Abs(halfGap), trailBlock.transform.localScale.y * YScaler, trailBlock.transform.localScale.z * ZScaler);
         TargetScale = Block.TargetScale;
         float xShift = (Block.TargetScale.x / 2f + Mathf.Abs(halfGap)) * (halfGap / Mathf.Abs(halfGap));
-        Block.transform.SetPositionAndRotation(transform.position - shipData.Course * offset + ship.Transform.right * xShift, shipData.blockRotation);
+        Block.transform.SetPositionAndRotation(transform.position - shipStatus.Course * offset + ship.Transform.right * xShift, shipStatus.blockRotation);
         Block.transform.parent = TrailContainer.transform;
         Block.ownerId = isCharmed ? tempShip.Player.PlayerUUID : ship.Player.PlayerUUID;
         Block.Player = isCharmed ? tempShip.Player : ship.Player;
@@ -244,18 +239,18 @@ public class TrailSpawner : MonoBehaviour
     IEnumerator SpawnTrailCoroutine()
     {
         yield return new WaitForSeconds(startDelay);
-        yield return new WaitUntil(() => shipData != null);
+        yield return new WaitUntil(() => shipStatus != null);
 
         while (true)
         {
-            if (Time.deltaTime < .1f && spawnerEnabled && !shipData.Attached && shipData.Speed > .01f)
+            if (Time.deltaTime < .1f && spawnerEnabled && !shipStatus.Attached && shipStatus.Speed > .01f)
             {
                 if (Gap == 0)
                 {
                     var Block = Instantiate(trailBlock);
                     Block.TargetScale = new Vector3(trailBlock.transform.localScale.x * XScaler, trailBlock.transform.localScale.y * YScaler, trailBlock.transform.localScale.z * ZScaler);
                     TargetScale = Block.TargetScale;
-                    Block.transform.SetPositionAndRotation(transform.position - shipData.Course * offset, shipData.blockRotation);
+                    Block.transform.SetPositionAndRotation(transform.position - shipStatus.Course * offset, shipStatus.blockRotation);
                     Block.transform.parent = TrailContainer.transform;
                     Block.waitTime = (skimmer.transform.localScale.z + TrailZScale) / ship.ShipStatus.Speed;
                     Block.ownerId = isCharmed ? tempShip.Player.PlayerUUID : ship.Player.PlayerUUID;
@@ -278,7 +273,7 @@ public class TrailSpawner : MonoBehaviour
                     CreateBlock(-Gap / 2, Trail2);
                 } 
             }
-            yield return new WaitForSeconds(Mathf.Clamp(wavelength / shipData.Speed,0,3f));
+            yield return new WaitForSeconds(Mathf.Clamp(wavelength / shipStatus.Speed,0,3f));
         }
     }
 

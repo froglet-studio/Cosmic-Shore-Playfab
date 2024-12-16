@@ -2,6 +2,7 @@
 using CosmicShore.NetworkManagement;
 using CosmicShore.Utilities;
 using CosmicShore.Utilities.Network;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Multiplayer.Samples.Utilities;
 using Unity.Netcode;
@@ -93,8 +94,16 @@ namespace CosmicShore.Gameplay.GameState
                 //getting spawned while joining. But that's not something we can fully address by changes in
                 //ServerMultiplayGameState.
                 
-                SpawnNetworkPlayerForEachClients(clientId, true);
+                SpawnPlayerAndShipForClient(clientId, true);
+
+                StartCoroutine(InitializeRoutine());
             }
+        }
+
+        IEnumerator InitializeRoutine()
+        {
+            yield return new WaitForSeconds(3f);
+            _clientGameplayState.InitializeAndSetupPlayer_ClientRpc();
         }
 
         void OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
@@ -104,8 +113,10 @@ namespace CosmicShore.Gameplay.GameState
                 InitialSpawnDone = true;
                 foreach (var kvp in NetworkManager.Singleton.ConnectedClients)
                 {
-                    SpawnNetworkPlayerForEachClients(kvp.Key, false);
+                    SpawnPlayerAndShipForClient(kvp.Key, false);
                 }
+
+                _clientGameplayState.InitializeAndSetupPlayer_ClientRpc();
             }
         }
 
@@ -118,7 +129,7 @@ namespace CosmicShore.Gameplay.GameState
             }
         }
 
-        void SpawnNetworkPlayerForEachClients(ulong clientId, bool lateJoin)
+        void SpawnPlayerAndShipForClient(ulong clientId, bool lateJoin)
         {
             NetworkObject playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
 
@@ -142,8 +153,6 @@ namespace CosmicShore.Gameplay.GameState
                 Transform spawnPoint = GetRandomSpawnPoint();
                 networkShip.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
             }
-
-            _clientGameplayState.InitializeAndSetupPlayer_ClientRpc();
         }
 
         /// <summary>

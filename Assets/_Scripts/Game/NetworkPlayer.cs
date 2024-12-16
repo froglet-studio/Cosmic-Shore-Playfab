@@ -25,7 +25,11 @@ namespace CosmicShore.Game
         public string PlayerName { get; private set; }
         public string PlayerUUID { get; private set; }
         public string Name { get; private set; }
-        public InputController InputController { get; private set; }
+
+        readonly InputController _inputController;
+        public InputController InputController =>
+            _inputController != null ? _inputController : GetComponent<InputController>();
+
         public GameCanvas GameCanvas { get; private set; }
         public Transform Transform => transform;
         public bool IsActive { get; private set; } = false;
@@ -33,16 +37,14 @@ namespace CosmicShore.Game
         IShip _ship;
         public IShip Ship => _ship;
 
-        private void Awake()
-        {
-            NppList.Clear();
-        }
 
         public override void OnNetworkSpawn()
         {
             NppList.Add(this);
 
             gameObject.name = "PersistentPlayer_" + OwnerClientId;
+
+            InputController.enabled = IsOwner;
         }
 
         public override void OnNetworkDespawn()
@@ -70,22 +72,12 @@ namespace CosmicShore.Game
         {
             _ship = ship;
             _ship = Hangar.Instance.LoadPlayerShip(_ship, _ship.Team, IsOwner);
-            _ship.AIPilot.AutoPilotEnabled = false;
 
             if (IsOwner)
             {
-                // Below logics are for the ship's owner client only.
-
                 GameCanvas = FindObjectOfType<GameCanvas>();
                 GameCanvas.MiniGameHUD.Ship = _ship;
-            }
-            bool inputControllerFound = TryGetComponent(out InputController inputController);
-            if (inputControllerFound)
-            {
-                InputController = inputController;
-                InputController.enabled = IsOwner;
-                if (IsOwner)
-                    InputController.Ship = _ship;
+                InputController.Ship = _ship;
             }
 
             _ship.Initialize(this, _ship.Team);
