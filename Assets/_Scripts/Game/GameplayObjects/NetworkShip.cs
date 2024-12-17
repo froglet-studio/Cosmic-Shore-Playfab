@@ -179,13 +179,20 @@ namespace CosmicShore.Game.GameplayObjects
         Dictionary<InputEvents, List<ShipAction>> _shipControlActions = new();
         Dictionary<ResourceEvents, List<ShipAction>> _classResourceActions = new();
         NetworkVariable<float> n_Speed = new(writePerm: NetworkVariableWritePermission.Owner);
+        NetworkVariable<Vector3> n_Course = new(writePerm: NetworkVariableWritePermission.Owner);
+        NetworkVariable<Quaternion> n_BlockRotation = new(writePerm: NetworkVariableWritePermission.Owner);
 
         Material _shipMaterial;
 
         public override void OnNetworkSpawn()
         {
             if (!IsOwner)
-                n_Speed.OnValueChanged += OnSpeedValueChanged;
+            {
+                n_Speed.OnValueChanged += OnSpeedChanged;
+                n_Course.OnValueChanged += OnCourseChanged;
+                n_BlockRotation.OnValueChanged += OnBlockRotationChanged;
+            }
+                
 
             ShipTransformer.enabled = IsOwner;
 
@@ -198,13 +205,19 @@ namespace CosmicShore.Game.GameplayObjects
             if (IsOwner)
             {
                 n_Speed.Value = ShipStatus.Speed;
+                n_Course.Value = ShipStatus.Course;
+                n_BlockRotation.Value = ShipStatus.blockRotation;
             }
         }
         
         public override void OnNetworkDespawn()
         {
             if (!IsOwner)
-                n_Speed.OnValueChanged -= OnSpeedValueChanged;
+            {
+                n_Speed.OnValueChanged -= OnSpeedChanged;
+                n_Course.OnValueChanged -= OnCourseChanged;
+                n_BlockRotation.OnValueChanged -= OnBlockRotationChanged;
+            }
         }
 
         public void Initialize(IPlayer player, Teams team)
@@ -338,9 +351,19 @@ namespace CosmicShore.Game.GameplayObjects
             // throw new NotImplementedException();
         }
 
-        void OnSpeedValueChanged(float previousValue, float newValue)
+        void OnSpeedChanged(float previousValue, float newValue)
         {
             ShipStatus.Speed = newValue;
+        }
+
+        void OnCourseChanged(Vector3  previousValue, Vector3 newValue)
+        {
+            ShipStatus.Course = newValue;
+        }
+
+        void OnBlockRotationChanged(Quaternion previousValue, Quaternion newValue)
+        {
+            ShipStatus.blockRotation = newValue;
         }
     }
 

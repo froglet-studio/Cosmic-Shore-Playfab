@@ -997,12 +997,22 @@ PrefabInstance:
         type: 3}
       propertyPath: CellTypes.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 36999bb97c4204943bec39ef90cf958c,
+      objectReference: {fileID: 11400000, guid: b10f742fb5da79449b0c7f40240cf810,
         type: 2}
+    - target: {fileID: 3197094124088707225, guid: cb702179ff5b42f41a3521ccd59e6934,
+        type: 3}
+      propertyPath: initialFaunaSpawnWaitTime
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7817456538282590180, guid: cb702179ff5b42f41a3521ccd59e6934,
         type: 3}
       propertyPath: m_Name
       value: NodeCenter
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817456538282590180, guid: cb702179ff5b42f41a3521ccd59e6934,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8200116291734656446, guid: cb702179ff5b42f41a3521ccd59e6934,
         type: 3}
