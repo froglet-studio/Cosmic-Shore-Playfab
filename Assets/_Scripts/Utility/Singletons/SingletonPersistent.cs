@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace StarWriter.Utility.Singleton
+namespace CosmicShore.Utility.Singleton
 {
     /// <remarks>
     /// Creates a Singleton GameObject which is persistent thru scenes
@@ -14,6 +14,7 @@ namespace StarWriter.Utility.Singleton
             if (Instance == null)
             {
                 Instance = this as T;
+                Debug.Log($"SingletonPersistent: {gameObject.name}");
                 DontDestroyOnLoad(this);
             }
             else

@@ -10,6 +10,12 @@ TagManager:
   - blue
   - field
   - ActionCamera
+  - Projectile
+  - EnergizedProjectile
+  - SuperEnergizedProjectile
+  - FancyCam
+  - Fauna
+  - Shard
   layers:
   - Default
   - TransparentFX
@@ -28,7 +34,7 @@ TagManager:
   - Shards
   - Cage
   - Automata
-  - 
+  - Mound
   - 
   - 
   - 

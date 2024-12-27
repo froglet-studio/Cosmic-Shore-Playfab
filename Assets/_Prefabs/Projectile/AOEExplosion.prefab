@@ -50,9 +50,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.5
   MaxScale: 0
-  ExplosionDuration: 12
+  ExplosionDuration: 3
   ExplosionDelay: 0.2
-  container: {fileID: 2728798890556433942}
+  shipImpactEffects: 
+  affectSelf: 0
+  destructive: 1
+  devastating: 0
+  Team: 0
+  Ship: {fileID: 0}
+  AnonymousExplosion: 0
 --- !u!33 &8683897607158942398
 MeshFilter:
   m_ObjectHideFlags: 0
