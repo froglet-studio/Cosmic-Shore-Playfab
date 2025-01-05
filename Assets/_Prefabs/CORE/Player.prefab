@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 2151207714166088006}
   - component: {fileID: 2151207714166088003}
   - component: {fileID: 2151207714166088012}
+  - component: {fileID: 7457932931985390425}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -88,28 +89,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameCanvas: {fileID: 0}
   Portrait: 0
-  ship: {fileID: 0}
+  requireTriggerForThrottle: 0
+  _inputStatus: {fileID: 7457932931985390425}
   AutoPilotEnabled: 0
-  XSum: 0
-  YSum: 0
-  XDiff: 0
-  YDiff: 0
-  Idle: 0
-  Paused: 0
-  isGyroEnabled: 0
-  invertYEnabled: 0
-  invertThrottleEnabled: 0
-  OneTouchLeft: 0
-  RightJoystickHome: {x: 0, y: 0}
-  LeftJoystickHome: {x: 0, y: 0}
-  RightClampedPosition: {x: 0, y: 0}
-  LeftClampedPosition: {x: 0, y: 0}
-  RightJoystickStart: {x: 0, y: 0}
-  LeftJoystickStart: {x: 0, y: 0}
-  RightNormalizedJoystickPosition: {x: 0, y: 0}
-  LeftNormalizedJoystickPosition: {x: 0, y: 0}
-  EasedRightJoystickPosition: {x: 0, y: 0}
-  EasedLeftJoystickPosition: {x: 0, y: 0}
   SingleTouchValue: {x: 0, y: 0}
 --- !u!114 &2151207714166088012
 MonoBehaviour:
@@ -123,12 +105,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca79d17578366e4f9cd2b19173ecab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: Player
-  playerUUID: admin
-  ship: {fileID: 0}
-  shipContainer: {fileID: 1360789018413082665}
-  GameCanvas: {fileID: 0}
   defaultShip: 2
+  shipContainer: {fileID: 1360789018413082665}
   UseHangarConfiguration: 1
   IsAI: 0
-  Team: 1
+  _playerName: 
+--- !u!114 &7457932931985390425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2151207714166088056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a32b860a8039dc4fba410a79ca72123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xSum: 0
+  ySum: 0
+  xDiff: 0
+  yDiff: 0
+  idle: 0
+  paused: 0
+  isGyroEnabled: 0
+  invertYEnabled: 0
+  invertThrottleEnabled: 0
+  oneTouchLeft: 0
+  rightJoystickHome: {x: 0, y: 0}
+  leftJoystickHome: {x: 0, y: 0}
+  rightClampedPosition: {x: 0, y: 0}
+  leftClampedPosition: {x: 0, y: 0}
+  rightJoystickStart: {x: 0, y: 0}
+  leftJoystickStart: {x: 0, y: 0}
+  rightNormalizedJoystickPosition: {x: 0, y: 0}
+  leftNormalizedJoystickPosition: {x: 0, y: 0}
+  easedRightJoystickPosition: {x: 0, y: 0}
+  easedLeftJoystickPosition: {x: 0, y: 0}

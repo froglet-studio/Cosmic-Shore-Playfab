@@ -9,14 +9,27 @@ using CosmicShore.Game.UI;
 using CosmicShore.App.Systems;
 using UnityEngine.InputSystem.Controls;
 using Gyroscope = UnityEngine.InputSystem.Gyroscope;
+using Unity.Netcode;
+using CosmicShore.Utility.ClassExtensions;
 
 namespace CosmicShore.Game.IO
 {
     public class InputController : MonoBehaviour
     {
+        struct JoystickData
+        {
+            public Vector2 joystickStart;
+            public int touchIndex;
+            public Vector2 joystickNormalizedOffset;
+            public Vector2 clampedPosition;
+        }
+
         [SerializeField] GameCanvas gameCanvas;
         [SerializeField] public bool Portrait;
         [SerializeField] bool requireTriggerForThrottle;
+
+        private IInputStatus _inputStatus;
+        public IInputStatus InputStatus => _inputStatus ??= TryAddInputStatus();
 
         public IShip Ship { get; set; }
         [HideInInspector] public bool AutoPilotEnabled;
@@ -34,17 +47,6 @@ namespace CosmicShore.Game.IO
         bool fullSpeedStraightEffectsStarted;
         bool minimumSpeedStraightEffectsStarted;
         int leftTouchIndex, rightTouchIndex;
-
-        [HideInInspector] public float XSum, YSum, XDiff, YDiff;
-        [HideInInspector] public bool Idle, Paused;
-        [HideInInspector] public bool isGyroEnabled, invertYEnabled, invertThrottleEnabled;
-        [HideInInspector] public bool OneTouchLeft;
-
-        [HideInInspector] public Vector2 RightJoystickHome, LeftJoystickHome;
-        [HideInInspector] public Vector2 RightClampedPosition, LeftClampedPosition;
-        [HideInInspector] public Vector2 RightJoystickStart, LeftJoystickStart;
-        [HideInInspector] public Vector2 RightNormalizedJoystickPosition, LeftNormalizedJoystickPosition;
-        [HideInInspector] public Vector2 EasedRightJoystickPosition, EasedLeftJoystickPosition;
 
         private Vector2 RightJoystickValue, LeftJoystickValue;
         public Vector2 SingleTouchValue;
@@ -84,9 +86,18 @@ namespace CosmicShore.Game.IO
             LoadSettings();
         }
 
+        IInputStatus TryAddInputStatus()
+        {
+            bool found = TryGetComponent(out NetworkObject _);
+            if (found)
+                return gameObject.GetOrAdd<NetworkInputStatus>();
+            else
+                return gameObject.GetOrAdd<InputStatus>();
+        }
+
         private void Update()
         {
-            if (PauseSystem.Paused || Paused) return;
+            if (PauseSystem.Paused || InputStatus.Paused) return;
             ReceiveInput();
         }
 
@@ -97,8 +108,8 @@ namespace CosmicShore.Game.IO
         private void InitializeJoysticks()
         {
             JoystickRadius = Screen.dpi;
-            LeftJoystickValue = LeftClampedPosition = LeftJoystickHome = new Vector2(JoystickRadius, JoystickRadius);
-            RightJoystickValue = RightClampedPosition = RightJoystickHome = new Vector2(Screen.currentResolution.width - JoystickRadius, JoystickRadius);
+            LeftJoystickValue = InputStatus.LeftClampedPosition = InputStatus.LeftJoystickHome = new Vector2(JoystickRadius, JoystickRadius);
+            RightJoystickValue = InputStatus.RightClampedPosition = InputStatus.RightJoystickHome = new Vector2(Screen.currentResolution.width - JoystickRadius, JoystickRadius);
         }
 
         private void InitializeGyroscope()
@@ -110,8 +121,8 @@ namespace CosmicShore.Game.IO
 
         private void LoadSettings()
         {
-            invertYEnabled = GameSetting.Instance.InvertYEnabled;
-            invertThrottleEnabled = GameSetting.Instance.InvertThrottleEnabled;
+            InputStatus.InvertYEnabled = GameSetting.Instance.InvertYEnabled;
+            InputStatus.InvertThrottleEnabled = GameSetting.Instance.InvertThrottleEnabled;
         }
 
         #endregion
@@ -138,32 +149,32 @@ namespace CosmicShore.Game.IO
         {
             if (Ship.ShipStatus.SingleStickControls)
             {
-                EasedLeftJoystickPosition = new Vector2(Ship.AIPilot.X, Ship.AIPilot.Y);
+                InputStatus.EasedLeftJoystickPosition = new Vector2(Ship.AIPilot.X, Ship.AIPilot.Y);
             }
             else
             {
-                XSum = Ship.AIPilot.XSum;
-                YSum = Ship.AIPilot.YSum;
-                XDiff = Ship.AIPilot.XDiff;
-                YDiff = Ship.AIPilot.YDiff;
+                InputStatus.XSum = Ship.AIPilot.XSum;
+                InputStatus.YSum = Ship.AIPilot.YSum;
+                InputStatus.XDiff = Ship.AIPilot.XDiff;
+                InputStatus.YDiff = Ship.AIPilot.YDiff;
 
-                Debug.Log("Autopilot XSum set: " + XSum);
+                Debug.Log("Autopilot XSum set: " + InputStatus.XSum);
             }
             PerformSpeedAndDirectionalEffects();
         }
 
         private void ProcessGamepadInput()
         {
-            LeftNormalizedJoystickPosition = Gamepad.current.leftStick.ReadValue();
-            RightNormalizedJoystickPosition = Gamepad.current.rightStick.ReadValue();
+            InputStatus.LeftNormalizedJoystickPosition = Gamepad.current.leftStick.ReadValue();
+            InputStatus.RightNormalizedJoystickPosition = Gamepad.current.rightStick.ReadValue();
 
             if (requireTriggerForThrottle)
                 HasThrottleInput = Gamepad.current.rightTrigger.ReadValue() > 0;
             else
                 HasThrottleInput = true;
 
-            Debug.Log(LeftNormalizedJoystickPosition);
-            Debug.Log(RightNormalizedJoystickPosition);
+            Debug.Log(InputStatus.LeftNormalizedJoystickPosition);
+            Debug.Log(InputStatus.RightNormalizedJoystickPosition);
 
             Reparameterize();
             ProcessGamePadButtons();
@@ -229,8 +240,11 @@ namespace CosmicShore.Game.IO
             {
                 AssignTouchIndices();
                 UpdateJoystickValues();
-                HandleJoystick(ref LeftJoystickStart, leftTouchIndex, ref LeftNormalizedJoystickPosition, ref LeftClampedPosition);
-                HandleJoystick(ref RightJoystickStart, rightTouchIndex, ref RightNormalizedJoystickPosition, ref RightClampedPosition);
+
+                HandleLeftJoystick();
+                HandleRightJoystick();
+                // HandleJoystick(ref _inputStatus.LeftJoystickStart, leftTouchIndex, ref _inputStatus.LeftNormalizedJoystickPosition, ref _inputStatus.LeftClampedPosition);
+                // HandleJoystick(ref _inputStatus.RightJoystickStart, rightTouchIndex, ref _inputStatus.RightNormalizedJoystickPosition, ref _inputStatus.RightClampedPosition);
                 StopStickEffects();
             }
         }
@@ -330,9 +344,11 @@ namespace CosmicShore.Game.IO
             }
             LeftJoystickValue = position;
             leftTouchIndex = 0;
-            OneTouchLeft = true;
-            HandleJoystick(ref LeftJoystickStart, leftTouchIndex, ref LeftNormalizedJoystickPosition, ref LeftClampedPosition);
-            RightNormalizedJoystickPosition = Vector3.Lerp(RightNormalizedJoystickPosition, Vector3.zero, 7 * Time.deltaTime);
+            InputStatus.OneTouchLeft = true;
+
+            HandleLeftJoystick();
+            // HandleJoystick(ref _inputStatus.LeftJoystickStart, leftTouchIndex, ref _inputStatus.LeftNormalizedJoystickPosition, ref _inputStatus.LeftClampedPosition);
+            InputStatus.RightNormalizedJoystickPosition = Vector3.Lerp(InputStatus.RightNormalizedJoystickPosition, Vector3.zero, 7 * Time.deltaTime);
         }
 
         private void HandleRightJoystick(Vector2 position)
@@ -345,27 +361,79 @@ namespace CosmicShore.Game.IO
             }
             RightJoystickValue = position;
             rightTouchIndex = 0;
-            OneTouchLeft = false;
-            HandleJoystick(ref RightJoystickStart, rightTouchIndex, ref RightNormalizedJoystickPosition, ref RightClampedPosition);
-            LeftNormalizedJoystickPosition = Vector3.Lerp(LeftNormalizedJoystickPosition, Vector3.zero, 7 * Time.deltaTime);
+            InputStatus.OneTouchLeft = false;
+
+            HandleRightJoystick();
+            // HandleJoystick(ref _inputStatus.RightJoystickStart, rightTouchIndex, ref _inputStatus.RightNormalizedJoystickPosition, ref _inputStatus.RightClampedPosition);
+            InputStatus.LeftNormalizedJoystickPosition = Vector3.Lerp(InputStatus.LeftNormalizedJoystickPosition, Vector3.zero, 7 * Time.deltaTime);
+        }
+
+        void HandleLeftJoystick()
+        {
+            CollectDataToHandleLeftJoystick(out JoystickData data);
+            HandleJoystick(ref data);
+            SaveDataAfterHandleLeftJoystick(in data);
+        }
+
+        void CollectDataToHandleLeftJoystick(out JoystickData data)
+        {
+            data = new()
+            {
+                joystickStart = InputStatus.LeftJoystickStart,
+                touchIndex = leftTouchIndex,
+                joystickNormalizedOffset = InputStatus.LeftNormalizedJoystickPosition,
+                clampedPosition = InputStatus.LeftClampedPosition,
+            };
+        }
+
+        void SaveDataAfterHandleLeftJoystick(in JoystickData data)
+        {
+            InputStatus.LeftJoystickStart = data.joystickStart;
+            InputStatus.LeftNormalizedJoystickPosition = data.joystickNormalizedOffset;
+            InputStatus.LeftClampedPosition = data.clampedPosition;
+        }
+
+        void HandleRightJoystick()
+        {
+            CollectDataToHandleRightJoystick(out JoystickData data);
+            HandleJoystick(ref data);
+            SaveDataAfterHandleRightJoystick(in data);
+        }
+
+        void CollectDataToHandleRightJoystick(out JoystickData data)
+        {
+            data = new()
+            {
+                joystickStart = InputStatus.RightJoystickStart,
+                touchIndex = rightTouchIndex,
+                joystickNormalizedOffset = InputStatus.RightNormalizedJoystickPosition,
+                clampedPosition = InputStatus.RightClampedPosition,
+            };
+        }
+
+        void SaveDataAfterHandleRightJoystick(in JoystickData data)
+        {
+            InputStatus.RightJoystickStart = data.joystickStart;
+            InputStatus.RightNormalizedJoystickPosition = data.joystickNormalizedOffset;
+            InputStatus.RightClampedPosition = data.clampedPosition;
         }
 
         private void ResetInputValues()
         {
-            XSum = 0;
-            YSum = 0;
-            XDiff = 0;
-            YDiff = 0;
+            InputStatus.XSum = 0;
+            InputStatus.YSum = 0;
+            InputStatus.XDiff = 0;
+            InputStatus.YDiff = 0;
 
-            Debug.Log("Reset XSum: " + XSum);
+            Debug.Log("Reset XSum: " + InputStatus.XSum);
         }
 
         private void HandleIdleState(bool isIdle)
         {
-            if (isIdle != Idle)
+            if (isIdle != InputStatus.Idle)
             {
-                Idle = isIdle;
-                if (Idle)
+                InputStatus.Idle = isIdle;
+                if (InputStatus.Idle)
                 {
                     Ship?.PerformShipControllerActions(InputEvents.IdleAction);
                 }
@@ -380,7 +448,21 @@ namespace CosmicShore.Game.IO
 
         #region Helper Methods
 
-        private void HandleJoystick(ref Vector2 joystickStart, int touchIndex, ref Vector2 joystick, ref Vector2 clampedPosition)
+        void HandleJoystick(ref JoystickData data)
+        {
+            Touch touch = Touch.activeTouches[data.touchIndex];
+
+            if (touch.phase == TouchPhase.Began || data.joystickStart == Vector2.zero)
+                data.joystickStart = touch.screenPosition;
+
+            Vector2 offset = touch.screenPosition - data.joystickStart;
+            Vector2 clampedOffset = Vector2.ClampMagnitude(offset, JoystickRadius);
+            data.clampedPosition = data.joystickStart + clampedOffset;
+            Vector2 normalizedOffset = clampedOffset / JoystickRadius;
+            data.joystickNormalizedOffset = normalizedOffset;
+        }
+
+        /*private void HandleJoystick(ref Vector2 joystickStart, int touchIndex, ref Vector2 joystick, ref Vector2 clampedPosition)
         {
             Touch touch = Touch.activeTouches[touchIndex];
 
@@ -392,24 +474,24 @@ namespace CosmicShore.Game.IO
             clampedPosition = joystickStart + clampedOffset;
             Vector2 normalizedOffset = clampedOffset / JoystickRadius;
             joystick = normalizedOffset;
-        }
+        }*/
 
         private void Reparameterize()
         {
-            EasedRightJoystickPosition = new Vector2(Ease(2 * RightNormalizedJoystickPosition.x), Ease(2 * RightNormalizedJoystickPosition.y));
-            EasedLeftJoystickPosition = new Vector2(Ease(2 * LeftNormalizedJoystickPosition.x), Ease(2 * LeftNormalizedJoystickPosition.y));
+            InputStatus.EasedRightJoystickPosition = new Vector2(Ease(2 * InputStatus.RightNormalizedJoystickPosition.x), Ease(2 * InputStatus.RightNormalizedJoystickPosition.y));
+            InputStatus.EasedLeftJoystickPosition = new Vector2(Ease(2 * InputStatus.LeftNormalizedJoystickPosition.x), Ease(2 * InputStatus.LeftNormalizedJoystickPosition.y));
 
-            XSum = Ease(RightNormalizedJoystickPosition.x + LeftNormalizedJoystickPosition.x);
-            YSum = -Ease(RightNormalizedJoystickPosition.y + LeftNormalizedJoystickPosition.y);
-            XDiff = (RightNormalizedJoystickPosition.x - LeftNormalizedJoystickPosition.x + 2) / 4;
-            YDiff = Ease(RightNormalizedJoystickPosition.y - LeftNormalizedJoystickPosition.y);
+            InputStatus.XSum = Ease(InputStatus.RightNormalizedJoystickPosition.x + InputStatus.LeftNormalizedJoystickPosition.x);
+            InputStatus.YSum = -Ease(InputStatus.RightNormalizedJoystickPosition.y + InputStatus.LeftNormalizedJoystickPosition.y);
+            InputStatus.XDiff = (InputStatus.RightNormalizedJoystickPosition.x - InputStatus.LeftNormalizedJoystickPosition.x + 2) / 4;
+            InputStatus.YDiff = Ease(InputStatus.RightNormalizedJoystickPosition.y - InputStatus.LeftNormalizedJoystickPosition.y);
 
-            Debug.Log("Reparameterize XSum set: " + XSum);
+            Debug.Log("Reparameterize XSum set: " + InputStatus.XSum);
 
-            if (invertYEnabled)
-                YSum *= -1;
-            if (invertThrottleEnabled)
-                YDiff = 1 - YDiff;
+            if (InputStatus.InvertYEnabled)
+                InputStatus.YSum *= -1;
+            if (InputStatus.InvertThrottleEnabled)
+                InputStatus.YDiff = 1 - InputStatus.YDiff;
         }
 
         private float Ease(float input)
@@ -420,9 +502,9 @@ namespace CosmicShore.Game.IO
         private void PerformSpeedAndDirectionalEffects()
         {
             float threshold = .3f;
-            float sumOfRotations = Mathf.Abs(YDiff) + Mathf.Abs(YSum) + Mathf.Abs(XSum);
-            float DeviationFromFullSpeedStraight = (1 - XDiff) + sumOfRotations;
-            float DeviationFromMinimumSpeedStraight = XDiff + sumOfRotations;
+            float sumOfRotations = Mathf.Abs(InputStatus.YDiff) + Mathf.Abs(InputStatus.YSum) + Mathf.Abs(InputStatus.XSum);
+            float DeviationFromFullSpeedStraight = (1 - InputStatus.XDiff) + sumOfRotations;
+            float DeviationFromMinimumSpeedStraight = InputStatus.XDiff + sumOfRotations;
 
             HandleFullSpeedStraight(DeviationFromFullSpeedStraight, threshold);
             HandleMinimumSpeedStraight(DeviationFromMinimumSpeedStraight, threshold);
@@ -518,7 +600,7 @@ namespace CosmicShore.Game.IO
                 inverseInitialRotation = Quaternion.Inverse(GyroQuaternionToUnityQuaternion(Input.gyro.attitude) * derivedCorrection);
             }
 
-            isGyroEnabled = status;
+            InputStatus.IsGyroEnabled = status;
         }
 
         #endregion
@@ -527,7 +609,10 @@ namespace CosmicShore.Game.IO
 
         private void ProcessGamePadButtons()
         {
-            HandleGamepadButton(Gamepad.current.leftShoulder, InputEvents.IdleAction, ref Idle);
+            bool inputState = InputStatus.Idle;
+            HandleGamepadButton(Gamepad.current.leftShoulder, InputEvents.IdleAction, ref inputState);
+            InputStatus.Idle = inputState;
+
             HandleGamepadButton(Gamepad.current.rightShoulder, InputEvents.FlipAction, ref phoneFlipState);
             HandleGamepadTrigger(Gamepad.current.leftTrigger, InputEvents.LeftStickAction);
             HandleGamepadTrigger(Gamepad.current.rightTrigger, InputEvents.RightStickAction);
@@ -612,13 +697,13 @@ namespace CosmicShore.Game.IO
         private void OnToggleInvertY(bool status)
         {
             Debug.Log($"InputController.OnToggleInvertY - status: {status}");
-            invertYEnabled = status;
+            InputStatus.InvertYEnabled = status;
         }
 
         private void OnToggleInvertThrottle(bool status)
         {
             Debug.Log($"InputController.OnToggleInvertThrottle - status: {status}");
-            invertThrottleEnabled = status;
+            InputStatus.InvertThrottleEnabled = status;
         }
 
         #endregion

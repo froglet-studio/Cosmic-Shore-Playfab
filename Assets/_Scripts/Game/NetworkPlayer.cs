@@ -26,9 +26,9 @@ namespace CosmicShore.Game
         public string PlayerUUID { get; private set; }
         public string Name { get; private set; }
 
-        readonly InputController _inputController;
-        public InputController InputController =>
-            _inputController != null ? _inputController : GetComponent<InputController>();
+        InputController _inputController;
+        public InputController InputController => 
+            _inputController = _inputController != null ? _inputController : GetComponent<InputController>();
 
         public GameCanvas GameCanvas { get; private set; }
         public Transform Transform => transform;

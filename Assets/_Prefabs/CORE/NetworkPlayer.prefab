@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 6028774933549221624}
   - component: {fileID: 3897458989294470871}
   - component: {fileID: 2151207714166088003}
+  - component: {fileID: 1508368532713492650}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Player
@@ -137,25 +138,18 @@ MonoBehaviour:
   gameCanvas: {fileID: 0}
   Portrait: 0
   requireTriggerForThrottle: 1
+  _inputStatus: {fileID: 1508368532713492650}
   AutoPilotEnabled: 0
-  XSum: 0
-  YSum: 0
-  XDiff: 0
-  YDiff: 0
-  Idle: 0
-  Paused: 0
-  isGyroEnabled: 0
-  invertYEnabled: 0
-  invertThrottleEnabled: 0
-  OneTouchLeft: 0
-  RightJoystickHome: {x: 0, y: 0}
-  LeftJoystickHome: {x: 0, y: 0}
-  RightClampedPosition: {x: 0, y: 0}
-  LeftClampedPosition: {x: 0, y: 0}
-  RightJoystickStart: {x: 0, y: 0}
-  LeftJoystickStart: {x: 0, y: 0}
-  RightNormalizedJoystickPosition: {x: 0, y: 0}
-  LeftNormalizedJoystickPosition: {x: 0, y: 0}
-  EasedRightJoystickPosition: {x: 0, y: 0}
-  EasedLeftJoystickPosition: {x: 0, y: 0}
   SingleTouchValue: {x: 0, y: 0}
+--- !u!114 &1508368532713492650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2151207714166088056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee9236ecd49cb24c9a685dc2a4c3c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

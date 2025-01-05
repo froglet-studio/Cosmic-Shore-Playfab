@@ -11,9 +11,12 @@ public class ShipTransformer : MonoBehaviour
     public IShip Ship { get; set; }
     protected ShipStatus shipStatus;
     protected ResourceSystem resourceSystem;
+
     #endregion
 
     protected InputController inputController;
+    protected IInputStatus inputStatus => inputController.InputStatus;
+
     protected readonly float lerpAmount = 2f;
     protected Quaternion accumulatedRotation;
 
@@ -73,7 +76,7 @@ public class ShipTransformer : MonoBehaviour
         if (inputController == null)
             return;
 
-        if (inputController.Paused)
+        if (inputStatus.Paused)
             return;
 
         RotateShip();
@@ -101,7 +104,7 @@ public class ShipTransformer : MonoBehaviour
             Yaw();
             Pitch();
 
-            if (inputController.isGyroEnabled) //&& !Equals(inverseInitialRotation, new Quaternion(0, 0, 0, 0)))
+            if (inputStatus.IsGyroEnabled) //&& !Equals(inverseInitialRotation, new Quaternion(0, 0, 0, 0)))
             {
                 // Updates GameObjects blockRotation from input device's gyroscope
                 transform.rotation = Quaternion.Lerp(
@@ -149,7 +152,7 @@ public class ShipTransformer : MonoBehaviour
     protected virtual void Pitch() // These need to not use *= because quaternions are not commutative
     {
         accumulatedRotation = Quaternion.AngleAxis(
-                            inputController.YSum * (shipStatus.Speed * RotationThrottleScaler + PitchScaler) * Time.deltaTime,
+                            inputStatus.YSum * (shipStatus.Speed * RotationThrottleScaler + PitchScaler) * Time.deltaTime,
                             transform.right) * accumulatedRotation;
 
         // Debug.Log("Pitch Y Sum: " + inputController.YSum);
@@ -159,17 +162,17 @@ public class ShipTransformer : MonoBehaviour
     protected virtual void Yaw()  // TODO: test replacing these AngleAxis calls with eulerangles
     {
         accumulatedRotation = Quaternion.AngleAxis(
-                            inputController.XSum * (shipStatus.Speed * RotationThrottleScaler + YawScaler)  * Time.deltaTime,
+                            inputStatus.XSum * (shipStatus.Speed * RotationThrottleScaler + YawScaler)  * Time.deltaTime,
                             transform.up) * accumulatedRotation;
 
-        Debug.Log("Yaw X Sum: " + inputController.XSum);
+        Debug.Log("Yaw X Sum: " + inputStatus.XSum);
         // Debug.Log("Yaw accumulated rotation: " + accumulatedRotation);
     }
 
     protected virtual void Roll()
     {
         accumulatedRotation = Quaternion.AngleAxis(
-                            inputController.YDiff * (shipStatus.Speed * RotationThrottleScaler + RollScaler) * Time.deltaTime,
+                            inputStatus.YDiff * (shipStatus.Speed * RotationThrottleScaler + RollScaler) * Time.deltaTime,
                             transform.forward) * accumulatedRotation;
 
         // Debug.Log("Roll Y Diff: " + inputController.YDiff);
@@ -192,7 +195,7 @@ public class ShipTransformer : MonoBehaviour
         }
         if (shipStatus.ChargedBoostDischarging) boostAmount *= shipStatus.ChargedBoostCharge;
         if (inputController != null)
-        shipStatus.Speed = Mathf.Lerp(shipStatus.Speed, inputController.XDiff * ThrottleScaler * boostAmount + MinimumSpeed, lerpAmount * Time.deltaTime);
+        shipStatus.Speed = Mathf.Lerp(shipStatus.Speed, inputStatus.XDiff * ThrottleScaler * boostAmount + MinimumSpeed, lerpAmount * Time.deltaTime);
 
         shipStatus.Speed *= throttleMultiplier;
 

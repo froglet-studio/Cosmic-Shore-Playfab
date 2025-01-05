@@ -18,6 +18,7 @@ namespace CosmicShore.Game.UI
         bool imageEnabled = true;
         Vector2 leftTouch, rightTouch;
         IPlayer player;
+        IInputStatus inputStatus;
 
         private void OnEnable()
         {
@@ -44,10 +45,12 @@ namespace CosmicShore.Game.UI
 
         public void Initialize(IPlayer player)
         {
+            this.player = player;
             if (!player.Ship.ShipStatus.AutoPilotEnabled)
                 gameObject.SetActive(Gamepad.current == null && !player.Ship.ShipStatus.CommandStickControls && (LeftThumb || !player.Ship.ShipStatus.SingleStickControls));
 
             initialized = true;
+            inputStatus = player.Ship.InputController.InputStatus;
         }
 
         void Update()
@@ -56,12 +59,12 @@ namespace CosmicShore.Game.UI
             {
                 if (Input.touches.Length == 0)
                 {
-                    transform.position = LeftThumb ? Vector2.Lerp(transform.position, player.Ship.InputController.LeftJoystickHome, .2f) : Vector2.Lerp(transform.position, player.Ship.InputController.RightJoystickHome, .2f);
+                    transform.position = LeftThumb ? Vector2.Lerp(transform.position, inputStatus.LeftJoystickHome, .2f) : Vector2.Lerp(transform.position, inputStatus.RightJoystickHome, .2f);
                     image.sprite = InactiveImage;
                 }
                 else if (LeftThumb)
                 {
-                    leftTouch = player.Ship.InputController.LeftClampedPosition;
+                    leftTouch = inputStatus.LeftClampedPosition;
                     transform.position = Vector2.Lerp(transform.position, leftTouch, .2f);
                     imageEnabled = true ? image.sprite = ActiveImage : image.sprite = InactiveImage;
                     
@@ -70,7 +73,7 @@ namespace CosmicShore.Game.UI
                 }
                 else
                 {
-                    rightTouch = player.Ship.InputController.RightClampedPosition;
+                    rightTouch = inputStatus.RightClampedPosition;
                     transform.position = Vector2.Lerp(transform.position, rightTouch, .2f);
                     imageEnabled = true ? image.sprite = ActiveImage : image.sprite = InactiveImage;
                     //image.transform.localScale = (Player.ActivePlayer.Ship.InputController.RightJoystickStart

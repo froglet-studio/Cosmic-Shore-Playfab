@@ -21,7 +21,7 @@ public class SingleStickShipTransformer : ShipTransformer
     protected override void Pitch() // These need to not use *= because quaternions are not commutative
     {
         accumulatedRotation = Quaternion.AngleAxis(
-                            -inputController.EasedLeftJoystickPosition.y * (shipStatus.Speed * RotationThrottleScaler + PitchScaler) * Time.deltaTime,
+                            -inputStatus.EasedLeftJoystickPosition.y * (shipStatus.Speed * RotationThrottleScaler + PitchScaler) * Time.deltaTime,
                             courseTransform.right) * accumulatedRotation;
         //additionalRotation = Quaternion.AngleAxis(
         //                    -inputController.EasedRightJoystickPosition.y * lookScalar,
@@ -31,7 +31,7 @@ public class SingleStickShipTransformer : ShipTransformer
     protected override void Yaw()
     {
         accumulatedRotation = Quaternion.AngleAxis(
-                            inputController.EasedLeftJoystickPosition.x * (shipStatus.Speed * RotationThrottleScaler + YawScaler) * Time.deltaTime,
+                            inputStatus.EasedLeftJoystickPosition.x * (shipStatus.Speed * RotationThrottleScaler + YawScaler) * Time.deltaTime,
                             courseTransform.up) * accumulatedRotation;
         //additionalRotation = Quaternion.AngleAxis(
         //                    inputController.EasedRightJoystickPosition.x * lookScalar,
@@ -41,7 +41,7 @@ public class SingleStickShipTransformer : ShipTransformer
     protected override void Roll()
     {
         accumulatedRotation = Quaternion.AngleAxis(
-                            -inputController.EasedLeftJoystickPosition.x * (shipStatus.Speed * RotationThrottleScaler + RollScaler) * Time.deltaTime, //use roll scaler to adjust the banking into turns
+                            -inputStatus.EasedLeftJoystickPosition.x * (shipStatus.Speed * RotationThrottleScaler + RollScaler) * Time.deltaTime, //use roll scaler to adjust the banking into turns
                             transform.forward) * accumulatedRotation;
     }
 
@@ -72,7 +72,7 @@ public class SingleStickShipTransformer : ShipTransformer
         }
         if (shipStatus.ChargedBoostDischarging) boostAmount *= shipStatus.ChargedBoostCharge;
         if (inputController != null)
-            shipStatus.Speed = Mathf.Lerp(shipStatus.Speed, inputController.XDiff * ThrottleScaler * boostAmount + MinimumSpeed, lerpAmount * Time.deltaTime);
+            shipStatus.Speed = Mathf.Lerp(shipStatus.Speed, inputStatus.XDiff * ThrottleScaler * boostAmount + MinimumSpeed, lerpAmount * Time.deltaTime);
 
         shipStatus.Speed *= throttleMultiplier;
 

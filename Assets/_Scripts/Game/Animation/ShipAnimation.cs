@@ -16,6 +16,7 @@ namespace CosmicShore.Game.Animation
 
         protected IShip Ship;
         protected InputController inputController;
+        protected IInputStatus inputStatus;
         protected List<Transform> Transforms = new(); // TODO: use this to populate the ship geometries on ship.cs
         protected List<Quaternion> InitialRotations = new(); // TODO: use this to populate the ship geometries on ship.cs
 
@@ -23,6 +24,7 @@ namespace CosmicShore.Game.Animation
         {
             Ship = ship;
             inputController = Ship.InputController;
+            inputStatus = inputController.InputStatus;
             Ship.ResourceSystem.OnElementLevelChange += UpdateShapeKey;
 
             AssignTransforms();
@@ -30,18 +32,18 @@ namespace CosmicShore.Game.Animation
 
         protected virtual void Start()
         {
-            AssignTransforms();
+            // AssignTransforms();
         }
 
         protected virtual void Update()
         {
             if (inputController != null) 
             {
-                if (inputController.Idle)
+                if (inputStatus.Idle)
                     Idle();
                 else
-                    if (Ship.ShipStatus.SingleStickControls) PerformShipPuppetry(inputController.EasedLeftJoystickPosition.y, inputController.EasedLeftJoystickPosition.x, 0, 0);
-                    else PerformShipPuppetry(inputController.YSum, inputController.XSum, inputController.YDiff, inputController.XDiff);
+                    if (Ship.ShipStatus.SingleStickControls) PerformShipPuppetry(inputStatus.EasedLeftJoystickPosition.y, inputStatus.EasedLeftJoystickPosition.x, 0, 0);
+                    else PerformShipPuppetry(inputStatus.YSum, inputStatus.XSum, inputStatus.YDiff, inputStatus.XDiff);
             }
         }
         protected abstract void AssignTransforms();

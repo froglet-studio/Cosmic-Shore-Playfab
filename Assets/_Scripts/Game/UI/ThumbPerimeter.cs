@@ -26,6 +26,7 @@ namespace CosmicShore.Game.UI
 
         Vector2 leftStartPosition, rightStartPosition;
         InputController controller;
+        IInputStatus inputStatus;
         IPlayer _player;
 
         private void OnEnable()
@@ -57,6 +58,8 @@ namespace CosmicShore.Game.UI
         // TODO - Need to call this from somewhere after player initializes.
         public void Initialize(IPlayer player)
         {
+            this.player = player;
+            inputStatus = this.player.InputController.InputStatus;
             bool isActive = Gamepad.current == null && !_player.Ship.ShipStatus.CommandStickControls && (LeftThumb || _player.Ship.ShipStatus.SingleStickControls);
             if (!_player.Ship.ShipStatus.AutoPilotEnabled)
             {
@@ -85,17 +88,17 @@ namespace CosmicShore.Game.UI
                     Vector2 normalizedJoystickPosition;
                     if (Input.touches.Length == 1)
                     {
-                        PerimeterActive = controller.OneTouchLeft == LeftThumb;
+                        PerimeterActive = inputStatus.OneTouchLeft == LeftThumb;
                     }                  
                     if (LeftThumb)
                     {
-                        transform.position = controller.LeftJoystickStart;
-                        normalizedJoystickPosition = controller.LeftNormalizedJoystickPosition;
+                        transform.position = inputStatus.LeftJoystickStart;
+                        normalizedJoystickPosition = inputStatus.LeftNormalizedJoystickPosition;
                     }
                     else
                     {
-                        transform.position = controller.RightJoystickStart;
-                        normalizedJoystickPosition = controller.RightNormalizedJoystickPosition;
+                        transform.position = inputStatus.RightJoystickStart;
+                        normalizedJoystickPosition = inputStatus.RightNormalizedJoystickPosition;
                     }
                     normalizedJoystickDistance = normalizedJoystickPosition.magnitude;
 

@@ -111,6 +111,11 @@ namespace CosmicShore.Game.GameplayObjects
                         Debug.LogError($"No player found to get input controller!");
                         return null;
                     }
+                    if (Player.InputController == null)
+                    {
+                        Debug.LogError($"No input controller inside player found!");
+                        return null;
+                    }
                     _inputController = Player.InputController;
                 }
                 return _inputController;
@@ -195,7 +200,6 @@ namespace CosmicShore.Game.GameplayObjects
                 
 
             ShipTransformer.enabled = IsOwner;
-
             TrailSpawner.ForceStartSpawningTrail();
             TrailSpawner.RestartTrailSpawnerAfterDelay(2f);
         }
@@ -227,6 +231,7 @@ namespace CosmicShore.Game.GameplayObjects
 
             AIPilot.AutoPilotEnabled = false;
             InitializeShipGeometries();
+            ShipAnimation.Initialize(this);
             TrailSpawner.Initialize(this);
             _nearFieldSkimmer.Initialize(this);
             _farFieldSkimmer.Initialize(this);
